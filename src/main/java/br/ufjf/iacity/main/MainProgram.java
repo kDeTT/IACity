@@ -75,7 +75,7 @@ public class MainProgram
 //            CityGraph graph = randomGraph(500, 50);
             
             
-//            BacktrackingSearch backTrack = new BacktrackingSearch(graph, new AlphabeticalTransition(), graph.getNode(cityA), graph.getNode(cityF));
+//            BacktrackingSearch backTrack = new BacktrackingSearch(graph, new AlphabeticalTransition(), graph.getNode(cityA), graph.getNode(cityF), true);
 //            
 //            long startTime = System.nanoTime();
 //            backTrack.search();
@@ -88,8 +88,8 @@ public class MainProgram
 //            System.out.println("Caminho:");
 //            backTrack.printPath();
             
-            BreadthAndDepthSearch breadthSearch = new BreadthAndDepthSearch(graph, new AlphabeticalTransition(), graph.getNode(cityA), graph.getNode(cityF), SearchMode.Breadth);
-//            BreadthAndDepthSearch breadthSearch = new BreadthAndDepthSearch(graph, new AlphabeticalTransition(), graph.getNode(cityA), graph.getNode(cityF), SearchMode.Depth);
+//            BreadthAndDepthSearch breadthSearch = new BreadthAndDepthSearch(graph, new AlphabeticalTransition(), graph.getNode(cityA), graph.getNode(cityF), SearchMode.Breadth, false);
+            BreadthAndDepthSearch breadthSearch = new BreadthAndDepthSearch(graph, new AlphabeticalTransition(), graph.getNode(cityA), graph.getNode(cityF), SearchMode.Depth, false);
 //            BreadthAndDepthSearch breadthSearch = new BreadthAndDepthSearch(graph, new AlphabeticalTransition(), graph.getNode(0), graph.getNode(799), SearchMode.Depth);
             
             long startTime = System.nanoTime();
@@ -104,9 +104,9 @@ public class MainProgram
             breadthSearch.printPath();
             
             
-////            OrderedSearch orderedSearch = new OrderedSearch(graph, new AlphabeticalTransition(), graph.getNode(cityA), graph.getNode(cityF));
+//            OrderedSearch orderedSearch = new OrderedSearch(graph, new AlphabeticalTransition(), graph.getNode(cityA), graph.getNode(cityF), false);
 //            OrderedSearch orderedSearch = new OrderedSearch(graph, new AlphabeticalTransition(), graph.getNode(0), graph.getNode(199));
-//            
+            
 //            long startTime = System.nanoTime();
 //            orderedSearch.search();
 //            long endTime = System.nanoTime();

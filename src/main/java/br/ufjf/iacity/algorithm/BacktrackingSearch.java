@@ -14,9 +14,10 @@ public class BacktrackingSearch extends AlgorithmBase
      * @param transition Transição que será aplicada para gerar novos nós de busca
      * @param startCityNode Nó do grafo de cidades que será o início do problema
      * @param endCityNode Nó do grafo de cidades que será o fim do problema
+     * @param enableDuplicated Habilita/desabilita a possiblidade de adicionar estados duplicados na árvore de busca
      * @throws IllegalArgumentException 
      */
-    public BacktrackingSearch(CityGraph cityGraph, ITransition transition, CityNodeGraph startCityNode, CityNodeGraph endCityNode) throws IllegalArgumentException
+    public BacktrackingSearch(CityGraph cityGraph, ITransition transition, CityNodeGraph startCityNode, CityNodeGraph endCityNode, boolean enableDuplicated) throws IllegalArgumentException
     {
         if ((cityGraph == null) || (transition == null)
                 || (startCityNode == null) || (endCityNode == null)) 
@@ -31,6 +32,10 @@ public class BacktrackingSearch extends AlgorithmBase
         // Inicializa a árvore de busca com o primeiro nó e define o nó final
         this.searchTree = new SearchTree(new SearchNode(null, 0, startCityNode));
         this.searchTree.setEndNode(new SearchNode(null, 0, endCityNode));
+        
+        // Habilita/Desabilita opções a serem usadas durante a busca
+        SearchNode.setEnableDuplicate(enableDuplicated);
+        SearchNode.setEnableCost(false);
         
         // Inicializa o estado da busca
         this.searchState = SearchState.Stopped;
@@ -70,7 +75,9 @@ public class BacktrackingSearch extends AlgorithmBase
                 if(!checkAncestral(nextCityNodeGraph))
                 {
                     // Cria e adiciona o novo nó na árvore de busca
-                    SearchNode newSearchNode = new SearchNode(searchTree.getCurrentNode(), (searchTree.getCurrentNode().getTreeLevel() + 1), nextCityNodeGraph);
+                    SearchNode newSearchNode = new SearchNode(searchTree.getCurrentNode(),
+                            (searchTree.getCurrentNode().getTreeLevel() + 1),
+                            nextCityNodeGraph);
                     this.searchTree.addChildToCurrentNode(newSearchNode);
                     
                     // Define que o nó atual foi expandido

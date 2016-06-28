@@ -22,9 +22,10 @@ public class BreadthAndDepthSearch extends AlgorithmBase
      * @param startCityNode Nó do grafo de cidades que será o início do problema
      * @param endCityNode Nó do grafo de cidades que será o fim do problema
      * @param searchMode Tipo de busca que será utilizado, sendo em largura (Breadth) ou profundidade (Depth)
+     * @param enableDuplicated Habilita/desabilita a possiblidade de adicionar estados duplicados na árvore de busca
      * @throws IllegalArgumentException 
      */
-    public BreadthAndDepthSearch(CityGraph cityGraph, ITransition transition, CityNodeGraph startCityNode, CityNodeGraph endCityNode, SearchMode searchMode) throws IllegalArgumentException
+    public BreadthAndDepthSearch(CityGraph cityGraph, ITransition transition, CityNodeGraph startCityNode, CityNodeGraph endCityNode, SearchMode searchMode, boolean enableDuplicated) throws IllegalArgumentException
     {
         if ((cityGraph == null) || (transition == null) || (startCityNode == null)
                 || (endCityNode == null) || (searchMode == null))
@@ -40,6 +41,10 @@ public class BreadthAndDepthSearch extends AlgorithmBase
         this.searchTree = new SearchTree();
         this.searchTree.setStartNode(new SearchNode(null, 0, startCityNode));
         this.searchTree.setEndNode(new SearchNode(null, 0, endCityNode));
+        
+        // Habilita/Desabilita opções a serem usadas durante a busca
+        SearchNode.setEnableDuplicate(enableDuplicated);
+        SearchNode.setEnableCost(false);
         
         // Define o modo de busca que será utilizado (Largura ou Profundidade)
         this.searchMode = searchMode;
@@ -104,8 +109,11 @@ public class BreadthAndDepthSearch extends AlgorithmBase
                  */
                 SearchNode openedSearchNode = this.getElementFromOpenedNodeListSearchNode(searchMode, openedNodeList);
                 
-                // Define primeiramente o nó atual como o pai do novo nó
-                this.searchTree.setCurrentNode(openedSearchNode.getRootNode());
+                if(searchMode.equals(SearchMode.Breadth))
+                {
+                    // Define primeiramente o nó atual como o pai do novo nó
+                    this.searchTree.setCurrentNode(openedSearchNode.getRootNode());
+                }
                 
                 // Adiciona o nó na árvore de busca
                 this.searchTree.addChildToCurrentNode(openedSearchNode);

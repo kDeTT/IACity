@@ -14,7 +14,11 @@ public class SearchNode
     private int treeLevel;
     private boolean expanded;
     private boolean visited;
+    
+    private static boolean enableCost;
     private float cost;
+    
+    private static boolean enableDuplicate;
     
     private CityNodeGraph cityNodeGraph;
     
@@ -61,12 +65,13 @@ public class SearchNode
         if (!Objects.equals(this.idNode, other.idNode)) {
             return false;
         }
-        if (Float.floatToIntBits(this.cost) != Float.floatToIntBits(other.cost)) {
+        if ((isEnableDuplicate()) && (this.rootNode != null) && (other.rootNode != null) && !Objects.equals(this.rootNode.idNode, other.rootNode.idNode)) {
             return false;
         }
-        if (!Objects.equals(this.cityNodeGraph, other.cityNodeGraph)) {
+        if (isEnableCost() && (Float.floatToIntBits(this.cost) != Float.floatToIntBits(other.cost))) {
             return false;
         }
+
         return true;
     }
     
@@ -159,5 +164,33 @@ public class SearchNode
      */
     public void setCost(float cost) {
         this.cost = cost;
+    }
+    
+    /**
+     * @return the enableCost
+     */
+    public static boolean isEnableCost() {
+        return enableCost;
+    }
+    
+    /**
+     * @param aEnableCost the enableCost to set
+     */
+    public static void setEnableCost(boolean aEnableCost) {
+        enableCost = aEnableCost;
+    }
+    
+    /**
+     * @return the enableDuplicate
+     */
+    public static boolean isEnableDuplicate() {
+        return enableDuplicate;
+    }
+
+    /**
+     * @param aEnableDuplicate the enableDuplicate to set
+     */
+    public static void setEnableDuplicate(boolean aEnableDuplicate) {
+        enableDuplicate = aEnableDuplicate;
     }
 }

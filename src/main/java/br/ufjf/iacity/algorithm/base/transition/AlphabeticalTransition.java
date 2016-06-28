@@ -104,7 +104,10 @@ public class AlphabeticalTransition implements ITransition
                                 (currentSearchNode.getTreeLevel() + 1), // Define o nível da árvore com base no nível do pai
                                 nextCityNodeAdj.getAdjNode());
                 
-                newSearchNode.setCost(nextCityNodeAdj.getCost());
+                if(SearchNode.isEnableCost())
+                {
+                    newSearchNode.setCost(nextCityNodeAdj.getCost());
+                }
                 
                 // Retorna o próximo nó
                 return newSearchNode;

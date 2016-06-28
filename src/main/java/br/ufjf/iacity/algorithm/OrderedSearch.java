@@ -17,9 +17,10 @@ public class OrderedSearch extends AlgorithmBase
      * @param transition Transição que será aplicada para gerar novos nós de busca
      * @param startCityNode Nó do grafo de cidades que será o início do problema
      * @param endCityNode Nó do grafo de cidades que será o fim do problema
+     * @param enableDuplicated Habilita/desabilita a possiblidade de adicionar estados duplicados na árvore de busca
      * @throws IllegalArgumentException 
      */
-    public OrderedSearch(CityGraph cityGraph, ITransition transition, CityNodeGraph startCityNode, CityNodeGraph endCityNode) throws IllegalArgumentException
+    public OrderedSearch(CityGraph cityGraph, ITransition transition, CityNodeGraph startCityNode, CityNodeGraph endCityNode, boolean enableDuplicated) throws IllegalArgumentException
     {
         if ((cityGraph == null) || (transition == null) || 
                 (startCityNode == null) || (endCityNode == null))
@@ -35,6 +36,10 @@ public class OrderedSearch extends AlgorithmBase
         this.searchTree = new SearchTree();
         this.searchTree.setStartNode(new SearchNode(null, 0, startCityNode));
         this.searchTree.setEndNode(new SearchNode(null, 0, endCityNode));
+        
+        // Habilita/Desabilita opções a serem usadas durante a busca
+        SearchNode.setEnableDuplicate(enableDuplicated);
+        SearchNode.setEnableCost(true);
         
         // Inicializa o estado da busca
         this.searchState = SearchState.Stopped;
