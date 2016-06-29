@@ -5,9 +5,6 @@ import br.ufjf.iacity.algorithm.base.SearchTree;
 import br.ufjf.iacity.algorithm.base.transition.ITransition;
 import br.ufjf.iacity.graph.CityGraph;
 import br.ufjf.iacity.graph.CityNodeAdjacency;
-import br.ufjf.iacity.graph.CityNodeGraph;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Stack;
@@ -115,7 +112,7 @@ public abstract class AlgorithmBase
         }
     }
     
-    protected boolean checkContains(List<CityNodeGraph> openedNodeList, List<CityNodeGraph> closedNodeList, CityNodeGraph nodeGraph)
+    protected boolean checkContains(List<SearchNode> openedNodeList, List<SearchNode> closedNodeList, SearchNode nodeGraph)
     {
         if((openedNodeList != null) && (closedNodeList != null) && (nodeGraph != null))
         {
@@ -131,96 +128,7 @@ public abstract class AlgorithmBase
      * @param cityNode Nó a ser verificado
      * @return (true) se já possui ancestral, (false) caso contrário
      */
-    protected boolean checkAncestral(CityNodeGraph cityNode)
-    {
-        SearchNode tmpSearchNode = this.searchTree.getCurrentNode();
-        
-        while(tmpSearchNode != null)
-        {
-            if(tmpSearchNode.getIdNode().equalsIgnoreCase(cityNode.getIdNode()))
-            {
-                return true;
-            }
-            
-            tmpSearchNode = tmpSearchNode.getRootNode();
-        }
-        
-        return false;
-    }
-    
-    protected void addInOpenedNodeList(BreadthAndDepthSearch.SearchMode searchMode, List<CityNodeGraph> openedNodeList, CityNodeGraph nodeGraph)
-    {
-        if((openedNodeList != null) && (nodeGraph != null) && (searchMode != null))
-        {
-            if (searchMode.equals(BreadthAndDepthSearch.SearchMode.Breadth)) 
-            {
-                ((LinkedList) openedNodeList).addLast(nodeGraph);
-            } 
-            else if (searchMode.equals(BreadthAndDepthSearch.SearchMode.Depth)) 
-            {
-                ((Stack) openedNodeList).push(nodeGraph);
-            }
-        }
-    }
-    
-    protected CityNodeGraph getElementFromOpenedNodeList(BreadthAndDepthSearch.SearchMode searchMode, List<CityNodeGraph> openedNodeList)
-    {
-        Object tmpElement = null;
-        CityNodeGraph nodeElement = null;
-        
-        if((openedNodeList != null) && (searchMode != null))
-        {
-            if (searchMode.equals(BreadthAndDepthSearch.SearchMode.Breadth)) 
-            {
-                tmpElement = ((LinkedList) openedNodeList).getFirst();
-            } 
-            else if (searchMode.equals(BreadthAndDepthSearch.SearchMode.Depth)) 
-            {
-                tmpElement = ((Stack) openedNodeList).peek();
-            }
-            
-            nodeElement = (CityNodeGraph)tmpElement;
-        }
-        
-        return nodeElement;
-    }
-    
-    protected CityNodeGraph removeFromOpenedNodeList(BreadthAndDepthSearch.SearchMode searchMode, List<CityNodeGraph> openedNodeList)
-    {
-        Object tmpObj = null;
-        
-        if((openedNodeList != null) && (searchMode != null))
-        {
-            if (searchMode.equals(BreadthAndDepthSearch.SearchMode.Breadth)) 
-            {
-                tmpObj = ((LinkedList) openedNodeList).removeFirst();
-            } 
-            else if (searchMode.equals(BreadthAndDepthSearch.SearchMode.Depth)) 
-            {
-                tmpObj = ((Stack) openedNodeList).pop();
-            }
-        }
-        
-        return (tmpObj != null) ? (CityNodeGraph)tmpObj : null;
-    }
-    
-    protected boolean checkContainsSearchNode(List<SearchNode> openedNodeList, List<SearchNode> closedNodeList, SearchNode nodeGraph)
-    {
-        if((openedNodeList != null) && (closedNodeList != null) && (nodeGraph != null))
-        {
-            return (openedNodeList.contains(nodeGraph) || (closedNodeList.contains(nodeGraph)));
-        }
-        
-        return false;
-    }
-    
-    /**
-     * Verifica se o nó já foi adicionado na árvore como ancestral
-     * 
-     * @param cityNode Nó a ser verificado
-     * @return (true) se já possui ancestral, (false) caso contrário
-     */
-    protected boolean checkAncestralSearchNode(SearchNode cityNode)
+    protected boolean checkAncestral(SearchNode cityNode)
     {
         SearchNode tmpSearchNode = this.searchTree.getCurrentNode();
         
@@ -284,7 +192,7 @@ public abstract class AlgorithmBase
         }
     }
     
-    protected SearchNode getElementFromOpenedNodeListSearchNode(BreadthAndDepthSearch.SearchMode searchMode, List<SearchNode> openedNodeList)
+    protected SearchNode getElementFromOpenedNodeList(BreadthAndDepthSearch.SearchMode searchMode, List<SearchNode> openedNodeList)
     {
         Object tmpElement = null;
         SearchNode nodeElement = null;
@@ -306,13 +214,13 @@ public abstract class AlgorithmBase
         return nodeElement;
     }
     
-    protected SearchNode removeFromOpenedNodeListSearchNode(BreadthAndDepthSearch.SearchMode searchMode, List<SearchNode> openedNodeList)
+    protected SearchNode removeFromOpenedNodeList(BreadthAndDepthSearch.SearchMode searchMode, List<SearchNode> openedNodeList)
     {
         Object tmpObj = null;
         
         if((openedNodeList != null) && (searchMode != null))
         {
-            if (searchMode.equals(BreadthAndDepthSearch.SearchMode.Breadth)) 
+            if (searchMode.equals(BreadthAndDepthSearch.SearchMode.Breadth) || searchMode.equals(BreadthAndDepthSearch.SearchMode.Ordered)) 
             {
                 tmpObj = ((LinkedList) openedNodeList).removeFirst();
             } 
@@ -323,10 +231,5 @@ public abstract class AlgorithmBase
         }
         
         return (tmpObj != null) ? (SearchNode)tmpObj : null;
-    }
-    
-    protected boolean removeFromOpenedNodeListSearchNode(List<SearchNode> openedNodeList, SearchNode toRemoveNode)
-    {
-        return openedNodeList.remove(toRemoveNode);
     }
 }

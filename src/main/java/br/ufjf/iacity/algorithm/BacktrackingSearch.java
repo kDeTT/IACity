@@ -59,7 +59,7 @@ public class BacktrackingSearch extends AlgorithmBase
         while (!(searchState.equals(SearchState.Success) || searchState.equals(SearchState.Failed)))
         {
             // Aplica a transição sobre o nó atual da árvore de busca
-            CityNodeGraph nextCityNodeGraph = transition.applyTransition(searchTree.getCurrentNode().getCityNodeGraph());
+            SearchNode nextSearchNode = transition.applyTransition(searchTree.getCurrentNode());
             
             /**
              * 
@@ -69,34 +69,31 @@ public class BacktrackingSearch extends AlgorithmBase
              * caso contrário, não existe mais operadores aplicáveis.
              * 
              */
-            if(nextCityNodeGraph != null)
+            if(nextSearchNode != null)
             {
                 // Verifica se não há ancestral para o nó
-                if(!checkAncestral(nextCityNodeGraph))
+                if(!checkAncestral(nextSearchNode))
                 {
-                    // Cria e adiciona o novo nó na árvore de busca
-                    SearchNode newSearchNode = new SearchNode(searchTree.getCurrentNode(),
-                            (searchTree.getCurrentNode().getTreeLevel() + 1),
-                            nextCityNodeGraph);
-                    this.searchTree.addChildToCurrentNode(newSearchNode);
+                    // Adiciona o novo nó na árvore de busca
+                    this.searchTree.addChildToCurrentNode(nextSearchNode);
                     
                     // Define que o nó atual foi expandido
                     this.searchTree.getCurrentNode().setExpanded(true);
                     
                     // Altera o nó atual para o novo nó criado
-                    this.searchTree.setCurrentNode(newSearchNode);
+                    this.searchTree.setCurrentNode(nextSearchNode);
                     
                     // Define que o nó atual da árvore foi visitado
                     this.searchTree.getCurrentNode().setVisited(true);
 
                     // Verifica se o nó é o nó buscado
-                    if (nextCityNodeGraph.getIdNode().equalsIgnoreCase(searchTree.getEndNode().getIdNode())) 
+                    if (nextSearchNode.getIdNode().equalsIgnoreCase(searchTree.getEndNode().getIdNode())) 
                     {
                         // A busca teve sucesso
                         searchState = SearchState.Success;
                         
                         // O novo nó é o nó final
-                        searchTree.setEndNode(newSearchNode);
+                        searchTree.setEndNode(nextSearchNode);
                     }
                 }
             }

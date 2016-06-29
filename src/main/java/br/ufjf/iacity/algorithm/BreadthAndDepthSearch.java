@@ -107,7 +107,7 @@ public class BreadthAndDepthSearch extends AlgorithmBase
                  * com o modo de busca usado
                  * 
                  */
-                SearchNode openedSearchNode = this.getElementFromOpenedNodeListSearchNode(searchMode, openedNodeList);
+                SearchNode openedSearchNode = this.getElementFromOpenedNodeList(searchMode, openedNodeList);
                 
                 if(searchMode.equals(SearchMode.Breadth))
                 {
@@ -130,7 +130,7 @@ public class BreadthAndDepthSearch extends AlgorithmBase
                  * lista de fechados
                  *
                  */
-                closedNodeList.add(removeFromOpenedNodeListSearchNode(searchMode, openedNodeList));
+                closedNodeList.add(removeFromOpenedNodeList(searchMode, openedNodeList));
                 
                 // Verifica se o nó buscado foi encontrado
                 if(openedSearchNode.getIdNode().equalsIgnoreCase(searchTree.getEndNode().getIdNode()))
@@ -163,7 +163,7 @@ public class BreadthAndDepthSearch extends AlgorithmBase
                          * nas listas de abertos e fechados
                          *
                          */
-                        if (!checkAncestralSearchNode(nextSearchNode) && !checkContainsSearchNode(openedNodeList, closedNodeList, nextSearchNode))
+                        if (!checkAncestral(nextSearchNode) && !checkContains(openedNodeList, closedNodeList, nextSearchNode))
                         {
                             tmpList.add(nextSearchNode);
                         }

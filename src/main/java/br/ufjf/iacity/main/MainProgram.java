@@ -1,7 +1,6 @@
 package br.ufjf.iacity.main;
 
-import br.ufjf.iacity.algorithm.BreadthAndDepthSearch;
-import br.ufjf.iacity.algorithm.BreadthAndDepthSearch.SearchMode;
+import br.ufjf.iacity.algorithm.OrderedSearch;
 import br.ufjf.iacity.algorithm.base.transition.AlphabeticalTransition;
 import br.ufjf.iacity.graph.CityGraph;
 import br.ufjf.iacity.helper.Coordinate;
@@ -89,34 +88,34 @@ public class MainProgram
 //            backTrack.printPath();
             
 //            BreadthAndDepthSearch breadthSearch = new BreadthAndDepthSearch(graph, new AlphabeticalTransition(), graph.getNode(cityA), graph.getNode(cityF), SearchMode.Breadth, false);
-            BreadthAndDepthSearch breadthSearch = new BreadthAndDepthSearch(graph, new AlphabeticalTransition(), graph.getNode(cityA), graph.getNode(cityF), SearchMode.Depth, false);
+//            BreadthAndDepthSearch breadthSearch = new BreadthAndDepthSearch(graph, new AlphabeticalTransition(), graph.getNode(cityA), graph.getNode(cityF), SearchMode.Depth, false);
 //            BreadthAndDepthSearch breadthSearch = new BreadthAndDepthSearch(graph, new AlphabeticalTransition(), graph.getNode(0), graph.getNode(799), SearchMode.Depth);
             
-            long startTime = System.nanoTime();
-            breadthSearch.search();
-            long endTime = System.nanoTime();
-
-            System.out.println("Tempo de Execução: " + ((endTime - startTime) / 1e6) + " ms");
-            breadthSearch.printCost();
-            breadthSearch.printDepth();
-            breadthSearch.printExpandedAndVisited();
-            System.out.println("Caminho:");
-            breadthSearch.printPath();
-            
-            
-//            OrderedSearch orderedSearch = new OrderedSearch(graph, new AlphabeticalTransition(), graph.getNode(cityA), graph.getNode(cityF), false);
-//            OrderedSearch orderedSearch = new OrderedSearch(graph, new AlphabeticalTransition(), graph.getNode(0), graph.getNode(199));
-            
 //            long startTime = System.nanoTime();
-//            orderedSearch.search();
+//            breadthSearch.search();
 //            long endTime = System.nanoTime();
 //
 //            System.out.println("Tempo de Execução: " + ((endTime - startTime) / 1e6) + " ms");
-//            orderedSearch.printCost();
-//            orderedSearch.printDepth();
-//            orderedSearch.printExpandedAndVisited();
+//            breadthSearch.printCost();
+//            breadthSearch.printDepth();
+//            breadthSearch.printExpandedAndVisited();
 //            System.out.println("Caminho:");
-//            orderedSearch.printPath();
+//            breadthSearch.printPath();
+            
+            
+            OrderedSearch orderedSearch = new OrderedSearch(graph, new AlphabeticalTransition(), graph.getNode(cityA), graph.getNode(cityF), false);
+//            OrderedSearch orderedSearch = new OrderedSearch(graph, new AlphabeticalTransition(), graph.getNode(0), graph.getNode(199));
+            
+            long startTime = System.nanoTime();
+            orderedSearch.search();
+            long endTime = System.nanoTime();
+
+            System.out.println("Tempo de Execução: " + ((endTime - startTime) / 1e6) + " ms");
+            orderedSearch.printCost();
+            orderedSearch.printDepth();
+            orderedSearch.printExpandedAndVisited();
+            System.out.println("Caminho:");
+            orderedSearch.printPath();
         }
         catch(Exception ex)
         {

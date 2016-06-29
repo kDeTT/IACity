@@ -82,7 +82,7 @@ public class OrderedSearch extends AlgorithmBase
                  * com o modo de busca usado
                  * 
                  */
-                SearchNode openedSearchNode = this.getElementFromOpenedNodeListSearchNode(SearchMode.Ordered, openedNodeList);
+                SearchNode openedSearchNode = this.getElementFromOpenedNodeList(SearchMode.Ordered, openedNodeList);
                 
                 // Define primeiramente o nó atual como o pai do novo nó
                 this.searchTree.setCurrentNode(openedSearchNode.getRootNode());
@@ -102,8 +102,7 @@ public class OrderedSearch extends AlgorithmBase
                  * lista de fechados
                  *
                  */
-                this.removeFromOpenedNodeListSearchNode(openedNodeList, openedSearchNode);
-                closedNodeList.add(openedSearchNode);
+                closedNodeList.add(removeFromOpenedNodeList(SearchMode.Ordered, openedNodeList));
                 
                 // Verifica se o nó buscado foi encontrado
                 if(openedSearchNode.getIdNode().equalsIgnoreCase(searchTree.getEndNode().getIdNode()))
@@ -133,7 +132,7 @@ public class OrderedSearch extends AlgorithmBase
                          * nas listas de abertos e fechados
                          *
                          */
-                        if (!checkAncestralSearchNode(nextSearchNode) && !checkContainsSearchNode(openedNodeList, closedNodeList, nextSearchNode))
+                        if (!checkAncestral(nextSearchNode) && !checkContains(openedNodeList, closedNodeList, nextSearchNode))
                         {
                             this.addInOpenedNodeList(SearchMode.Ordered, openedNodeList, nextSearchNode);
                         }
