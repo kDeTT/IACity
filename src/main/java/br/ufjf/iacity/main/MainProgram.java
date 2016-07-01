@@ -71,7 +71,7 @@ public class MainProgram
             
             graph.addAdjacency(graph.getNode(cityE), graph.getNode(cityF), 5, false);
             
-//            CityGraph graph = randomGraph(500, 50);
+//            CityGraph graph = randomGraph(100, 50);
             
             
 //            BacktrackingSearch backTrack = new BacktrackingSearch(graph, new AlphabeticalTransition(), graph.getNode(cityA), graph.getNode(cityF), true);
@@ -104,7 +104,7 @@ public class MainProgram
             
             
             OrderedSearch orderedSearch = new OrderedSearch(graph, new AlphabeticalTransition(), graph.getNode(cityA), graph.getNode(cityF), false);
-//            OrderedSearch orderedSearch = new OrderedSearch(graph, new AlphabeticalTransition(), graph.getNode(0), graph.getNode(199));
+//            OrderedSearch orderedSearch = new OrderedSearch(graph, new AlphabeticalTransition(), graph.getNode(0), graph.getNode(99), false);
             
             long startTime = System.nanoTime();
             orderedSearch.search();

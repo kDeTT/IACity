@@ -6,6 +6,7 @@ import br.ufjf.iacity.algorithm.base.SearchTree;
 import br.ufjf.iacity.algorithm.base.transition.ITransition;
 import br.ufjf.iacity.graph.CityGraph;
 import br.ufjf.iacity.graph.CityNodeGraph;
+import br.ufjf.iacity.helper.sort.QuickSort;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -140,6 +141,9 @@ public class OrderedSearch extends AlgorithmBase
                         // Aplica a próxima transição
                         nextSearchNode = this.transition.applyTransition(searchTree.getCurrentNode());
                     }
+                    
+                    // Ordena a lista de abertos usando o custo dos nós
+                    openedNodeList = QuickSort.sort(openedNodeList);
 
                     // Define que o nó atual da árvore foi expandido
                     this.searchTree.getCurrentNode().setExpanded(true);

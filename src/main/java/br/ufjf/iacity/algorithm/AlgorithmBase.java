@@ -159,21 +159,25 @@ public abstract class AlgorithmBase
             }
             else if (searchMode.equals(BreadthAndDepthSearch.SearchMode.Ordered)) 
             {
-                if(openedNodeList.size() > 0)
-                {
-                    for (int i = 0; i < openedNodeList.size(); i++) 
-                    {
-                        if (newSearchNode.getCost() <= openedNodeList.get(i).getCost()) 
-                        {
-                            openedNodeList.add(i, newSearchNode);
-                            break;
-                        }
-                    }
-                }
-                else
-                {
-                    openedNodeList.add(newSearchNode);
-                }
+                openedNodeList.add(newSearchNode);
+                
+                
+                
+//                if(openedNodeList.size() > 0)
+//                {
+//                    for (int i = 0; i < openedNodeList.size(); i++) 
+//                    {
+//                        if (newSearchNode.getCost() <= openedNodeList.get(i).getCost()) 
+//                        {
+//                            openedNodeList.add(i, newSearchNode);
+//                            break;
+//                        }
+//                    }
+//                }
+//                else
+//                {
+//                    openedNodeList.add(newSearchNode);
+//                }
                 
                 
                 
