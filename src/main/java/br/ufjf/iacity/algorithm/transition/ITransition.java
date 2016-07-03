@@ -1,4 +1,4 @@
-package br.ufjf.iacity.algorithm.base.transition;
+package br.ufjf.iacity.algorithm.transition;
 
 import br.ufjf.iacity.algorithm.base.SearchNode;
 

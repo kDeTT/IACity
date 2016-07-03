@@ -1,13 +1,16 @@
 package br.ufjf.iacity.main;
 
-import br.ufjf.iacity.algorithm.OrderedSearch;
-import br.ufjf.iacity.algorithm.base.transition.AlphabeticalTransition;
+import br.ufjf.iacity.algorithm.AbstractAlgorithmSearch.SearchState;
+import br.ufjf.iacity.algorithm.BacktrackingSearch;
+import br.ufjf.iacity.algorithm.events.ISearchStatusChangedEventListener;
+import br.ufjf.iacity.algorithm.transition.AlphabeticalTransition;
 import br.ufjf.iacity.graph.CityGraph;
 import br.ufjf.iacity.helper.Coordinate;
+import br.ufjf.iacity.helper.algorithm.AlgorithmParameter;
 import br.ufjf.iacity.model.City;
 import java.util.Random;
 
-public class MainProgram 
+public class MainProgram
 {
     private static CityGraph randomGraph(int maxCities, int maxAdjacency)
     {
@@ -40,8 +43,22 @@ public class MainProgram
     
     public static void main(String[] args) 
     {
+        class EventTest implements ISearchStatusChangedEventListener {
+
+            @Override
+            public void searchStatusChangedEvent(Object event) {
+                if (event instanceof SearchState) {
+                    SearchState state = (SearchState) event;
+                    System.out.println(String.format("Search status changed: %s", state.toString()));
+                }
+            }
+        }
+        
         try
         {
+            //            CityGraph graph = randomGraph(100, 50);
+            
+            
             City cityA = new City("A", new Coordinate(-1, -1));
             City cityB = new City("B", new Coordinate(-1, -1));
             City cityC = new City("C", new Coordinate(-1, -1));
@@ -71,29 +88,46 @@ public class MainProgram
             
             graph.addAdjacency(graph.getNode(cityE), graph.getNode(cityF), 5, false);
             
-//            CityGraph graph = randomGraph(100, 50);
+            AlgorithmParameter parameter = new AlgorithmParameter();
+            
+            parameter.setGraph(graph);
+            parameter.setTransition(new AlphabeticalTransition());
+            parameter.setStartCityNode(graph.getNode(cityA));
+            parameter.setEndCityNode(graph.getNode(cityF));
+            parameter.setEnableDuplicated(true);
             
             
-//            BacktrackingSearch backTrack = new BacktrackingSearch(graph, new AlphabeticalTransition(), graph.getNode(cityA), graph.getNode(cityF), true);
+            long startTime;
+            long endTime;
+            
+            
+            
+            BacktrackingSearch backTrack = new BacktrackingSearch(parameter);
+            
+            // Testando evento
+            EventTest testEvent = new EventTest();
+            backTrack.addSearchStatusChangedEventListener(testEvent);
+            
+            startTime = System.nanoTime();
+            backTrack.search();
+            endTime = System.nanoTime();
+            
+            System.out.println("Tempo de Execução: " + ((endTime - startTime) / 1e6) + " ms");
+            backTrack.printCost();
+            backTrack.printDepth();
+            backTrack.printExpandedAndVisited();
+            System.out.println("Caminho:");
+            backTrack.printPath();
+            
+            
+            
+//            parameter.setSearchMode(SearchMode.Breadth);
 //            
-//            long startTime = System.nanoTime();
-//            backTrack.search();
-//            long endTime = System.nanoTime();
-//            
-//            System.out.println("Tempo de Execução: " + ((endTime - startTime) / 1e6) + " ms");
-//            backTrack.printCost();
-//            backTrack.printDepth();
-//            backTrack.printExpandedAndVisited();
-//            System.out.println("Caminho:");
-//            backTrack.printPath();
-            
-//            BreadthAndDepthSearch breadthSearch = new BreadthAndDepthSearch(graph, new AlphabeticalTransition(), graph.getNode(cityA), graph.getNode(cityF), SearchMode.Breadth, false);
-//            BreadthAndDepthSearch breadthSearch = new BreadthAndDepthSearch(graph, new AlphabeticalTransition(), graph.getNode(cityA), graph.getNode(cityF), SearchMode.Depth, false);
-//            BreadthAndDepthSearch breadthSearch = new BreadthAndDepthSearch(graph, new AlphabeticalTransition(), graph.getNode(0), graph.getNode(799), SearchMode.Depth);
-            
-//            long startTime = System.nanoTime();
+//            BreadthAndDepthSearch breadthSearch = new BreadthAndDepthSearch(parameter);
+//
+//            startTime = System.nanoTime();
 //            breadthSearch.search();
-//            long endTime = System.nanoTime();
+//            endTime = System.nanoTime();
 //
 //            System.out.println("Tempo de Execução: " + ((endTime - startTime) / 1e6) + " ms");
 //            breadthSearch.printCost();
@@ -102,20 +136,35 @@ public class MainProgram
 //            System.out.println("Caminho:");
 //            breadthSearch.printPath();
             
+//            parameter.setSearchMode(SearchMode.Depth);
+//            
+//            BreadthAndDepthSearch depthSearch = new BreadthAndDepthSearch(parameter);
+//
+//            startTime = System.nanoTime();
+//            depthSearch.search();
+//            endTime = System.nanoTime();
+//
+//            System.out.println("Tempo de Execução: " + ((endTime - startTime) / 1e6) + " ms");
+//            depthSearch.printCost();
+//            depthSearch.printDepth();
+//            depthSearch.printExpandedAndVisited();
+//            System.out.println("Caminho:");
+//            depthSearch.printPath();
             
-            OrderedSearch orderedSearch = new OrderedSearch(graph, new AlphabeticalTransition(), graph.getNode(cityA), graph.getNode(cityF), false);
-//            OrderedSearch orderedSearch = new OrderedSearch(graph, new AlphabeticalTransition(), graph.getNode(0), graph.getNode(99), false);
             
-            long startTime = System.nanoTime();
-            orderedSearch.search();
-            long endTime = System.nanoTime();
-
-            System.out.println("Tempo de Execução: " + ((endTime - startTime) / 1e6) + " ms");
-            orderedSearch.printCost();
-            orderedSearch.printDepth();
-            orderedSearch.printExpandedAndVisited();
-            System.out.println("Caminho:");
-            orderedSearch.printPath();
+            
+//            OrderedSearch orderedSearch = new OrderedSearch(parameter);
+//            
+//            startTime = System.nanoTime();
+//            orderedSearch.search();
+//            endTime = System.nanoTime();
+//
+//            System.out.println("Tempo de Execução: " + ((endTime - startTime) / 1e6) + " ms");
+//            orderedSearch.printCost();
+//            orderedSearch.printDepth();
+//            orderedSearch.printExpandedAndVisited();
+//            System.out.println("Caminho:");
+//            orderedSearch.printPath();
         }
         catch(Exception ex)
         {
