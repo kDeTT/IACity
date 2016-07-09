@@ -1,7 +1,7 @@
 package br.ufjf.iacity.algorithm;
 
-import br.ufjf.iacity.algorithm.base.SearchNode;
-import br.ufjf.iacity.algorithm.base.SearchTree;
+import br.ufjf.iacity.algorithm.helper.SearchNode;
+import br.ufjf.iacity.algorithm.helper.SearchTree;
 import br.ufjf.iacity.algorithm.events.ISearchStartedEventListener;
 import br.ufjf.iacity.algorithm.events.ISearchStatusChangedEventListener;
 import br.ufjf.iacity.algorithm.events.ISearchStoppedEventListener;
@@ -17,6 +17,13 @@ import java.util.Stack;
 
 public abstract class AbstractAlgorithmSearch 
 {
+
+    /**
+     * @return the searchTree
+     */
+    public SearchTree getSearchTree() {
+        return searchTree;
+    }
     public enum SearchState { Success, Failed, Searching, Started, Stopped }
     
     public enum SearchMode { Backtracking, Breadth, Depth, Ordered, BestFirst, A, IDA }
@@ -119,7 +126,7 @@ public abstract class AbstractAlgorithmSearch
             StringBuilder path = new StringBuilder();
             StringBuilder reversePath = new StringBuilder();
             
-            SearchNode tmpSearchNode = this.searchTree.getEndNode();
+            SearchNode tmpSearchNode = this.getSearchTree().getEndNode();
 
             while (tmpSearchNode != null) 
             {
@@ -147,7 +154,7 @@ public abstract class AbstractAlgorithmSearch
         if(getSearchState().equals(SearchState.Success))
         {
             int cost = 0;
-            SearchNode tmpSearchNode = this.searchTree.getEndNode();
+            SearchNode tmpSearchNode = this.getSearchTree().getEndNode();
 
             while (tmpSearchNode.getRootNode() != null) 
             {
@@ -175,7 +182,7 @@ public abstract class AbstractAlgorithmSearch
         {
             int expanded = 0;
             
-            SearchNode tmpSearchNode = this.searchTree.getEndNode();
+            SearchNode tmpSearchNode = this.getSearchTree().getEndNode();
 
             while (tmpSearchNode != null) 
             {
@@ -201,7 +208,7 @@ public abstract class AbstractAlgorithmSearch
         {
             int visited = 0;
             
-            SearchNode tmpSearchNode = this.searchTree.getEndNode();
+            SearchNode tmpSearchNode = this.getSearchTree().getEndNode();
 
             while (tmpSearchNode != null) 
             {
@@ -246,7 +253,7 @@ public abstract class AbstractAlgorithmSearch
     {
         if(getSearchState().equals(SearchState.Success))
         {
-            this.solutionDepth = searchTree.getEndNode().getTreeLevel();
+            this.solutionDepth = getSearchTree().getEndNode().getTreeLevel();
         }
         else
         {
@@ -272,6 +279,11 @@ public abstract class AbstractAlgorithmSearch
     {
         this.calculateVisitedNodeCount();
         return solutionVisitedNodeCount;
+    }
+    
+    public float getSolutionAverageFactorBranching()
+    {
+        return ((float)getSolutionExpandedNodeCount() / getSolutionVisitedNodeCount());
     }
     
     public void printPath()
@@ -302,11 +314,16 @@ public abstract class AbstractAlgorithmSearch
         System.out.println("Quantidade de nós visitados: " + getSolutionVisitedNodeCount());
     }
     
-    protected boolean checkContains(List<SearchNode> openedNodeList, List<SearchNode> closedNodeList, SearchNode nodeGraph)
+    public void printAverageFactorBranching()
     {
-        if((openedNodeList != null) && (closedNodeList != null) && (nodeGraph != null))
+        System.out.println("Fator Médio de Ramificação: " + getSolutionAverageFactorBranching());
+    }
+    
+    protected boolean checkContains(List<SearchNode> openedNodeList, SearchNode nodeGraph)
+    {
+        if((openedNodeList != null) && (nodeGraph != null))
         {
-            return (openedNodeList.contains(nodeGraph) || (closedNodeList.contains(nodeGraph)));
+            return openedNodeList.contains(nodeGraph);
         }
         
         return false;
@@ -320,7 +337,7 @@ public abstract class AbstractAlgorithmSearch
      */
     protected boolean checkAncestral(SearchNode cityNode)
     {
-        SearchNode tmpSearchNode = this.searchTree.getCurrentNode();
+        SearchNode tmpSearchNode = this.getSearchTree().getCurrentNode();
         
         while(tmpSearchNode != null)
         {

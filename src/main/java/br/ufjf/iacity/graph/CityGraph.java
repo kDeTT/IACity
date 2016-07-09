@@ -29,6 +29,22 @@ public class CityGraph
         return (this.nodeList.get(idNode));
     }
     
+    public CityNodeGraph getNode(String idNode)
+    {
+        CityNodeGraph nodeGraph = null;
+        
+        for(CityNodeGraph node : nodeList)
+        {
+            if(node.getIdNode().equalsIgnoreCase(idNode))
+            {
+                nodeGraph = node;
+                break;
+            }
+        }
+        
+        return nodeGraph;
+    }
+    
     public CityNodeGraph getNode(City city)
     {
         CityNodeGraph nodeGraph = null;

@@ -1,14 +1,14 @@
 package br.ufjf.iacity.model;
 
-import br.ufjf.iacity.helper.Coordinate;
+import br.ufjf.iacity.helper.GeoCoordinate;
 import java.util.Objects;
 
 public class City 
 {
     private final String name;
-    private final Coordinate coordinate;
+    private final GeoCoordinate coordinate;
     
-    public City(String name, Coordinate coordinate) throws IllegalArgumentException
+    public City(String name, GeoCoordinate coordinate) throws IllegalArgumentException
     {
         if((name == null) || (coordinate == null))
         {
@@ -24,7 +24,7 @@ public class City
         return name;
     }
 
-    public Coordinate getCoordinate() 
+    public GeoCoordinate getCoordinate() 
     {
         return coordinate;
     }

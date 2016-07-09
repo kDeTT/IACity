@@ -21,5 +21,11 @@
             <artifactId>google-maps-services</artifactId>
             <version>${googlemaps.client.version}</version>
         </dependency>
+        
+        <dependency>
+            <groupId>com.mxgraph</groupId>
+            <artifactId>jgraphx</artifactId>
+            <version>3.5.1.4</version>
+        </dependency>
     </dependencies>
 </project>

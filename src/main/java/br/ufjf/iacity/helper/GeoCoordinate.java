@@ -2,7 +2,7 @@ package br.ufjf.iacity.helper;
 
 import java.text.DecimalFormat;
 
-public class Coordinate 
+public class GeoCoordinate 
 {
     private static final double MAX_LATITUDE = 90.0000000;
     private static final double MIN_LATITUDE = -90.0000000;
@@ -10,12 +10,15 @@ public class Coordinate
     private static final double MAX_LONGITUDE = 180.0000000;
     private static final double MIN_LONGITUDE = -180.0000000;
     
+    // Raio da Terra em quilômetros
+    private static final int EARTH_RADIUS = 6371;
+    
     private double latitude;
     private double longitude;
     
     private final DecimalFormat formatPattern;
     
-    public Coordinate(double latitude, double longitude) throws IllegalArgumentException
+    public GeoCoordinate(double latitude, double longitude) throws IllegalArgumentException
     {
         if(isValidLatitude(latitude) && isValidLongitude(longitude))
         {
@@ -34,6 +37,14 @@ public class Coordinate
     public String toString()
     {
         return String.format("%s, %s", formatPattern.format(latitude), formatPattern.format(longitude));
+    }
+    
+    public CartesianCoordinate castToCartesian()
+    {
+        double x = (double) (EARTH_RADIUS * Math.cos(latitude) * Math.cos(longitude));
+        double y = (double) (EARTH_RADIUS * Math.cos(latitude) * Math.sin(longitude));
+        
+        return new CartesianCoordinate(x, y);
     }
     
     public static boolean isValidLatitude(double latitude)
@@ -93,7 +104,7 @@ public class Coordinate
             return false;
         }
         
-        final Coordinate other = (Coordinate) obj;
+        final GeoCoordinate other = (GeoCoordinate) obj;
         
         if (Double.doubleToLongBits(this.latitude) != Double.doubleToLongBits(other.latitude)) 
         {

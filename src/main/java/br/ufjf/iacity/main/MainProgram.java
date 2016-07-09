@@ -5,7 +5,7 @@ import br.ufjf.iacity.algorithm.BacktrackingSearch;
 import br.ufjf.iacity.algorithm.events.ISearchStatusChangedEventListener;
 import br.ufjf.iacity.algorithm.transition.AlphabeticalTransition;
 import br.ufjf.iacity.graph.CityGraph;
-import br.ufjf.iacity.helper.Coordinate;
+import br.ufjf.iacity.helper.GeoCoordinate;
 import br.ufjf.iacity.helper.algorithm.AlgorithmParameter;
 import br.ufjf.iacity.model.City;
 import java.util.Random;
@@ -18,7 +18,7 @@ public class MainProgram
         
         for(int i = 0; i < maxCities; i++)
         {
-            graph.addNode(-1, new City(String.valueOf(i), new Coordinate(-1, -1)));
+            graph.addNode(-1, new City(String.valueOf(i), new GeoCoordinate(-1, -1)));
         }
         
         float costAdj;
@@ -59,12 +59,12 @@ public class MainProgram
             //            CityGraph graph = randomGraph(100, 50);
             
             
-            City cityA = new City("A", new Coordinate(-1, -1));
-            City cityB = new City("B", new Coordinate(-1, -1));
-            City cityC = new City("C", new Coordinate(-1, -1));
-            City cityD = new City("D", new Coordinate(-1, -1));
-            City cityE = new City("E", new Coordinate(-1, -1));
-            City cityF = new City("F", new Coordinate(-1, -1));
+            City cityA = new City("A", new GeoCoordinate(-1, -1));
+            City cityB = new City("B", new GeoCoordinate(-1, -1));
+            City cityC = new City("C", new GeoCoordinate(-1, -1));
+            City cityD = new City("D", new GeoCoordinate(-1, -1));
+            City cityE = new City("E", new GeoCoordinate(-1, -1));
+            City cityF = new City("F", new GeoCoordinate(-1, -1));
             
             CityGraph graph = new CityGraph();
             graph.addNode(0, cityA);
@@ -116,6 +116,7 @@ public class MainProgram
             backTrack.printCost();
             backTrack.printDepth();
             backTrack.printExpandedAndVisited();
+            backTrack.printAverageFactorBranching();
             System.out.println("Caminho:");
             backTrack.printPath();
             

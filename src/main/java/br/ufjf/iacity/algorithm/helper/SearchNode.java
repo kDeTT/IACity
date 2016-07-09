@@ -1,4 +1,4 @@
-package br.ufjf.iacity.algorithm.base;
+package br.ufjf.iacity.algorithm.helper;
 
 import br.ufjf.iacity.graph.CityNodeGraph;
 import java.util.ArrayList;
@@ -6,7 +6,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Objects;
 
-public class SearchNode 
+public class SearchNode implements Comparable
 {
     private String idNode;
     private SearchNode rootNode;
@@ -54,25 +54,28 @@ public class SearchNode
     }
 
     @Override
-    public boolean equals(Object obj) {
-        if (obj == null) {
+    public boolean equals(Object obj) 
+    {
+        if (obj == null) 
+        {
             return false;
         }
-        if (getClass() != obj.getClass()) {
+        
+        if (getClass() != obj.getClass()) 
+        {
             return false;
         }
-        final SearchNode other = (SearchNode) obj;
-        if (!Objects.equals(this.idNode, other.idNode)) {
-            return false;
-        }
-        if ((isEnableDuplicate()) && (this.rootNode != null) && (other.rootNode != null) && !Objects.equals(this.rootNode.idNode, other.rootNode.idNode)) {
-            return false;
-        }
-        if (isEnableCost() && (Float.floatToIntBits(this.cost) != Float.floatToIntBits(other.cost))) {
-            return false;
-        }
-
-        return true;
+        
+        SearchNode other = (SearchNode) obj;
+        return Objects.equals(this.idNode, other.idNode);
+    }
+    
+    @Override
+    public int compareTo(Object obj)
+    {
+        // Caso contrário, compara os custos dos estados
+        SearchNode other = (SearchNode) obj;
+        return Float.compare(this.cost, other.cost);
     }
     
     /**

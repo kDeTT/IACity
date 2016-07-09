@@ -1,7 +1,7 @@
 package br.ufjf.iacity.algorithm;
 
-import br.ufjf.iacity.algorithm.base.SearchNode;
-import br.ufjf.iacity.algorithm.base.SearchTree;
+import br.ufjf.iacity.algorithm.helper.SearchNode;
+import br.ufjf.iacity.algorithm.helper.SearchTree;
 import br.ufjf.iacity.helper.algorithm.AlgorithmParameter;
 import br.ufjf.iacity.helper.sort.QuickSort;
 import java.util.LinkedList;
@@ -62,7 +62,7 @@ public class OrderedSearch extends AbstractAlgorithmSearch
         List<SearchNode> closedNodeList = new LinkedList<>();
         
         // Adiciona o nó inicial na lista de abertos
-        this.addInOpenedNodeList(SearchMode.Ordered, openedNodeList, searchTree.getStartNode());
+        this.addInOpenedNodeList(SearchMode.Ordered, openedNodeList, getSearchTree().getStartNode());
         
         // Enquanto não for obtido sucesso ou fracasso, continue a busca
         while (!(getSearchState().equals(SearchState.Success) || getSearchState().equals(SearchState.Failed)))
@@ -84,16 +84,16 @@ public class OrderedSearch extends AbstractAlgorithmSearch
                 SearchNode openedSearchNode = this.getElementFromOpenedNodeList(SearchMode.Ordered, openedNodeList);
                 
                 // Define primeiramente o nó atual como o pai do novo nó
-                this.searchTree.setCurrentNode(openedSearchNode.getRootNode());
+                this.getSearchTree().setCurrentNode(openedSearchNode.getRootNode());
                 
                 // Adiciona o nó na árvore de busca
-                this.searchTree.addChildToCurrentNode(openedSearchNode);
+                this.getSearchTree().addChildToCurrentNode(openedSearchNode);
                 
                 // Altera o nó atual para o novo nó
-                this.searchTree.setCurrentNode(openedSearchNode);
+                this.getSearchTree().setCurrentNode(openedSearchNode);
                 
                 // Define que o nó atual da árvore foi visitado
-                this.searchTree.getCurrentNode().setVisited(true);
+                this.getSearchTree().getCurrentNode().setVisited(true);
                 
                 /**
                  *
@@ -104,13 +104,13 @@ public class OrderedSearch extends AbstractAlgorithmSearch
                 closedNodeList.add(removeFromOpenedNodeList(SearchMode.Ordered, openedNodeList));
                 
                 // Verifica se o nó buscado foi encontrado
-                if(openedSearchNode.getIdNode().equalsIgnoreCase(searchTree.getEndNode().getIdNode()))
+                if(openedSearchNode.getIdNode().equalsIgnoreCase(getSearchTree().getEndNode().getIdNode()))
                 {
                     // A busca teve sucesso
                     this.setSearchState(SearchState.Success);
                         
                     // O nó final foi encontrado
-                    this.searchTree.setEndNode(openedSearchNode);
+                    this.getSearchTree().setEndNode(openedSearchNode);
                 }
                 else
                 {   
@@ -120,7 +120,7 @@ public class OrderedSearch extends AbstractAlgorithmSearch
                      * da árvore de busca, adicionando na lista de abertos
                      * 
                      */
-                    SearchNode nextSearchNode = this.transition.applyTransition(searchTree.getCurrentNode());
+                    SearchNode nextSearchNode = this.transition.applyTransition(getSearchTree().getCurrentNode());
                     
                     // Enquanto há transição aplicável, continue
                     while(nextSearchNode != null)
@@ -131,20 +131,73 @@ public class OrderedSearch extends AbstractAlgorithmSearch
                          * nas listas de abertos e fechados
                          *
                          */
-                        if (!checkAncestral(nextSearchNode) && !checkContains(openedNodeList, closedNodeList, nextSearchNode))
+                        if (!checkAncestral(nextSearchNode))
                         {
-                            this.addInOpenedNodeList(SearchMode.Ordered, openedNodeList, nextSearchNode);
+                            // Verifica se podas serão permitidas (enableDuplicated)
+                            if(!SearchNode.isEnableDuplicate())
+                            {
+                                /**
+                                 * Verifica se não está na lista de fechados.
+                                 * Caso esteja, o novo estado não deve ser adicionado
+                                 */
+                                if(!checkContains(closedNodeList, nextSearchNode))
+                                {
+                                    // Verifica se está na lista de abertos
+                                    if(checkContains(openedNodeList, nextSearchNode))
+                                    {
+                                        // Busca pelo estado igual na lista de abertos
+                                        for(SearchNode openedNode : openedNodeList)
+                                        {
+                                            if(openedNode.getIdNode().equalsIgnoreCase(nextSearchNode.getIdNode()))
+                                            {
+                                                /**
+                                                 * Compara o custo dos estados
+                                                 * para verificar qual deve ser mantido
+                                                 * na lista de abertos
+                                                 */
+                                                if(nextSearchNode.compareTo(openedNode) < 0)
+                                                {
+                                                    /**
+                                                     * Caso o novo estado tenha um custo menor que
+                                                     * o estado que já está na lista de abertos,
+                                                     * deve-se remover o estado que já está na lista
+                                                     * e adicionar o novo
+                                                     */
+                                                    openedNodeList.remove(openedNode);
+                                                    this.addInOpenedNodeList(SearchMode.Ordered, openedNodeList, nextSearchNode);
+                                                    
+                                                    // Termina o loop
+                                                    break;
+                                                }
+                                            }
+                                        }
+                                    }
+                                    else
+                                    {
+                                        // Caso não esteja, adicionar o novo estado imediatamente
+                                        this.addInOpenedNodeList(SearchMode.Ordered, openedNodeList, nextSearchNode);
+                                    }
+                                }
+                            }
+                            else
+                            {
+                                /**
+                                 * Caso podas não sejam permitidas, adicionar
+                                 * o novo estado imediatamente
+                                 */
+                                this.addInOpenedNodeList(SearchMode.Ordered, openedNodeList, nextSearchNode);
+                            }
                         }
                         
                         // Aplica a próxima transição
-                        nextSearchNode = this.transition.applyTransition(searchTree.getCurrentNode());
+                        nextSearchNode = this.transition.applyTransition(getSearchTree().getCurrentNode());
                     }
                     
                     // Ordena a lista de abertos usando o custo dos nós
                     openedNodeList = QuickSort.sort(openedNodeList);
 
                     // Define que o nó atual da árvore foi expandido
-                    this.searchTree.getCurrentNode().setExpanded(true);
+                    this.getSearchTree().getCurrentNode().setExpanded(true);
                 }
             }
         }

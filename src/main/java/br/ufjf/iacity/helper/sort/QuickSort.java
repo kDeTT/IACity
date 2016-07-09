@@ -1,6 +1,6 @@
 package br.ufjf.iacity.helper.sort;
 
-import br.ufjf.iacity.algorithm.base.SearchNode;
+import br.ufjf.iacity.algorithm.helper.SearchNode;
 import java.util.LinkedList;
 import java.util.List;
 

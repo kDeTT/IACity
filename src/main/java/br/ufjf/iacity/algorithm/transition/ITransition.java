@@ -1,6 +1,6 @@
 package br.ufjf.iacity.algorithm.transition;
 
-import br.ufjf.iacity.algorithm.base.SearchNode;
+import br.ufjf.iacity.algorithm.helper.SearchNode;
 
 public interface ITransition 
 {

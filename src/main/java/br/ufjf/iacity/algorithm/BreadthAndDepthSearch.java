@@ -1,7 +1,7 @@
 package br.ufjf.iacity.algorithm;
 
-import br.ufjf.iacity.algorithm.base.SearchNode;
-import br.ufjf.iacity.algorithm.base.SearchTree;
+import br.ufjf.iacity.algorithm.helper.SearchNode;
+import br.ufjf.iacity.algorithm.helper.SearchTree;
 import br.ufjf.iacity.helper.algorithm.AlgorithmParameter;
 import java.util.LinkedList;
 import java.util.List;
@@ -84,7 +84,7 @@ public class BreadthAndDepthSearch extends AbstractAlgorithmSearch
         List<SearchNode> closedNodeList = new LinkedList<>();
         
         // Adiciona o nó inicial na lista de abertos
-        this.addInOpenedNodeList(searchMode, openedNodeList, searchTree.getStartNode());
+        this.addInOpenedNodeList(searchMode, openedNodeList, getSearchTree().getStartNode());
         
         // Enquanto não for obtido sucesso ou fracasso, continue a busca
         while (!(getSearchState().equals(SearchState.Success) || getSearchState().equals(SearchState.Failed)))
@@ -108,17 +108,17 @@ public class BreadthAndDepthSearch extends AbstractAlgorithmSearch
                 if(searchMode.equals(SearchMode.Breadth))
                 {
                     // Define primeiramente o nó atual como o pai do novo nó
-                    this.searchTree.setCurrentNode(openedSearchNode.getRootNode());
+                    this.getSearchTree().setCurrentNode(openedSearchNode.getRootNode());
                 }
                 
                 // Adiciona o nó na árvore de busca
-                this.searchTree.addChildToCurrentNode(openedSearchNode);
+                this.getSearchTree().addChildToCurrentNode(openedSearchNode);
                 
                 // Altera o nó atual para o novo nó
-                this.searchTree.setCurrentNode(openedSearchNode);
+                this.getSearchTree().setCurrentNode(openedSearchNode);
                 
                 // Define que o nó atual da árvore foi visitado
-                this.searchTree.getCurrentNode().setVisited(true);
+                this.getSearchTree().getCurrentNode().setVisited(true);
                 
                 /**
                  *
@@ -129,13 +129,13 @@ public class BreadthAndDepthSearch extends AbstractAlgorithmSearch
                 closedNodeList.add(removeFromOpenedNodeList(searchMode, openedNodeList));
                 
                 // Verifica se o nó buscado foi encontrado
-                if(openedSearchNode.getIdNode().equalsIgnoreCase(searchTree.getEndNode().getIdNode()))
+                if(openedSearchNode.getIdNode().equalsIgnoreCase(getSearchTree().getEndNode().getIdNode()))
                 {
                     // A busca teve sucesso
                     this.setSearchState(SearchState.Success);
                         
                     // O nó final foi encontrado
-                    this.searchTree.setEndNode(openedSearchNode);
+                    this.getSearchTree().setEndNode(openedSearchNode);
                 }
                 else
                 {
@@ -148,7 +148,7 @@ public class BreadthAndDepthSearch extends AbstractAlgorithmSearch
                      * da árvore de busca, adicionando na lista de abertos
                      * 
                      */
-                    SearchNode nextSearchNode = this.transition.applyTransition(searchTree.getCurrentNode());
+                    SearchNode nextSearchNode = this.transition.applyTransition(getSearchTree().getCurrentNode());
                     
                     // Enquanto há transição aplicável, continue
                     while(nextSearchNode != null)
@@ -159,13 +159,23 @@ public class BreadthAndDepthSearch extends AbstractAlgorithmSearch
                          * nas listas de abertos e fechados
                          *
                          */
-                        if (!checkAncestral(nextSearchNode) && !checkContains(openedNodeList, closedNodeList, nextSearchNode))
+                        if (!checkAncestral(nextSearchNode))
                         {
-                            tmpList.add(nextSearchNode);
+                            if(SearchNode.isEnableDuplicate())
+                            {
+                                tmpList.add(nextSearchNode);
+                            }
+                            else
+                            {
+                                if (!checkContains(closedNodeList, nextSearchNode) && !checkContains(openedNodeList, nextSearchNode)) 
+                                {
+                                    tmpList.add(nextSearchNode);
+                                }
+                            }
                         }
                         
                         // Aplica a próxima transição
-                        nextSearchNode = this.transition.applyTransition(searchTree.getCurrentNode());
+                        nextSearchNode = this.transition.applyTransition(getSearchTree().getCurrentNode());
                     }
                     
                     /**
@@ -193,7 +203,7 @@ public class BreadthAndDepthSearch extends AbstractAlgorithmSearch
                     }
                     
                     // Define que o nó atual da árvore foi expandido
-                    this.searchTree.getCurrentNode().setExpanded(true);
+                    this.getSearchTree().getCurrentNode().setExpanded(true);
                 }
             }
         }

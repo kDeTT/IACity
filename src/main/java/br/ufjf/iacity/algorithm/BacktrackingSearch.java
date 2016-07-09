@@ -1,7 +1,7 @@
 package br.ufjf.iacity.algorithm;
 
-import br.ufjf.iacity.algorithm.base.SearchNode;
-import br.ufjf.iacity.algorithm.base.SearchTree;
+import br.ufjf.iacity.algorithm.helper.SearchNode;
+import br.ufjf.iacity.algorithm.helper.SearchTree;
 import br.ufjf.iacity.helper.algorithm.AlgorithmParameter;
 
 public class BacktrackingSearch extends AbstractAlgorithmSearch
@@ -52,13 +52,13 @@ public class BacktrackingSearch extends AbstractAlgorithmSearch
         this.setSearchState(SearchState.Searching);
         
         // Define que o nó inicial foi visitado
-        this.searchTree.getCurrentNode().setVisited(true);
+        this.getSearchTree().getCurrentNode().setVisited(true);
         
         // Enquanto não for obtido sucesso ou fracasso, continua a busca
         while (!(getSearchState().equals(SearchState.Success) || getSearchState().equals(SearchState.Failed)))
         {
             // Aplica a transição sobre o nó atual da árvore de busca
-            SearchNode nextSearchNode = transition.applyTransition(searchTree.getCurrentNode());
+            SearchNode nextSearchNode = transition.applyTransition(getSearchTree().getCurrentNode());
             
             /**
              * 
@@ -74,25 +74,25 @@ public class BacktrackingSearch extends AbstractAlgorithmSearch
                 if(!checkAncestral(nextSearchNode))
                 {
                     // Adiciona o novo nó na árvore de busca
-                    this.searchTree.addChildToCurrentNode(nextSearchNode);
+                    this.getSearchTree().addChildToCurrentNode(nextSearchNode);
                     
                     // Define que o nó atual foi expandido
-                    this.searchTree.getCurrentNode().setExpanded(true);
+                    this.getSearchTree().getCurrentNode().setExpanded(true);
                     
                     // Altera o nó atual para o novo nó criado
-                    this.searchTree.setCurrentNode(nextSearchNode);
+                    this.getSearchTree().setCurrentNode(nextSearchNode);
                     
                     // Define que o nó atual da árvore foi visitado
-                    this.searchTree.getCurrentNode().setVisited(true);
+                    this.getSearchTree().getCurrentNode().setVisited(true);
 
                     // Verifica se o nó é o nó buscado
-                    if (nextSearchNode.getIdNode().equalsIgnoreCase(searchTree.getEndNode().getIdNode())) 
+                    if (nextSearchNode.getIdNode().equalsIgnoreCase(getSearchTree().getEndNode().getIdNode())) 
                     {
                         // A busca teve sucesso
                         setSearchState(SearchState.Success);
                         
                         // O novo nó é o nó final
-                        searchTree.setEndNode(nextSearchNode);
+                        getSearchTree().setEndNode(nextSearchNode);
                     }
                 }
             }
@@ -105,14 +105,14 @@ public class BacktrackingSearch extends AbstractAlgorithmSearch
                  * e, neste caso, a solução não foi encontrada
                  * 
                  */
-                if(searchTree.getCurrentNode().getIdNode().equalsIgnoreCase(searchTree.getRootNode().getIdNode()))
+                if(getSearchTree().getCurrentNode().getIdNode().equalsIgnoreCase(getSearchTree().getRootNode().getIdNode()))
                 {
                     setSearchState(SearchState.Failed);
                 }
                 else
                 {
                     // Retorna para o pai do nó atual
-                    this.searchTree.setCurrentNode(searchTree.getCurrentNode().getRootNode());
+                    this.getSearchTree().setCurrentNode(getSearchTree().getCurrentNode().getRootNode());
                 }
             }
         }

@@ -1,4 +1,6 @@
-package br.ufjf.iacity.algorithm.base;
+package br.ufjf.iacity.algorithm.helper;
+
+import java.util.Iterator;
 
 public class SearchTree 
 {
@@ -36,8 +38,50 @@ public class SearchTree
                 throw new NullPointerException("O nó atual da árvore de busca não foi definido");
             }
             
+            SearchNode childRootNode = childNode.getRootNode();
+            
+            if((childRootNode != null) && !currentNode.getIdNode().equalsIgnoreCase(childRootNode.getIdNode()))
+            {
+                childRootNode = findNode(childRootNode.getIdNode(), childRootNode);
+                
+                if(childRootNode != null)
+                {
+                    this.currentNode = childRootNode;
+                }
+            }
+            
             this.currentNode.addChildNode(childNode);
         }
+    }
+    
+    private SearchNode findNode(String idNode, SearchNode rootNode)
+    {
+        if(rootNode == null)
+        {
+            return null;
+        }
+        
+        if(rootNode.getIdNode().equalsIgnoreCase(idNode))
+        {
+            return rootNode;
+        }
+        
+        SearchNode tmpNode;
+        SearchNode childNode;
+        Iterator<SearchNode> childIt = rootNode.getChildNodeIterator();
+        
+        while(childIt.hasNext())
+        {
+            childNode = childIt.next();
+            tmpNode = findNode(idNode, childNode);
+            
+            if(tmpNode.getIdNode().equalsIgnoreCase(idNode))
+            {
+                return tmpNode;
+            }
+        }
+        
+        return null;
     }
 
     /**
