@@ -10,9 +10,6 @@ public class GeoCoordinate
     private static final double MAX_LONGITUDE = 180.0000000;
     private static final double MIN_LONGITUDE = -180.0000000;
     
-    // Raio da Terra em quilômetros
-    private static final int EARTH_RADIUS = 6371;
-    
     private double latitude;
     private double longitude;
     
@@ -39,11 +36,65 @@ public class GeoCoordinate
         return String.format("%s, %s", formatPattern.format(latitude), formatPattern.format(longitude));
     }
     
-    public CartesianCoordinate castToCartesian()
+    private double longitudeToScreenX(double canvasWidth, double startX, double longitude) 
     {
-        double x = (double) (EARTH_RADIUS * Math.cos(latitude) * Math.cos(longitude));
-        double y = (double) (EARTH_RADIUS * Math.cos(latitude) * Math.sin(longitude));
-        
+
+        // Make the value positive, so we can calculate the percentage
+        double iAdjustedDegreesOfLongitude = (longitude * 1) + 180;
+        double iDegreesOfLongitudeToScreenX = 0;
+
+        // Are we at the West -180 point?
+        if (iAdjustedDegreesOfLongitude == 0) 
+        {
+            // Screen X is the left of the map (avoid divide by zero)
+            iDegreesOfLongitudeToScreenX = startX;
+        } 
+        else if (iAdjustedDegreesOfLongitude > 360) 
+        {
+            // If the longitude crosses the 180 line fix it (doesn't translat to screen well)
+            iDegreesOfLongitudeToScreenX = startX + canvasWidth;
+        } 
+        else 
+        {
+            // Convert the longitude value to screen X
+            iDegreesOfLongitudeToScreenX = (startX + (iAdjustedDegreesOfLongitude * (canvasWidth / 360)));
+        }
+
+        return iDegreesOfLongitudeToScreenX;
+    }
+    
+    private double latitudeToScreenY(double canvasHeight, double startY, double latitude) 
+    {
+        // Make the value positive, so we can calculate the percentage
+        double iAdjustedDegreesOfLatitude = (latitude * 1) + 90;
+        double iDegreesOfLatitudeToScreenY = 0;
+
+        // Are we at the South pole?
+        if (iAdjustedDegreesOfLatitude == 0) 
+        {
+            // Screen Y is the botton of the map (avoid divide by zero)
+            iDegreesOfLatitudeToScreenY = canvasHeight + startY;
+        } 
+        else if (iAdjustedDegreesOfLatitude > 180)
+        {
+		// Are we at the North pole (or beyond)?
+            // Screen Y is the top of the map
+            iDegreesOfLatitudeToScreenY = startY;
+        }
+        else 
+        {
+            // Convert the latitude value to screen X
+            iDegreesOfLatitudeToScreenY = (canvasHeight - (iAdjustedDegreesOfLatitude * (canvasHeight / 180)) + startY);
+        }
+
+        return iDegreesOfLatitudeToScreenY;
+    }
+
+    public CartesianCoordinate castToCartesian(double canvasWidth, double canvasHeight, double startX, double startY)
+    {
+        double x = this.longitudeToScreenX(canvasWidth, startX, longitude);
+        double y = this.latitudeToScreenY(canvasHeight, startY, latitude);
+
         return new CartesianCoordinate(x, y);
     }
     

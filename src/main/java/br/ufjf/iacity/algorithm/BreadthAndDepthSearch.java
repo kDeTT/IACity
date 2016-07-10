@@ -105,11 +105,11 @@ public class BreadthAndDepthSearch extends AbstractAlgorithmSearch
                  */
                 SearchNode openedSearchNode = this.getElementFromOpenedNodeList(searchMode, openedNodeList);
                 
-                if(searchMode.equals(SearchMode.Breadth))
-                {
-                    // Define primeiramente o nó atual como o pai do novo nó
-                    this.getSearchTree().setCurrentNode(openedSearchNode.getRootNode());
-                }
+//                if(searchMode.equals(SearchMode.Breadth))
+//                {
+//                    // Define primeiramente o nó atual como o pai do novo nó
+//                    this.getSearchTree().setCurrentNode(openedSearchNode.getRootNode());
+//                }
                 
                 // Adiciona o nó na árvore de busca
                 this.getSearchTree().addChildToCurrentNode(openedSearchNode);

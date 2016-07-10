@@ -11,6 +11,7 @@ import br.ufjf.iacity.algorithm.events.initiator.SearchStoppedEvenInitiator;
 import br.ufjf.iacity.algorithm.transition.ITransition;
 import br.ufjf.iacity.graph.CityGraph;
 import br.ufjf.iacity.graph.CityNodeAdjacency;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Stack;
@@ -176,55 +177,43 @@ public abstract class AbstractAlgorithmSearch
         }
     }
     
-    private void calculateExpandedNodeCount()
+    private void calculateExpandedNodeCount(SearchNode rootNode)
     {
-        if(getSearchState().equals(SearchState.Success))
+        if(rootNode != null)
         {
-            int expanded = 0;
-            
-            SearchNode tmpSearchNode = this.getSearchTree().getEndNode();
-
-            while (tmpSearchNode != null) 
+            if(rootNode.isExpanded())
             {
-                if(tmpSearchNode.isExpanded())
-                {
-                    expanded++;
-                }
-                
-                tmpSearchNode = tmpSearchNode.getRootNode();
+                this.solutionExpandedNodeCount++;
             }
-
-            this.solutionExpandedNodeCount = expanded;
-        }
-        else
-        {
-            this.solutionExpandedNodeCount = -1;
+            
+            SearchNode tmpNode;
+            Iterator<SearchNode> childIt = rootNode.getChildNodeIterator();
+            
+            while(childIt.hasNext())
+            {
+                tmpNode = childIt.next();
+                calculateExpandedNodeCount(tmpNode);
+            }
         }
     }
     
-    private void calculateVisitedNodeCount()
+    private void calculateVisitedNodeCount(SearchNode rootNode)
     {
-        if(getSearchState().equals(SearchState.Success))
+        if(rootNode != null)
         {
-            int visited = 0;
-            
-            SearchNode tmpSearchNode = this.getSearchTree().getEndNode();
-
-            while (tmpSearchNode != null) 
+            if(rootNode.isVisited())
             {
-                if(tmpSearchNode.isVisited())
-                {
-                    visited++;
-                }
-                
-                tmpSearchNode = tmpSearchNode.getRootNode();
+                this.solutionVisitedNodeCount++;
             }
-
-            this.solutionVisitedNodeCount = visited;
-        }
-        else
-        {
-            this.solutionVisitedNodeCount = -1;
+            
+            SearchNode tmpNode;
+            Iterator<SearchNode> childIt = rootNode.getChildNodeIterator();
+            
+            while(childIt.hasNext())
+            {
+                tmpNode = childIt.next();
+                calculateVisitedNodeCount(tmpNode);
+            }
         }
     }
     
@@ -268,7 +257,8 @@ public abstract class AbstractAlgorithmSearch
      */
     public int getSolutionExpandedNodeCount() 
     {
-        this.calculateExpandedNodeCount();
+        this.solutionExpandedNodeCount = 0;
+        this.calculateExpandedNodeCount(searchTree.getRootNode());
         return solutionExpandedNodeCount;
     }
 
@@ -277,7 +267,8 @@ public abstract class AbstractAlgorithmSearch
      */
     public int getSolutionVisitedNodeCount()
     {
-        this.calculateVisitedNodeCount();
+        this.solutionVisitedNodeCount = 0;
+        this.calculateVisitedNodeCount(searchTree.getRootNode());
         return solutionVisitedNodeCount;
     }
     
@@ -367,38 +358,6 @@ public abstract class AbstractAlgorithmSearch
             else if (searchMode.equals(BreadthAndDepthSearch.SearchMode.Ordered)) 
             {
                 openedNodeList.add(newSearchNode);
-                
-                
-                
-//                if(openedNodeList.size() > 0)
-//                {
-//                    for (int i = 0; i < openedNodeList.size(); i++) 
-//                    {
-//                        if (newSearchNode.getCost() <= openedNodeList.get(i).getCost()) 
-//                        {
-//                            openedNodeList.add(i, newSearchNode);
-//                            break;
-//                        }
-//                    }
-//                }
-//                else
-//                {
-//                    openedNodeList.add(newSearchNode);
-//                }
-                
-                
-                
-//                Collections.sort(openedNodeList, new Comparator()
-//                {
-//                    @Override
-//                    public int compare(Object obj1, Object obj2) 
-//                    {
-//                        SearchNode searchNode1 = (SearchNode)obj1;
-//                        SearchNode searchNode2 = (SearchNode)obj2;
-//                        
-//                        return (searchNode1.getCost() < searchNode2.getCost()) ? -1 : (searchNode1.getCost() > searchNode2.getCost()) ? 1 : 0;
-//                    }
-//                });
             }
         }
     }

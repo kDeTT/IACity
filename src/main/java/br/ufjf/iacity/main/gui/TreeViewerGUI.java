@@ -1,18 +1,12 @@
 package br.ufjf.iacity.main.gui;
 
 import br.ufjf.iacity.algorithm.helper.SearchNode;
-import com.mxgraph.model.mxCell;
-import com.mxgraph.model.mxGraphModel;
 import com.mxgraph.swing.mxGraphComponent;
 import com.mxgraph.view.mxGraph;
 import java.util.Iterator;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
-/**
- *
- * @author Luis Augusto
- */
 public class TreeViewerGUI extends JFrame 
 {
     private final int rootX = 10;
@@ -33,11 +27,13 @@ public class TreeViewerGUI extends JFrame
      */
     public TreeViewerGUI(SearchNode rootNode) 
     {
-        this.setSize(canvasWidth, canvasHeight);
+        setTitle("Visualizar Árvore de Busca");
+        setSize(canvasWidth, canvasHeight);
+        setLocationRelativeTo(null);
 
         this.jGraph = new mxGraph();
         this.jGraphParent = this.jGraph.getDefaultParent();
-        jGraph.setCellsEditable(false);
+        
         this.create(rootNode);
     }
     
@@ -59,6 +55,7 @@ public class TreeViewerGUI extends JFrame
             
             Object[] childCells = this.jGraph.getChildCells(jGraphParent, true, false);
             this.jGraph.removeCells(childCells, true);
+            
             this.drawTree(rootNode, 100, 0);
         }
         catch(Exception ex)
@@ -79,10 +76,10 @@ public class TreeViewerGUI extends JFrame
         }
         
 //        int xCoord = (int) (((canvasWidth * (factor)) / (Math.pow(2, rootNode.getTreeLevel()) + 1)) - ((canvasWidth - 10) / 2));
-        int xCoord = (int)(xCoordRoot + (xCoordRoot * index));
+        double xCoord = (xCoordRoot + (xCoordRoot * index));
         
 //        int xCoord = ((rootNode.getTreeLevel() * COLLUMN_WIDTH) + rootX);
-        int yCoord = ((rootNode.getTreeLevel() * ROW_HEIGHT) + rootY);
+        double yCoord = ((rootNode.getTreeLevel() * ROW_HEIGHT) + rootY);
         
         Object rootVertex = jGraph.insertVertex(jGraphParent, rootNode.getIdNode(), rootNode.getIdNode(), xCoord, yCoord, NODE_SIZE, NODE_SIZE);
         

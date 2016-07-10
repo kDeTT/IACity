@@ -84,7 +84,7 @@ public class OrderedSearch extends AbstractAlgorithmSearch
                 SearchNode openedSearchNode = this.getElementFromOpenedNodeList(SearchMode.Ordered, openedNodeList);
                 
                 // Define primeiramente o nó atual como o pai do novo nó
-                this.getSearchTree().setCurrentNode(openedSearchNode.getRootNode());
+//                this.getSearchTree().setCurrentNode(openedSearchNode.getRootNode());
                 
                 // Adiciona o nó na árvore de busca
                 this.getSearchTree().addChildToCurrentNode(openedSearchNode);

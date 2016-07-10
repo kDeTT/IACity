@@ -1,0 +1,19 @@
+BEGINVERTICES
+<A, -1, -1, 0>
+<B, -1, -1, 0>
+<C, -1, -1, 0>
+<D, -1, -1, 0>
+<E, -1, -1, 0>
+<F, -1, -1, 0>
+ENDVERTICES
+BEGINEDGES
+<A, B, 20, false>
+<A, C, 10, false>
+<A, D, 5, false>
+<B, C, 25, false>
+<B, D, 15, false>
+<C, D, 30, false>
+<C, E, 15, false>
+<D, E, 10, false>
+<E, F, 5, false>
+ENDEDGES

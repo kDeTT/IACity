@@ -13,8 +13,12 @@ import br.ufjf.iacity.graph.CityGraph;
 import br.ufjf.iacity.graph.CityNodeGraph;
 import br.ufjf.iacity.helper.GeoCoordinate;
 import br.ufjf.iacity.helper.algorithm.AlgorithmParameter;
+import br.ufjf.iacity.helper.file.FileHelper;
 import br.ufjf.iacity.model.City;
 import java.awt.event.ActionEvent;
+import java.io.File;
+import java.util.List;
+import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.UIManager;
@@ -39,6 +43,7 @@ public class IACityGUI extends JFrame implements
         initComponents();
         initEvents();
         configComponents();
+        setLocationRelativeTo(null);
     }
 
     /**
@@ -53,7 +58,6 @@ public class IACityGUI extends JFrame implements
         radioGroupCreateGraph = new javax.swing.ButtonGroup();
         radioGroupSearchAlgorithm = new javax.swing.ButtonGroup();
         radioGroupSearchTransition = new javax.swing.ButtonGroup();
-        checkBoxGroupOptions = new javax.swing.ButtonGroup();
         jLabel1 = new javax.swing.JLabel();
         jTabbedPane2 = new javax.swing.JTabbedPane();
         jPanel1 = new javax.swing.JPanel();
@@ -62,7 +66,7 @@ public class IACityGUI extends JFrame implements
         radioTxtFileGraph = new javax.swing.JRadioButton();
         radioMapsGraph = new javax.swing.JRadioButton();
         btnCreateGraph = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
+        btnShowGraph = new javax.swing.JButton();
         jPanel2 = new javax.swing.JPanel();
         jPanel3 = new javax.swing.JPanel();
         jLabel2 = new javax.swing.JLabel();
@@ -139,9 +143,14 @@ public class IACityGUI extends JFrame implements
             }
         });
 
-        jButton2.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
-        jButton2.setText("Ver Grafo");
-        jButton2.setEnabled(false);
+        btnShowGraph.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        btnShowGraph.setText("Ver Grafo");
+        btnShowGraph.setEnabled(false);
+        btnShowGraph.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnShowGraphActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -160,7 +169,7 @@ public class IACityGUI extends JFrame implements
                         .addGap(290, 290, 290)
                         .addComponent(btnCreateGraph, javax.swing.GroupLayout.PREFERRED_SIZE, 122, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
-                        .addComponent(jButton2)))
+                        .addComponent(btnShowGraph)))
                 .addContainerGap(233, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
@@ -177,7 +186,7 @@ public class IACityGUI extends JFrame implements
                 .addGap(44, 44, 44)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnCreateGraph, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton2))
+                    .addComponent(btnShowGraph))
                 .addContainerGap(64, Short.MAX_VALUE))
         );
 
@@ -265,7 +274,6 @@ public class IACityGUI extends JFrame implements
         jLabel4.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jLabel4.setText("Marque as opções que serão usadas durante a busca");
 
-        checkBoxGroupOptions.add(checkBoxEnableDuplicated);
         checkBoxEnableDuplicated.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         checkBoxEnableDuplicated.setText("Habilitar a possiblidade de adicionar estados duplicados na árvore de busca");
         checkBoxEnableDuplicated.addActionListener(new java.awt.event.ActionListener() {
@@ -303,6 +311,11 @@ public class IACityGUI extends JFrame implements
         radioGroupSearchTransition.add(radioAlphabeticalTransition);
         radioAlphabeticalTransition.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         radioAlphabeticalTransition.setText("Ordem alfabética dos nomes das cidades");
+        radioAlphabeticalTransition.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                radioAlphabeticalTransitionActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
         jPanel5.setLayout(jPanel5Layout);
@@ -608,26 +621,76 @@ public class IACityGUI extends JFrame implements
     // </editor-fold>
     
     private void btnCreateGraphActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCreateGraphActionPerformed
-        // Limpando estado anterior
-        this.radioGroupCreateGraph.clearSelection();
-        this.radioGroupSearchAlgorithm.clearSelection();
-        this.radioGroupSearchTransition.clearSelection();
-        this.checkBoxGroupOptions.clearSelection();
+        // Limpa nós inicial e final do grafo anterior
+        searchParameter.setStartCityNode(null);
+        searchParameter.setEndCityNode(null);
         
         this.txtStartNodeID.setText("");
         this.txtEndNodeID.setText("");
         
-        searchParameter = new AlgorithmParameter(); 
+         // Limpa o status anterior
+        this.clearStatus();
         
-        CityGraph graph = createGraph();
-        searchParameter.setGraph(graph);
+        // Elimina a busca anterior
+        algorithmSearch = null;
         
-        this.btnStartSearch.setEnabled(true);
+        if(radioManualGraph.isSelected())
+        {
+            ManualCreateGraphGUI manualGraphGUI = new ManualCreateGraphGUI();
+            manualGraphGUI.setModal(true);
+            manualGraphGUI.setVisible(true);
+            
+            List<String> verticesList = manualGraphGUI.getListVertices();
+            List<String> adjacencyList = manualGraphGUI.getListAdjacency();
+            
+            CityGraph graph = CityGraph.createGraphStringsList(verticesList, adjacencyList);
+            searchParameter.setGraph(graph);
+        }
+        else if(radioTxtFileGraph.isSelected())
+        {
+            try 
+            {
+                CityGraph graph = null;
+                
+                JFileChooser fileChooser = new JFileChooser();
+                fileChooser.setCurrentDirectory(new File(FileHelper.WORK_DIR));
+
+                if (fileChooser.showOpenDialog(null) == JFileChooser.APPROVE_OPTION) 
+                {
+                    graph = FileHelper.loadGraphFile(fileChooser.getSelectedFile().getName());
+                }
+                
+                searchParameter.setGraph(graph);
+            } 
+            catch (Exception ex) 
+            {
+                JOptionPane.showMessageDialog(this, ex.getMessage());
+            }
+        }
+        else
+        {
+            CityGraph graph = createGraph();
+            searchParameter.setGraph(graph);
+        }
+        
+        
+        // Habilita o botão de busca
+        this.btnShowSearchTree.setEnabled(false);
+        
+        // Habilita o botão de mostrar o grafo
+        this.btnShowGraph.setEnabled(true);
+        
+        if(searchParameter.getGraph() != null)
+        {
+            JOptionPane.showMessageDialog(this, "O grafo foi criado, selecione as opções do algoritmo.");
+        }
+        else
+        {
+            JOptionPane.showMessageDialog(this, "Não foi possível criar o grafo.");
+        }
     }//GEN-LAST:event_btnCreateGraphActionPerformed
 
     private void btnStartSearchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnStartSearchActionPerformed
-        searchParameter.setTransition(new AlphabeticalTransition());
-        
         if (searchParameter.getSearchMode() == null)
         {
             JOptionPane.showMessageDialog(this, "Algoritmo de busca não selecionado");
@@ -650,8 +713,9 @@ public class IACityGUI extends JFrame implements
         }
         else
         {
-            algorithmSearch = null;
-            
+            // Reseta o grafo para o estado inicial
+            searchParameter.getGraph().resetState();
+
             switch (searchParameter.getSearchMode().toString().toUpperCase())
             {
                 case "BACKTRACKING":
@@ -717,7 +781,7 @@ public class IACityGUI extends JFrame implements
         {
             CityGraph graph = searchParameter.getGraph();
             
-            CityNodeGraph startNode = graph.getNode(txtStartNodeID.getText());
+            CityNodeGraph startNode = graph.getNode(txtStartNodeID.getText().replaceAll(" ", ""));
             
             if(startNode == null)
             {
@@ -728,7 +792,7 @@ public class IACityGUI extends JFrame implements
                 searchParameter.setStartCityNode(startNode);
             }
             
-            CityNodeGraph endNode = graph.getNode(txtEndNodeID.getText());
+            CityNodeGraph endNode = graph.getNode(txtEndNodeID.getText().replaceAll(" ", ""));
             
             if(endNode == null)
             {
@@ -746,6 +810,23 @@ public class IACityGUI extends JFrame implements
         }
     }//GEN-LAST:event_btnSetStartAndEndNodeActionPerformed
 
+    private void radioAlphabeticalTransitionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_radioAlphabeticalTransitionActionPerformed
+        searchParameter.setTransition(new AlphabeticalTransition());
+    }//GEN-LAST:event_radioAlphabeticalTransitionActionPerformed
+
+    private void btnShowGraphActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnShowGraphActionPerformed
+        java.awt.EventQueue.invokeLater(new Runnable()
+        {
+            @Override
+            public void run() 
+            {
+                GraphViewerGUI frame = new GraphViewerGUI(searchParameter.getGraph());
+		frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+		frame.setVisible(true);
+            }
+        });
+    }//GEN-LAST:event_btnShowGraphActionPerformed
+    
     private void radioGroupSearchAlgorithmActionPerformed(ActionEvent evt)
     {
         switch(evt.getActionCommand().toUpperCase())
@@ -778,6 +859,7 @@ public class IACityGUI extends JFrame implements
     
     private void clearStatus()
     {
+        this.labelStatusSearchInfo.setText("Status: Stopped");
         this.labelSearchExecutionTimeInfo.setText(String.format("Tempo de Execução: %s ms", 0));
         this.labelSearchCostInfo.setText(String.format("Custo da Solução: %s", 0));
         this.labelSearchDepthInfo.setText(String.format("Profundidade da Solução: %s", 0));
@@ -814,6 +896,7 @@ public class IACityGUI extends JFrame implements
         this.txtSearchPathInfo.setText(algorithmSearch.getSolutionPath());
         
         this.btnShowSearchTree.setEnabled(true);
+        this.btnStartSearch.setEnabled(true);
     }
     
     @Override
@@ -887,11 +970,10 @@ public class IACityGUI extends JFrame implements
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnCreateGraph;
     private javax.swing.JButton btnSetStartAndEndNode;
+    private javax.swing.JButton btnShowGraph;
     private javax.swing.JButton btnShowSearchTree;
     private javax.swing.JButton btnStartSearch;
     private javax.swing.JCheckBox checkBoxEnableDuplicated;
-    private javax.swing.ButtonGroup checkBoxGroupOptions;
-    private javax.swing.JButton jButton2;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel2;
