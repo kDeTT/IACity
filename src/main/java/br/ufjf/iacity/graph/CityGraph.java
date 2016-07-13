@@ -36,7 +36,7 @@ public class CityGraph
         }
     }
     
-    public static CityGraph createGraphStringsList(List<String> verticesList, List<String> adjacencyList)
+    public static CityGraph createGraphFromStringsList(List<String> verticesList, List<String> adjacencyList)
     {
         CityGraph graph = new CityGraph();
         
@@ -209,12 +209,12 @@ public class CityGraph
         if(nodeList.contains(city1) && nodeList.contains(city2))
         {
             int index1 = this.nodeList.indexOf(city1);
-            nodeList.get(index1).addAdjacency(new CityNodeAdjacency(cost, city2));
+            nodeList.get(index1).addAdjacency(new CityNodeAdjacency(cost, city2, directed));
             
             if(!directed)
             {
                 int index2 = this.nodeList.indexOf(city2);
-                nodeList.get(index2).addAdjacency(new CityNodeAdjacency(cost, city1));
+                nodeList.get(index2).addAdjacency(new CityNodeAdjacency(cost, city1, directed));
             }
             
             return true;

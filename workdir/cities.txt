@@ -1,0 +1,46 @@
+BEGINVERTICES
+<JuizDeFora, -1.0, -1.0, 0.0>
+<MatiasBarbosa, -1.0, -1.0, 0.0>
+<SimãoPereira, -1.0, -1.0, 0.0>
+<Torreões, -1.0, -1.0, 0.0>
+<BelmiroBraga, -1.0, -1.0, 0.0>
+<SantanaDoDeserto, -1.0, -1.0, 0.0>
+<Sarandira, -1.0, -1.0, 0.0>
+<Pequeri, -1.0, -1.0, 0.0>
+<Chiador, -1.0, -1.0, 0.0>
+<MarDeEspanha, -1.0, -1.0, 0.0>
+<Bicas, -1.0, -1.0, 0.0>
+<Sen.Cortes, -1.0, -1.0, 0.0>
+ENDVERTICES
+BEGINEDGES
+<JuizDeFora, MatiasBarbosa, 150.0, true>
+<JuizDeFora, Torreões, 200.0, true>
+<JuizDeFora, Bicas, 700.0, true>
+<MatiasBarbosa, JuizDeFora, 150.0, true>
+<MatiasBarbosa, BelmiroBraga, 100.0, true>
+<MatiasBarbosa, SimãoPereira, 100.0, true>
+<MatiasBarbosa, SantanaDoDeserto, 300.0, true>
+<MatiasBarbosa, Sarandira, 200.0, true>
+<SimãoPereira, MatiasBarbosa, 100.0, true>
+<SimãoPereira, BelmiroBraga, 50.0, true>
+<SimãoPereira, Sarandira, 200.0, true>
+<Torreões, JuizDeFora, 200.0, true>
+<BelmiroBraga, MatiasBarbosa, 100.0, true>
+<BelmiroBraga, SimãoPereira, 50.0, true>
+<SantanaDoDeserto, MatiasBarbosa, 300.0, true>
+<SantanaDoDeserto, MarDeEspanha, 500.0, true>
+<SantanaDoDeserto, Chiador, 250.0, true>
+<Sarandira, MatiasBarbosa, 200.0, true>
+<Sarandira, SimãoPereira, 200.0, true>
+<Sarandira, Pequeri, 50.0, true>
+<Pequeri, Sarandira, 50.0, true>
+<Pequeri, MarDeEspanha, 300.0, true>
+<Chiador, SantanaDoDeserto, 250.0, true>
+<MarDeEspanha, SantanaDoDeserto, 500.0, true>
+<MarDeEspanha, Pequeri, 300.0, true>
+<MarDeEspanha, Bicas, 400.0, true>
+<MarDeEspanha, Sen.Cortes, 100.0, true>
+<Bicas, JuizDeFora, 700.0, true>
+<Bicas, MarDeEspanha, 400.0, true>
+<Sen.Cortes, MarDeEspanha, 100.0, true>
+ENDEDGES

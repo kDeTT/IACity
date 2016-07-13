@@ -17,7 +17,11 @@ import br.ufjf.iacity.helper.file.FileHelper;
 import br.ufjf.iacity.model.City;
 import java.awt.event.ActionEvent;
 import java.io.File;
+import java.io.IOException;
 import java.util.List;
+import java.util.Random;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
@@ -66,7 +70,9 @@ public class IACityGUI extends JFrame implements
         radioTxtFileGraph = new javax.swing.JRadioButton();
         radioMapsGraph = new javax.swing.JRadioButton();
         btnCreateGraph = new javax.swing.JButton();
+        jPanel9 = new javax.swing.JPanel();
         btnShowGraph = new javax.swing.JButton();
+        btnSaveGraph = new javax.swing.JButton();
         jPanel2 = new javax.swing.JPanel();
         jPanel3 = new javax.swing.JPanel();
         jLabel2 = new javax.swing.JLabel();
@@ -143,6 +149,8 @@ public class IACityGUI extends JFrame implements
             }
         });
 
+        jPanel9.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(153, 153, 153)));
+
         btnShowGraph.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         btnShowGraph.setText("Ver Grafo");
         btnShowGraph.setEnabled(false);
@@ -151,6 +159,37 @@ public class IACityGUI extends JFrame implements
                 btnShowGraphActionPerformed(evt);
             }
         });
+
+        btnSaveGraph.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        btnSaveGraph.setText("Salvar Grafo");
+        btnSaveGraph.setActionCommand("Salvar Grafo");
+        btnSaveGraph.setEnabled(false);
+        btnSaveGraph.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSaveGraphActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout jPanel9Layout = new javax.swing.GroupLayout(jPanel9);
+        jPanel9.setLayout(jPanel9Layout);
+        jPanel9Layout.setHorizontalGroup(
+            jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel9Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(btnSaveGraph, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(btnShowGraph, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap())
+        );
+        jPanel9Layout.setVerticalGroup(
+            jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel9Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(btnShowGraph)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(btnSaveGraph)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -169,7 +208,7 @@ public class IACityGUI extends JFrame implements
                         .addGap(290, 290, 290)
                         .addComponent(btnCreateGraph, javax.swing.GroupLayout.PREFERRED_SIZE, 122, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
-                        .addComponent(btnShowGraph)))
+                        .addComponent(jPanel9, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap(233, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
@@ -183,11 +222,15 @@ public class IACityGUI extends JFrame implements
                 .addComponent(radioTxtFileGraph)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(radioMapsGraph)
-                .addGap(44, 44, 44)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btnCreateGraph, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnShowGraph))
-                .addContainerGap(64, Short.MAX_VALUE))
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(44, 44, 44)
+                        .addComponent(btnCreateGraph, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addContainerGap(64, Short.MAX_VALUE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jPanel9, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(42, 42, 42))))
         );
 
         jTabbedPane2.addTab("Grafo de Cidades", jPanel1);
@@ -355,6 +398,7 @@ public class IACityGUI extends JFrame implements
 
         btnSetStartAndEndNode.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         btnSetStartAndEndNode.setText("Definir");
+        btnSetStartAndEndNode.setEnabled(false);
         btnSetStartAndEndNode.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnSetStartAndEndNodeActionPerformed(evt);
@@ -439,6 +483,7 @@ public class IACityGUI extends JFrame implements
 
         btnStartSearch.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         btnStartSearch.setText("Buscar");
+        btnStartSearch.setEnabled(false);
         btnStartSearch.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnStartSearchActionPerformed(evt);
@@ -643,7 +688,7 @@ public class IACityGUI extends JFrame implements
             List<String> verticesList = manualGraphGUI.getListVertices();
             List<String> adjacencyList = manualGraphGUI.getListAdjacency();
             
-            CityGraph graph = CityGraph.createGraphStringsList(verticesList, adjacencyList);
+            CityGraph graph = CityGraph.createGraphFromStringsList(verticesList, adjacencyList);
             searchParameter.setGraph(graph);
         }
         else if(radioTxtFileGraph.isSelected())
@@ -653,6 +698,7 @@ public class IACityGUI extends JFrame implements
                 CityGraph graph = null;
                 
                 JFileChooser fileChooser = new JFileChooser();
+                fileChooser.setDialogType(JFileChooser.OPEN_DIALOG);
                 fileChooser.setCurrentDirectory(new File(FileHelper.WORK_DIR));
 
                 if (fileChooser.showOpenDialog(null) == JFileChooser.APPROVE_OPTION) 
@@ -669,16 +715,18 @@ public class IACityGUI extends JFrame implements
         }
         else
         {
-            CityGraph graph = createGraph();
+//            CityGraph graph = createGraph();
+            CityGraph graph = randomGraph(500, 1);
             searchParameter.setGraph(graph);
         }
         
-        
-        // Habilita o botão de busca
-        this.btnShowSearchTree.setEnabled(false);
-        
-        // Habilita o botão de mostrar o grafo
+        // Habilita botões
         this.btnShowGraph.setEnabled(true);
+        this.btnSaveGraph.setEnabled(true);
+        this.btnSetStartAndEndNode.setEnabled(true);
+        this.btnStartSearch.setEnabled(true);
+        
+        this.btnShowSearchTree.setEnabled(false);
         
         if(searchParameter.getGraph() != null)
         {
@@ -826,6 +874,25 @@ public class IACityGUI extends JFrame implements
             }
         });
     }//GEN-LAST:event_btnShowGraphActionPerformed
+
+    private void btnSaveGraphActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSaveGraphActionPerformed
+        JFileChooser fileChooser = new JFileChooser();
+        fileChooser.setDialogType(JFileChooser.SAVE_DIALOG);
+        fileChooser.setCurrentDirectory(new File(FileHelper.WORK_DIR));
+
+        if (fileChooser.showOpenDialog(null) == JFileChooser.APPROVE_OPTION) 
+        {
+            try 
+            {
+                FileHelper.saveGraphFile(fileChooser.getSelectedFile().getName(), searchParameter.getGraph());
+                JOptionPane.showMessageDialog(this, "O grafo foi salvo");
+            } 
+            catch (IOException ex) 
+            {
+                JOptionPane.showMessageDialog(this, ex.getMessage());
+            }
+        }
+    }//GEN-LAST:event_btnSaveGraphActionPerformed
     
     private void radioGroupSearchAlgorithmActionPerformed(ActionEvent evt)
     {
@@ -905,6 +972,34 @@ public class IACityGUI extends JFrame implements
         this.labelStatusSearchInfo.setText(String.format("Status: %s", algorithmSearch.getSearchState().toString()));
     }
     
+    private static CityGraph randomGraph(int maxCities, int maxAdjacency)
+    {
+        CityGraph graph = new CityGraph();
+        
+        for(int i = 0; i < maxCities; i++)
+        {
+            graph.addNode(-1, new City(String.valueOf(i), new GeoCoordinate(-1, -1)));
+        }
+        
+        float costAdj;
+        int rndIndex1;
+        int rndIndex2;
+        Random rand = new Random();
+        
+        for(int i = 0; i < maxCities; i++)
+        {
+            for(int j = 0; j < maxAdjacency; j++)
+            {
+                costAdj = rand.nextInt(500);
+                rndIndex1 = rand.nextInt(maxCities);
+                rndIndex2 = rand.nextInt(maxCities);
+            
+                graph.addAdjacency(graph.getNode(rndIndex1), graph.getNode(rndIndex2), costAdj, false);
+            }
+        }
+        
+        return graph;
+    }
     
     private CityGraph createGraph()
     {
@@ -969,6 +1064,7 @@ public class IACityGUI extends JFrame implements
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnCreateGraph;
+    private javax.swing.JButton btnSaveGraph;
     private javax.swing.JButton btnSetStartAndEndNode;
     private javax.swing.JButton btnShowGraph;
     private javax.swing.JButton btnShowSearchTree;
@@ -992,6 +1088,7 @@ public class IACityGUI extends JFrame implements
     private javax.swing.JPanel jPanel6;
     private javax.swing.JPanel jPanel7;
     private javax.swing.JPanel jPanel8;
+    private javax.swing.JPanel jPanel9;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTabbedPane jTabbedPane2;
     private javax.swing.JLabel labelAlgorithmSearchInfo;

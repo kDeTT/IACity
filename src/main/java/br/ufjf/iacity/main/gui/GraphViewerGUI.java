@@ -13,13 +13,15 @@ import javax.swing.JOptionPane;
 
 public class GraphViewerGUI extends JFrame 
 {
-    private final int CANVAS_WIDTH = 640;
-    private final int CANVAS_HEIGHT = 480;
+    private final int WINDOW_WIDTH = 800;
+    private final int WINDOW_HEIGHT = 600;
     
-    private final int CIRCLE_ROOT_X = (CANVAS_WIDTH / 2) - 35;
-    private final int CIRCLE_ROOT_Y = (CANVAS_HEIGHT / 2) - 35;
-    private final int CIRCLE_RADIUS = (CANVAS_HEIGHT / 2) - 35;
-    
+    private int canvasWidth;
+    private int canvasHeight;
+    private int circleRootX;
+    private int circleRootY;
+    private int circleRadius;
+
     private final int NODE_SIZE = 25;
     
     private final mxGraph jGraph;
@@ -28,8 +30,20 @@ public class GraphViewerGUI extends JFrame
     public GraphViewerGUI(CityGraph graph) 
     {
         setTitle("Visualizar Grafo");
-        setSize(CANVAS_WIDTH, CANVAS_HEIGHT);
+        setSize(WINDOW_WIDTH, WINDOW_HEIGHT);
         setLocationRelativeTo(null);
+        
+        GraphViewerOptionsGUI viewerOptGUI = new GraphViewerOptionsGUI();
+        viewerOptGUI.setModal(true);
+        viewerOptGUI.setVisible(true);
+        
+        this.canvasWidth = viewerOptGUI.getCanvasWidth();
+        this.canvasHeight = viewerOptGUI.getCanvasHeight();
+        
+        this.circleRootX = 2 * ((canvasWidth / 2) + 35);
+        this.circleRootY = 2 * ((canvasHeight / 2) - 35);
+        
+        this.circleRadius = 2 * ((canvasHeight / 2) - 35);
 
         this.jGraph = new mxGraph();
         this.jGraphParent = this.jGraph.getDefaultParent();
@@ -60,14 +74,14 @@ public class GraphViewerGUI extends JFrame
             Iterator<CityNodeGraph> nodeIt = graph.getNodeIterator();
             
             double angle = 0;
-            double variation = ((2 * Math.PI) / graph.getNodeCount());
-            
+            double angleVariation = ((2 * Math.PI) / graph.getNodeCount());
+
             while(nodeIt.hasNext())
             {
                 tmpNode = nodeIt.next();
                 this.drawVertices(tmpNode, angle);
                 
-                angle += variation;
+                angle += angleVariation;
             }
             
             nodeIt = graph.getNodeIterator();
@@ -100,8 +114,8 @@ public class GraphViewerGUI extends JFrame
     
     private void drawVertices(CityNodeGraph nodeGraph, double angle)
     {
-        double xCoord  =  CIRCLE_ROOT_X + CIRCLE_RADIUS * Math.cos(angle);
-        double yCoord  =  CIRCLE_ROOT_Y + CIRCLE_RADIUS * Math.sin(angle);
+        double xCoord  =  circleRootX + circleRadius * Math.cos(angle);
+        double yCoord  =  circleRootY + circleRadius * Math.sin(angle);
         
         this.jGraph.insertVertex(jGraphParent, nodeGraph.getIdNode(), nodeGraph.getIdNode(), xCoord, yCoord, NODE_SIZE, NODE_SIZE);
     }

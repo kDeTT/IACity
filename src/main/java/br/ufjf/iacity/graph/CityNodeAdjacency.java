@@ -8,9 +8,10 @@ public class CityNodeAdjacency
     private float cost;
     private final CityNodeGraph adjNode;
     
+    private boolean directed;
     private boolean visited;
     
-    public CityNodeAdjacency(float cost, CityNodeGraph adjNode) throws IllegalArgumentException
+    public CityNodeAdjacency(float cost, CityNodeGraph adjNode, boolean directed) throws IllegalArgumentException
     {
         if(adjNode == null)
         {
@@ -20,6 +21,7 @@ public class CityNodeAdjacency
         this.idAdj = adjNode.getIdNode();
         this.cost = cost;
         this.adjNode = adjNode;
+        this.directed = directed;
     }
     
     /**
@@ -88,5 +90,19 @@ public class CityNodeAdjacency
      */
     public void setVisited(boolean visited) {
         this.visited = visited;
+    }
+
+    /**
+     * @return the directed
+     */
+    public boolean isDirected() {
+        return directed;
+    }
+
+    /**
+     * @param directed the directed to set
+     */
+    public void setDirected(boolean directed) {
+        this.directed = directed;
     }
 }
