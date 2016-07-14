@@ -32,6 +32,8 @@
             <groupId>com.mxgraph</groupId>
             <artifactId>jgraphx</artifactId>
             <version>3.5.1.4</version>
+            <scope>system</scope>
+            <systemPath>${project.basedir}/libs/jgraphx.jar</systemPath>
         </dependency>
     </dependencies>
 </project>

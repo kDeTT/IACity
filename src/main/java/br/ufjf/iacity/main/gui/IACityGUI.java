@@ -20,8 +20,6 @@ import java.io.File;
 import java.io.IOException;
 import java.util.List;
 import java.util.Random;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
@@ -752,7 +750,7 @@ public class IACityGUI extends JFrame implements
         else
         {
 //            CityGraph graph = createGraph();
-            CityGraph graph = randomGraph(500, 1);
+            CityGraph graph = randomGraph(100, 1);
             searchParameter.setGraph(graph);
         }
         

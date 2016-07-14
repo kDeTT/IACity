@@ -56,7 +56,7 @@ public class GraphViewerGUI extends JFrame
         this.updateGraph(graph);
         
         mxGraphComponent graphComponent = new mxGraphComponent(jGraph);
-        graphComponent.setEnabled(false);
+//        graphComponent.setEnabled(false);
         
         getContentPane().add(graphComponent);
     }
