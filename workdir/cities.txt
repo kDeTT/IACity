@@ -1,4 +1,4 @@
-BEGINVERTICES
+BEGIN_VERTICES
 <JuizDeFora, -1.0, -1.0, 0.0>
 <MatiasBarbosa, -1.0, -1.0, 0.0>
 <SimãoPereira, -1.0, -1.0, 0.0>
@@ -11,8 +11,8 @@ BEGINVERTICES
 <MarDeEspanha, -1.0, -1.0, 0.0>
 <Bicas, -1.0, -1.0, 0.0>
 <Sen.Cortes, -1.0, -1.0, 0.0>
-ENDVERTICES
-BEGINEDGES
+END_VERTICES
+BEGIN_EDGES
 <JuizDeFora, MatiasBarbosa, 150.0, true>
 <JuizDeFora, Torreões, 200.0, true>
 <JuizDeFora, Bicas, 700.0, true>
@@ -43,4 +43,4 @@ BEGINEDGES
 <Bicas, JuizDeFora, 700.0, true>
 <Bicas, MarDeEspanha, 400.0, true>
 <Sen.Cortes, MarDeEspanha, 100.0, true>
-ENDEDGES
+END_EDGES

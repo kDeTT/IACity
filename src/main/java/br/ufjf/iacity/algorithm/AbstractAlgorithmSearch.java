@@ -11,6 +11,7 @@ import br.ufjf.iacity.algorithm.events.initiator.SearchStoppedEvenInitiator;
 import br.ufjf.iacity.algorithm.transition.ITransition;
 import br.ufjf.iacity.graph.CityGraph;
 import br.ufjf.iacity.graph.CityNodeAdjacency;
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
@@ -20,10 +21,10 @@ public abstract class AbstractAlgorithmSearch
 {
 
     /**
-     * @return the searchTree
+     * @return the cityGraph
      */
-    public SearchTree getSearchTree() {
-        return searchTree;
+    public CityGraph getCityGraph() {
+        return cityGraph;
     }
     public enum SearchState { Success, Failed, Searching, Started, Stopped }
     
@@ -46,6 +47,8 @@ public abstract class AbstractAlgorithmSearch
     
     public abstract void search();
     
+    private double executionTime;
+    private List<String> solutionList;
     private String solutionPath;
     private float solutionCost;
     private int solutionDepth;
@@ -124,28 +127,28 @@ public abstract class AbstractAlgorithmSearch
     {
         if(getSearchState().equals(SearchState.Success))
         {
-            StringBuilder path = new StringBuilder();
+            this.solutionList = new ArrayList<>();
             StringBuilder reversePath = new StringBuilder();
             
             SearchNode tmpSearchNode = this.getSearchTree().getEndNode();
 
             while (tmpSearchNode != null) 
             {
-                path.append(String.format("Nó: %s #", tmpSearchNode.getIdNode()));
+                this.solutionList.add(tmpSearchNode.getIdNode());
+                
                 tmpSearchNode = tmpSearchNode.getRootNode();
             }
             
-            String[] splitPath = path.toString().split("#");
-            
-            for(int i = (splitPath.length - 1); i >= 0 ; i--)
+            for(int i = (solutionList.size() - 1); i >= 0 ; i--)
             {
-                reversePath.append(splitPath[i]).append(System.getProperty("line.separator"));
+                reversePath.append(solutionList.get(i)).append(System.getProperty("line.separator"));
             }
             
             this.solutionPath = reversePath.toString();
         }
         else
         {
+            this.solutionList.clear();
             this.solutionPath = "";
         }
     }
@@ -159,7 +162,7 @@ public abstract class AbstractAlgorithmSearch
 
             while (tmpSearchNode.getRootNode() != null) 
             {
-                CityNodeAdjacency adjacency = cityGraph.getAdjacency(tmpSearchNode.getRootNode().getCityNodeGraph(), tmpSearchNode.getCityNodeGraph());
+                CityNodeAdjacency adjacency = getCityGraph().getAdjacency(tmpSearchNode.getRootNode().getCityNodeGraph(), tmpSearchNode.getCityNodeGraph());
                 
                 if(adjacency != null)
                 {
@@ -215,66 +218,6 @@ public abstract class AbstractAlgorithmSearch
                 calculateVisitedNodeCount(tmpNode);
             }
         }
-    }
-    
-    /**
-     * @return the solutionPath
-     */
-    public String getSolutionPath()
-    {
-        this.makeSolutionPath();
-        return solutionPath;
-    }
-
-    /**
-     * @return the solutionCost
-     */
-    public float getSolutionCost() 
-    {
-        this.calculateSolutionCost();
-        return solutionCost;
-    }
-
-    /**
-     * @return the solutionDepth
-     */
-    public int getSolutionDepth()
-    {
-        if(getSearchState().equals(SearchState.Success))
-        {
-            this.solutionDepth = getSearchTree().getEndNode().getTreeLevel();
-        }
-        else
-        {
-            this.solutionDepth = -1;
-        }
-        
-        return solutionDepth;
-    }
-
-    /**
-     * @return the solutionExpandedNodeCount
-     */
-    public int getSolutionExpandedNodeCount() 
-    {
-        this.solutionExpandedNodeCount = 0;
-        this.calculateExpandedNodeCount(searchTree.getRootNode());
-        return solutionExpandedNodeCount;
-    }
-
-    /**
-     * @return the solutionVisitedNodeCount
-     */
-    public int getSolutionVisitedNodeCount()
-    {
-        this.solutionVisitedNodeCount = 0;
-        this.calculateVisitedNodeCount(searchTree.getRootNode());
-        return solutionVisitedNodeCount;
-    }
-    
-    public float getSolutionAverageFactorBranching()
-    {
-        return ((float)getSolutionExpandedNodeCount() / getSolutionVisitedNodeCount());
     }
     
     public void printPath()
@@ -401,5 +344,95 @@ public abstract class AbstractAlgorithmSearch
         }
         
         return (tmpObj != null) ? (SearchNode)tmpObj : null;
+    }
+    
+    /**
+     * @return the searchTree
+     */
+    public SearchTree getSearchTree() {
+        return searchTree;
+    }
+
+    /**
+     * @return the executionTime
+     */
+    public double getExecutionTime() {
+        return executionTime;
+    }
+
+    /**
+     * @param executionTime the executionTime to set
+     */
+    public void setExecutionTime(double executionTime) {
+        this.executionTime = executionTime;
+    }
+
+    /**
+     * @return the solutionList
+     */
+    public List<String> getSolutionList() 
+    {
+        this.makeSolutionPath();
+        return solutionList;
+    }
+    
+    /**
+     * @return the solutionPath
+     */
+    public String getSolutionPath()
+    {
+        this.makeSolutionPath();
+        return solutionPath;
+    }
+
+    /**
+     * @return the solutionCost
+     */
+    public float getSolutionCost() 
+    {
+        this.calculateSolutionCost();
+        return solutionCost;
+    }
+
+    /**
+     * @return the solutionDepth
+     */
+    public int getSolutionDepth()
+    {
+        if(getSearchState().equals(SearchState.Success))
+        {
+            this.solutionDepth = getSearchTree().getEndNode().getTreeLevel();
+        }
+        else
+        {
+            this.solutionDepth = -1;
+        }
+        
+        return solutionDepth;
+    }
+
+    /**
+     * @return the solutionExpandedNodeCount
+     */
+    public int getSolutionExpandedNodeCount() 
+    {
+        this.solutionExpandedNodeCount = 0;
+        this.calculateExpandedNodeCount(searchTree.getRootNode());
+        return solutionExpandedNodeCount;
+    }
+
+    /**
+     * @return the solutionVisitedNodeCount
+     */
+    public int getSolutionVisitedNodeCount()
+    {
+        this.solutionVisitedNodeCount = 0;
+        this.calculateVisitedNodeCount(searchTree.getRootNode());
+        return solutionVisitedNodeCount;
+    }
+    
+    public float getSolutionAverageFactorBranching()
+    {
+        return ((float)getSolutionExpandedNodeCount() / getSolutionVisitedNodeCount());
     }
 }

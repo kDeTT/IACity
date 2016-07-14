@@ -111,7 +111,9 @@ public class IACityGUI extends JFrame implements
         txtSearchPathInfo = new javax.swing.JTextArea();
         labelAverageFactorBranching = new javax.swing.JLabel();
         jLabel11 = new javax.swing.JLabel();
+        jPanel10 = new javax.swing.JPanel();
         btnShowSearchTree = new javax.swing.JButton();
+        btnSaveResult = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("IACity");
@@ -222,15 +224,14 @@ public class IACityGUI extends JFrame implements
                 .addComponent(radioTxtFileGraph)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(radioMapsGraph)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 46, Short.MAX_VALUE)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(44, 44, 44)
-                        .addComponent(btnCreateGraph, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addContainerGap(64, Short.MAX_VALUE))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(jPanel9, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(42, 42, 42))))
+                        .addGap(42, 42, 42))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                        .addComponent(btnCreateGraph, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(59, 59, 59))))
         );
 
         jTabbedPane2.addTab("Grafo de Cidades", jPanel1);
@@ -476,7 +477,7 @@ public class IACityGUI extends JFrame implements
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jPanel7, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addContainerGap(12, Short.MAX_VALUE))
+                .addContainerGap(30, Short.MAX_VALUE))
         );
 
         jTabbedPane2.addTab("Algoritmos de IA", jPanel2);
@@ -580,6 +581,8 @@ public class IACityGUI extends JFrame implements
         jLabel11.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jLabel11.setText("Status da Busca");
 
+        jPanel10.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(153, 153, 153)));
+
         btnShowSearchTree.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         btnShowSearchTree.setText("Ver Árvore");
         btnShowSearchTree.setEnabled(false);
@@ -588,6 +591,36 @@ public class IACityGUI extends JFrame implements
                 btnShowSearchTreeActionPerformed(evt);
             }
         });
+
+        btnSaveResult.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        btnSaveResult.setText("Salvar Resultado");
+        btnSaveResult.setEnabled(false);
+        btnSaveResult.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSaveResultActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout jPanel10Layout = new javax.swing.GroupLayout(jPanel10);
+        jPanel10.setLayout(jPanel10Layout);
+        jPanel10Layout.setHorizontalGroup(
+            jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel10Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(btnSaveResult, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(btnShowSearchTree, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap())
+        );
+        jPanel10Layout.setVerticalGroup(
+            jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel10Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(btnShowSearchTree)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(btnSaveResult)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
 
         javax.swing.GroupLayout jPanel6Layout = new javax.swing.GroupLayout(jPanel6);
         jPanel6.setLayout(jPanel6Layout);
@@ -604,21 +637,24 @@ public class IACityGUI extends JFrame implements
                         .addGap(310, 310, 310)
                         .addComponent(btnStartSearch, javax.swing.GroupLayout.PREFERRED_SIZE, 122, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
-                        .addComponent(btnShowSearchTree)))
+                        .addComponent(jPanel10, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap(164, Short.MAX_VALUE))
         );
         jPanel6Layout.setVerticalGroup(
             jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel6Layout.createSequentialGroup()
-                .addContainerGap(27, Short.MAX_VALUE)
+            .addGroup(jPanel6Layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jLabel11)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanel8, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btnStartSearch, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnShowSearchTree))
-                .addGap(18, 18, 18))
+                .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel6Layout.createSequentialGroup()
+                        .addGap(37, 37, 37)
+                        .addComponent(btnStartSearch, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel6Layout.createSequentialGroup()
+                        .addGap(18, 18, 18)
+                        .addComponent(jPanel10, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGap(14, 14, 14))
         );
 
         jTabbedPane2.addTab("Buscar", jPanel6);
@@ -893,6 +929,25 @@ public class IACityGUI extends JFrame implements
             }
         }
     }//GEN-LAST:event_btnSaveGraphActionPerformed
+
+    private void btnSaveResultActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSaveResultActionPerformed
+        JFileChooser fileChooser = new JFileChooser();
+        fileChooser.setDialogType(JFileChooser.SAVE_DIALOG);
+        fileChooser.setCurrentDirectory(new File(FileHelper.WORK_DIR));
+
+        if (fileChooser.showOpenDialog(null) == JFileChooser.APPROVE_OPTION) 
+        {
+            try 
+            {
+                FileHelper.saveResultFile(fileChooser.getSelectedFile().getName(), algorithmSearch);
+                JOptionPane.showMessageDialog(this, "O resultado foi salvo");
+            } 
+            catch (IOException ex) 
+            {
+                JOptionPane.showMessageDialog(this, ex.getMessage());
+            }
+        }
+    }//GEN-LAST:event_btnSaveResultActionPerformed
     
     private void radioGroupSearchAlgorithmActionPerformed(ActionEvent evt)
     {
@@ -939,10 +994,11 @@ public class IACityGUI extends JFrame implements
     @Override
     public void searchStartedEvent(Object event) 
     {
-        this.clearStatus();
+        this.clearStatus();        
         
-        this.btnShowSearchTree.setEnabled(false);
         this.btnStartSearch.setEnabled(false);
+        this.btnShowSearchTree.setEnabled(false);
+        this.btnSaveResult.setEnabled(false);
         
         startSearchTime = System.nanoTime();
     }
@@ -953,8 +1009,9 @@ public class IACityGUI extends JFrame implements
         endSearchTime = System.nanoTime();
         
         double executionTime = ((endSearchTime - startSearchTime) / 1e6);
+        algorithmSearch.setExecutionTime(executionTime);
         
-        this.labelSearchExecutionTimeInfo.setText(String.format("Tempo de Execução: %s ms", executionTime));
+        this.labelSearchExecutionTimeInfo.setText(String.format("Tempo de Execução: %s ms", algorithmSearch.getExecutionTime()));
         this.labelSearchCostInfo.setText(String.format("Custo da Solução: %s", algorithmSearch.getSolutionCost()));
         this.labelSearchDepthInfo.setText(String.format("Profundidade da Solução: %s", algorithmSearch.getSolutionDepth()));
         this.labelExpandedNodeCountInfo.setText(String.format("Quantidade de Nós Expandidos: %s", algorithmSearch.getSolutionExpandedNodeCount()));
@@ -962,8 +1019,9 @@ public class IACityGUI extends JFrame implements
         this.labelAverageFactorBranching.setText(String.format("Fator Médio de Ramificação: %s", algorithmSearch.getSolutionAverageFactorBranching()));
         this.txtSearchPathInfo.setText(algorithmSearch.getSolutionPath());
         
-        this.btnShowSearchTree.setEnabled(true);
         this.btnStartSearch.setEnabled(true);
+        this.btnShowSearchTree.setEnabled(true);
+        this.btnSaveResult.setEnabled(true);
     }
     
     @Override
@@ -1065,6 +1123,7 @@ public class IACityGUI extends JFrame implements
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnCreateGraph;
     private javax.swing.JButton btnSaveGraph;
+    private javax.swing.JButton btnSaveResult;
     private javax.swing.JButton btnSetStartAndEndNode;
     private javax.swing.JButton btnShowGraph;
     private javax.swing.JButton btnShowSearchTree;
@@ -1081,6 +1140,7 @@ public class IACityGUI extends JFrame implements
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel jPanel10;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;

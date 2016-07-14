@@ -40,20 +40,20 @@ public class CityGraph
     {
         CityGraph graph = new CityGraph();
         
-        for(String vertices : verticesList)
+        for(String vertice : verticesList)
         {
             // Remove caracteres inicial e final da linha
-            vertices = vertices.replaceAll("<", "");
-            vertices = vertices.replaceAll(">", "");
+            vertice = vertice.replaceAll("<", "");
+            vertice = vertice.replaceAll(">", "");
 
             // Capitaliza o texto
-            vertices = WordUtils.capitalizeFully(vertices);
+            vertice = WordUtils.capitalizeFully(vertice);
 
             // Remove todos os espaÃ§os
-            vertices = vertices.replaceAll(" ", "");
+            vertice = vertice.replaceAll(" ", "");
 
             // Quebra os campos da linha
-            String[] lineSplit = vertices.split(",");
+            String[] lineSplit = vertice.split(",");
 
             // Verifica se possui todos os campos necessÃ¡rios
             if (lineSplit.length == 4) 
