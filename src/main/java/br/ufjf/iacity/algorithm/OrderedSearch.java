@@ -120,11 +120,15 @@ public class OrderedSearch extends AbstractAlgorithmSearch
                      * da árvore de busca, adicionando na lista de abertos
                      * 
                      */
-                    SearchNode nextSearchNode = this.transition.applyTransition(getSearchTree().getCurrentNode());
+                    SearchNode currentNode = getSearchTree().getCurrentNode();
+                    SearchNode nextSearchNode = this.transition.applyTransition(currentNode);
                     
                     // Enquanto há transição aplicável, continue
                     while(nextSearchNode != null)
                     {
+                        // Define o custo do estado da raíz até o nó atual
+                        nextSearchNode.setCost(currentNode.getCost() + nextSearchNode.getCost());
+                        
                         /**
                          *
                          * Verifica se não há ancestral e se também já não está
@@ -190,7 +194,7 @@ public class OrderedSearch extends AbstractAlgorithmSearch
                         }
                         
                         // Aplica a próxima transição
-                        nextSearchNode = this.transition.applyTransition(getSearchTree().getCurrentNode());
+                        nextSearchNode = this.transition.applyTransition(currentNode);
                     }
                     
                     // Ordena a lista de abertos usando o custo dos nós
