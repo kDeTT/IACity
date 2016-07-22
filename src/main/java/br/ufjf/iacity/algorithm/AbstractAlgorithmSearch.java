@@ -125,9 +125,11 @@ public abstract class AbstractAlgorithmSearch
     
     private void makeSolutionPath()
     {
+        this.solutionList = new ArrayList<>();
+        
         if(getSearchState().equals(SearchState.Success))
         {
-            this.solutionList = new ArrayList<>();
+            
             StringBuilder reversePath = new StringBuilder();
             
             SearchNode tmpSearchNode = this.getSearchTree().getEndNode();
@@ -148,7 +150,6 @@ public abstract class AbstractAlgorithmSearch
         }
         else
         {
-            this.solutionList.clear();
             this.solutionPath = "";
         }
     }

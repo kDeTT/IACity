@@ -1,0 +1,45 @@
+BEGIN_VERTICES
+<Juizdefora, -21.764545, -43.3525787, 0.0>
+<Matiasbarbosa, -21.8638311, -43.3343982, 0.0>
+<Simãopereira, -21.9644122, -43.3267168, 0.0>
+<Torreões, -21.862771, -43.5576236, 0.0>
+<Belmirobraga, -21.9496145, -43.4228832, 0.0>
+<Santanadodeserto, -21.9517327, -43.1749396, 0.0>
+<Sarandira, -21.8308162, -43.3198963, 0.0>
+<Pequeri, -21.8377411, -43.1292706, 0.0>
+<Chiador, -22.0030662, -43.0738898, 0.0>
+<Mardeespanha, -21.8657366, -43.0218217, 0.0>
+<Bicas, -21.7162954, -43.0792084, 0.0>
+<Sen.cortes, -21.7990142, -42.9602942, 0.0>
+END_VERTICES
+BEGIN_EDGES
+<Juizdefora, Matiasbarbosa, 150.0, true>
+<Juizdefora, Torreões, 200.0, true>
+<Juizdefora, Bicas, 700.0, true>
+<Matiasbarbosa, Juizdefora, 150.0, true>
+<Matiasbarbosa, Belmirobraga, 100.0, true>
+<Matiasbarbosa, Simãopereira, 100.0, true>
+<Matiasbarbosa, Santanadodeserto, 300.0, true>
+<Matiasbarbosa, Sarandira, 200.0, true>
+<Simãopereira, Matiasbarbosa, 100.0, true>
+<Simãopereira, Belmirobraga, 50.0, true>
+<Simãopereira, Sarandira, 200.0, true>
+<Torreões, Juizdefora, 200.0, true>
+<Belmirobraga, Matiasbarbosa, 100.0, true>
+<Belmirobraga, Simãopereira, 50.0, true>
+<Santanadodeserto, Matiasbarbosa, 300.0, true>
+<Santanadodeserto, Mardeespanha, 500.0, true>
+<Santanadodeserto, Chiador, 250.0, true>
+<Sarandira, Matiasbarbosa, 200.0, true>
+<Sarandira, Simãopereira, 200.0, true>
+<Sarandira, Pequeri, 50.0, true>
+<Pequeri, Sarandira, 50.0, true>
+<Pequeri, Mardeespanha, 300.0, true>
+<Mardeespanha, Santanadodeserto, 500.0, true>
+<Mardeespanha, Pequeri, 300.0, true>
+<Mardeespanha, Bicas, 400.0, true>
+<Mardeespanha, Sen.cortes, 100.0, true>
+<Bicas, Juizdefora, 700.0, true>
+<Bicas, Mardeespanha, 400.0, true>
+<Sen.cortes, Mardeespanha, 100.0, true>
+END_EDGES

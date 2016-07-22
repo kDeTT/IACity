@@ -11,8 +11,6 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.nio.file.FileSystems;
-import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -24,6 +22,17 @@ import java.util.List;
 public class FileHelper 
 {
     public static final String WORK_DIR = System.getProperty("user.dir") + File.separator + "workdir" + File.separator;
+    public static final String IACITY_FILE_EXTENSION = "txt";
+    
+    private static String formatFilePath(String path)
+    {
+        if(!path.endsWith(IACITY_FILE_EXTENSION))
+        {
+            path = String.format("%s.%s", path, IACITY_FILE_EXTENSION);
+        }
+        
+        return path;
+    }
     
     public static CityGraph loadGraphFile(String filePath) throws Exception
     {
@@ -31,10 +40,8 @@ public class FileHelper
         {
             List<String> verticesList = new ArrayList<>();
             List<String> adjacencyList = new ArrayList<>();
-            
-            Path path = FileSystems.getDefault().getPath(WORK_DIR, filePath);
-            
-            try(BufferedReader reader = new BufferedReader(new FileReader(path.toFile())))
+
+            try(BufferedReader reader = new BufferedReader(new FileReader(filePath)))
             {
                 String line;
                 
@@ -72,9 +79,7 @@ public class FileHelper
     {
         try 
         {
-            Path path = FileSystems.getDefault().getPath(WORK_DIR, filePath);
-
-            try (BufferedWriter writer = new BufferedWriter(new FileWriter(path.toFile()))) 
+            try (BufferedWriter writer = new BufferedWriter(new FileWriter(formatFilePath(filePath)))) 
             {
                 writer.write("BEGIN_VERTICES");
                 writer.newLine();
@@ -134,9 +139,7 @@ public class FileHelper
     {
         try 
         {
-            Path path = FileSystems.getDefault().getPath(WORK_DIR, filePath);
-
-            try (BufferedWriter writer = new BufferedWriter(new FileWriter(path.toFile()))) 
+            try (BufferedWriter writer = new BufferedWriter(new FileWriter(formatFilePath(filePath)))) 
             {
                 writer.write("BEGIN_SEARCHINFO");
                 writer.newLine();

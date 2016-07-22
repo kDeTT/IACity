@@ -1,16 +1,26 @@
-// Variáveis para uso do Google Maps
+﻿// Variáveis para uso do Google Maps
 var gmap_api_key;
 var gmap_api_url;
 var gmap_script;
-var gmap_locations;
 var gmap_map;
+var gmap_locations;
 var gmap_polyline;
+
+// Parâmetro com o caminho do arquivo de resultados
+var resultFile = getParameterByName('resultfile');
 
 // Inicializa a página
 function init()
 {
 	// Definindo eventos
 	document.getElementById('fileChooser').addEventListener('change', handleFileSelect, false);
+	
+	// Tratamento global de erros
+	window.onerror = function(message, url, lineNumber) 
+	{  
+  		alert('Message: \n\n' + message + '\n\n URL: \n\n' + url + '\n\n Line Number: ' + lineNumber);
+  		return true;
+	}; 
 	
 	// Faz a leitura do arquivo contendo a chave da API do Google Maps
 	gmap_api_key = readTextFile('GMAPS_API_KEY.txt');
@@ -22,10 +32,22 @@ function init()
 	gmap_script = document.createElement("script");
 	gmap_script.type = "text/javascript";
 	gmap_script.src = gmap_api_url;
+	
+	// Caso a página receba um arquivo de resultado como parâmetro
+	// carregá-lo assim que o mapa for criado
+	gmap_script.onload = function()
+	{
+      	if(resultFile != null)
+		{
+			parseIACityResultFile(readTextFile(resultFile));
+			updateMap();
+		}
+    };
+	
 	document.body.appendChild(gmap_script);
 }
 
-// Inicializa o mapa do Google Maps
+// Inicializa o mapa
 function plotMap()
 {
 	if(gmap_map == null)
@@ -43,7 +65,7 @@ function plotMap()
 			mapTypeId: google.maps.MapTypeId.ROADMAP,
 		
 			// Zoom e centro do mapa
-    		zoom: 5,
+    		zoom: 7,
     		center: {lat: -16.6954999, lng: -49.4443554}
   		});
 	}
@@ -63,13 +85,29 @@ function plotMap()
   	gmap_polyline.setMap(gmap_map);
 }
 
-function handleFileSelect(evt)
+/*
+ *	Atualiza o caminho desenhado no mapa
+ */
+function updateMap()
 {
-	var selectedFile = evt.target.files;
-	parseIACityResultFile(readTextFile(selectedFile[0].name));
+	gmap_map.setCenter(gmap_locations[0]);
 	gmap_polyline.setPath(gmap_locations);
 }
 
+/*
+ *	Carrega um caminho no mapa, quando um novo arquivo for
+ *	selecionado pelo usuário
+ */
+function handleFileSelect(evt)
+{
+	var selectedFile = evt.target.files;
+	parseIACityResultFile(readTextFile('result/' + selectedFile[0].name));
+	updateMap();
+}
+
+/*
+ *	Faz o parser do arquivo de resultado lido
+ */
 function parseIACityResultFile(content)
 {
 	var line;
@@ -116,6 +154,34 @@ function parseIACityResultFile(content)
 			again = false;
 		}
 	}
+}
+
+/*
+ *	Obtém um parâmetro da URL
+ */
+function getParameterByName(name, url) 
+{
+    if (!url)
+	{
+		url = window.location.href;
+	}
+	
+    name = name.replace(/[\[\]]/g, "\\$&");
+	
+    var regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)"),
+        results = regex.exec(url);
+
+    if (!results) 
+	{
+		return null;
+	}
+	
+    if (!results[2])
+	{
+		return '';
+	}
+	
+    return decodeURIComponent(results[2].replace(/\+/g, " "));
 }
 
 /*
