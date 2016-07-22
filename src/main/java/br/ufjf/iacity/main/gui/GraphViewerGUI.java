@@ -18,9 +18,9 @@ public class GraphViewerGUI extends JFrame
     
     private int canvasWidth;
     private int canvasHeight;
-    private int circleRootX;
-    private int circleRootY;
-    private int circleRadius;
+    private double circleRootX;
+    private double circleRootY;
+    private double circleRadius;
 
     private final int NODE_SIZE = 25;
     
@@ -37,14 +37,14 @@ public class GraphViewerGUI extends JFrame
         viewerOptGUI.setModal(true);
         viewerOptGUI.setVisible(true);
         
-        this.canvasWidth = viewerOptGUI.getCanvasWidth();
-        this.canvasHeight = viewerOptGUI.getCanvasHeight();
+        this.canvasWidth = (viewerOptGUI.getCanvasWidth() == 0) ? (WINDOW_WIDTH / 2) : viewerOptGUI.getCanvasWidth();
+        this.canvasHeight = (viewerOptGUI.getCanvasHeight() == 0) ? (WINDOW_HEIGHT / 2) : viewerOptGUI.getCanvasHeight();
         
-        this.circleRootX = 2 * ((canvasWidth / 2) + 35);
-        this.circleRootY = 2 * ((canvasHeight / 2) - 35);
+        this.circleRadius =  1.5 * (canvasHeight / 2);
         
-        this.circleRadius = 2 * ((canvasHeight / 2) - 35);
-
+        this.circleRootX = 1.2 * ((canvasWidth / 2) + (circleRadius / 2));
+        this.circleRootY = ((canvasHeight / 2) + (circleRadius / 2));
+        
         this.jGraph = new mxGraph();
         this.jGraphParent = this.jGraph.getDefaultParent();
         

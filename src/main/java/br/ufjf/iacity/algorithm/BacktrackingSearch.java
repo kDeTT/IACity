@@ -2,7 +2,7 @@ package br.ufjf.iacity.algorithm;
 
 import br.ufjf.iacity.algorithm.helper.SearchNode;
 import br.ufjf.iacity.algorithm.helper.SearchTree;
-import br.ufjf.iacity.helper.algorithm.AlgorithmParameter;
+import br.ufjf.iacity.algorithm.helper.AlgorithmParameter;
 
 public class BacktrackingSearch extends AbstractAlgorithmSearch
 {   

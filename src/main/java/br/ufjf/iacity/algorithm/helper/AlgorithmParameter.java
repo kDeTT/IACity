@@ -1,4 +1,4 @@
-package br.ufjf.iacity.helper.algorithm;
+package br.ufjf.iacity.algorithm.helper;
 
 import br.ufjf.iacity.algorithm.AbstractAlgorithmSearch.SearchMode;
 import br.ufjf.iacity.algorithm.transition.ITransition;

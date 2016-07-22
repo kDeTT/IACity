@@ -120,9 +120,16 @@ public class GraphViewerOptionsGUI extends javax.swing.JDialog
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnOkActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnOkActionPerformed
-        this.canvasWidth = Integer.parseInt(txtWidthSize.getText());
-        this.canvasHeight = Integer.parseInt(txtHeightSize.getText());
-        this.dispose();
+        try
+        {
+            this.canvasWidth = Integer.parseInt(txtWidthSize.getText());
+            this.canvasHeight = Integer.parseInt(txtHeightSize.getText());
+        }
+        catch(NumberFormatException ex) { }
+        finally
+        {
+            this.dispose();
+        }
     }//GEN-LAST:event_btnOkActionPerformed
 
     /**

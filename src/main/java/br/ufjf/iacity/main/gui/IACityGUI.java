@@ -12,7 +12,7 @@ import br.ufjf.iacity.algorithm.transition.AlphabeticalTransition;
 import br.ufjf.iacity.graph.CityGraph;
 import br.ufjf.iacity.graph.CityNodeGraph;
 import br.ufjf.iacity.helper.GeoCoordinate;
-import br.ufjf.iacity.helper.algorithm.AlgorithmParameter;
+import br.ufjf.iacity.algorithm.helper.AlgorithmParameter;
 import br.ufjf.iacity.helper.file.FileHelper;
 import br.ufjf.iacity.model.City;
 import java.awt.event.ActionEvent;
