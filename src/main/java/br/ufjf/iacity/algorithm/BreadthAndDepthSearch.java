@@ -145,7 +145,8 @@ public class BreadthAndDepthSearch extends AbstractAlgorithmSearch
                      * da árvore de busca, adicionando na lista de abertos
                      * 
                      */
-                    SearchNode nextSearchNode = this.transition.applyTransition(getSearchTree().getCurrentNode());
+                    SearchNode currentNode = getSearchTree().getCurrentNode();
+                    SearchNode nextSearchNode = this.transition.applyTransition(currentNode);
                     
                     // Enquanto há transição aplicável, continue
                     while(nextSearchNode != null)
@@ -172,7 +173,7 @@ public class BreadthAndDepthSearch extends AbstractAlgorithmSearch
                         }
                         
                         // Aplica a próxima transição
-                        nextSearchNode = this.transition.applyTransition(getSearchTree().getCurrentNode());
+                        nextSearchNode = this.transition.applyTransition(currentNode);
                     }
                     
                     /**

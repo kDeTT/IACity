@@ -43,7 +43,7 @@ public abstract class AbstractAlgorithmSearch
     private double executionTime;
     private List<String> solutionList;
     private String solutionPath;
-    private float solutionCost;
+    private double solutionCost;
     private int solutionDepth;
     private int solutionExpandedNodeCount;
     private int solutionVisitedNodeCount;
@@ -161,7 +161,7 @@ public abstract class AbstractAlgorithmSearch
         }
         else
         {
-            this.solutionCost = Float.POSITIVE_INFINITY;
+            this.solutionCost = Double.POSITIVE_INFINITY;
         }
     }
     
@@ -219,7 +219,7 @@ public abstract class AbstractAlgorithmSearch
     
     public void printDepth()
     {
-        System.out.println(String.format("Profundidade da solução: %s", getSolutionDepth()));
+        System.out.println(String.format("Profundidade da solução: %s", getSolutionSearchDepth()));
     }
     
     public void printCost()
@@ -380,7 +380,7 @@ public abstract class AbstractAlgorithmSearch
     /**
      * @return the solutionCost
      */
-    public float getSolutionCost() 
+    public double getSolutionCost() 
     {
         this.calculateSolutionCost();
         return solutionCost;
@@ -389,7 +389,7 @@ public abstract class AbstractAlgorithmSearch
     /**
      * @return the solutionDepth
      */
-    public int getSolutionDepth()
+    public int getSolutionSearchDepth()
     {
         if(getSearchState().equals(SearchState.Success))
         {
@@ -401,6 +401,16 @@ public abstract class AbstractAlgorithmSearch
         }
         
         return solutionDepth;
+    }
+    
+    public int getSolutionTreeDepth()
+    {
+        return this.getSearchTree().depth();
+    }
+    
+    public int getSolutionTreeNodeCount()
+    {
+        return this.searchTree.getNodeCount();
     }
 
     /**
@@ -425,6 +435,6 @@ public abstract class AbstractAlgorithmSearch
     
     public float getSolutionAverageFactorBranching()
     {
-        return ((float)getSolutionExpandedNodeCount() / getSolutionVisitedNodeCount());
+        return ((float)getSolutionVisitedNodeCount() / getSolutionExpandedNodeCount());
     }
 }

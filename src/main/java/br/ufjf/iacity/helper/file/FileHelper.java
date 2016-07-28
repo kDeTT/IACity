@@ -186,7 +186,7 @@ public class FileHelper
                 writer.write(String.format("Custo da Solução: %s", algorithmSearch.getSolutionCost()));
                 writer.newLine();
                 
-                writer.write(String.format("Profundidade da Solução: %s", algorithmSearch.getSolutionDepth()));
+                writer.write(String.format("Profundidade da Solução: %s", algorithmSearch.getSolutionSearchDepth()));
                 writer.newLine();
                 
                 writer.write(String.format("Quantidade de Nós Expandidos: %s", algorithmSearch.getSolutionExpandedNodeCount()));

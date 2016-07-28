@@ -10,11 +10,17 @@ public class SearchTree
     private SearchNode startNode;
     private SearchNode endNode;
     
+    private int nodeCount;
+    private int depth;
+    
     public SearchTree()
     {
         this.rootNode = null;
         this.currentNode = null;
         this.endNode = null;
+        
+        this.nodeCount = 0;
+        this.depth = 0;
     }
     
     public SearchTree(SearchNode rootNode)
@@ -22,6 +28,39 @@ public class SearchTree
         this.rootNode = rootNode;
         this.currentNode = rootNode;
         this.endNode = null;
+        
+        this.nodeCount = 0;
+        this.depth = 0;
+    }
+    
+    private void calculateDepth(SearchNode rootNode, int currentDepth)
+    {
+        if(rootNode != null)
+        {
+            currentDepth++;
+            
+            if (currentDepth > depth) 
+            {
+                depth = currentDepth;
+            }
+            
+            SearchNode childNode;
+            Iterator<SearchNode> childIt = rootNode.getChildNodeIterator();
+
+            while (childIt.hasNext()) 
+            {
+                childNode = childIt.next();
+                calculateDepth(childNode, currentDepth);
+            }
+            
+            currentDepth--;
+        }
+    }
+    
+    public int depth()
+    {
+        calculateDepth(rootNode, 0);
+        return (depth - 1);
     }
     
     public void addChildToCurrentNode(SearchNode childNode) throws NullPointerException
@@ -30,6 +69,7 @@ public class SearchTree
         {
             this.rootNode = childNode;
             this.currentNode = rootNode;
+            this.nodeCount++;
         }
         else
         {
@@ -51,6 +91,7 @@ public class SearchTree
             }
             
             this.currentNode.addChildNode(childNode);
+            this.nodeCount++;
         }
     }
     
@@ -66,6 +107,7 @@ public class SearchTree
             }
             
             childNode = null;
+            this.nodeCount--;
         }
     }
     
@@ -147,5 +189,19 @@ public class SearchTree
      */
     public void setEndNode(SearchNode endNode) {
         this.endNode = endNode;
+    }
+
+    /**
+     * @return the nodeCount
+     */
+    public int getNodeCount() {
+        return nodeCount;
+    }
+
+    /**
+     * @param nodeCount the nodeCount to set
+     */
+    public void setNodeCount(int nodeCount) {
+        this.nodeCount = nodeCount;
     }
 }

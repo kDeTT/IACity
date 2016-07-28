@@ -14,6 +14,11 @@ public class CartesianCoordinate
         this.x = x;
         this.y = y;
     }
+    
+    public double distanceTo(CartesianCoordinate other)
+    {
+        return Math.sqrt(Math.pow(getX() - other.getX(), 2) + Math.pow(getY() - other.getY(), 2));
+    }
 
     /**
      * @return the x

@@ -32,7 +32,7 @@ public class GeoCoordinate
     
     public double degreeToRadians(double degree) 
     {
-        return degree * (Math.PI/180);
+        return degree * Math.PI / 180;
     }
     
     // Haversine Formula
@@ -57,9 +57,15 @@ public class GeoCoordinate
         return earthRadius * c;
     }
     
-    public CartesianCoordinate castToCartesian(double canvasWidth, double canvasHeight, double startX, double startY)
+    public CartesianCoordinate castToCartesian()
     {
-        return new CartesianCoordinate(-1, -1);
+        // Radius of the earth in km
+        int earthRadius = 6371;
+        
+        double x = earthRadius * Math.cos(degreeToRadians(getLatitude())) * Math.cos(degreeToRadians(getLongitude()));
+        double y = earthRadius * Math.cos(degreeToRadians(getLatitude())) * Math.sin(degreeToRadians(getLongitude()));
+        
+        return new CartesianCoordinate(x, y);
     }
     
     public static boolean isValidLatitude(double latitude)
