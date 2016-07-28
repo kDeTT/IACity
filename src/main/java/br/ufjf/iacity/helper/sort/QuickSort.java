@@ -1,6 +1,6 @@
 package br.ufjf.iacity.helper.sort;
 
-import br.ufjf.iacity.algorithm.helper.SearchNode;
+import br.ufjf.iacity.algorithm.search.SearchNode;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -9,9 +9,11 @@ import java.util.List;
  */
 public class QuickSort
 {
+    public enum SortType { Cost, EvalFunction };
+    
     private QuickSort() {}
 
-    public static List<SearchNode> sort(List<SearchNode> inputList) 
+    public static List<SearchNode> sort(List<SearchNode> inputList, SortType sortType) 
     {
         if (inputList.size() <= 1) 
         {
@@ -26,22 +28,33 @@ public class QuickSort
 
         for (int i = 0; i < inputList.size(); i++)
         {
-            if (inputList.get(i).getCost() <= pivotNode.getCost())
+            if(sortType.equals(SortType.Cost))
             {
-                if (i == middle)
-                {
-                    continue;
+                if (inputList.get(i).getCost() <= pivotNode.getCost()) {
+                    if (i == middle) {
+                        continue;
+                    }
+
+                    lessList.add(inputList.get(i));
+                } else {
+                    greaterList.add(inputList.get(i));
                 }
-                
-                lessList.add(inputList.get(i));
-            } 
-            else 
+            }
+            else if(sortType.equals(SortType.EvalFunction))
             {
-                greaterList.add(inputList.get(i));
+                if (inputList.get(i).getEvalFunctionValue() <= pivotNode.getEvalFunctionValue()) {
+                    if (i == middle) {
+                        continue;
+                    }
+
+                    lessList.add(inputList.get(i));
+                } else {
+                    greaterList.add(inputList.get(i));
+                }
             }
         }
 
-        return concatenate(sort(lessList), pivotNode, sort(greaterList));
+        return concatenate(sort(lessList, sortType), pivotNode, sort(greaterList, sortType));
     }
     
     private static List<SearchNode> concatenate(List<SearchNode> lessList, SearchNode pivotNode, List<SearchNode> greaterList) {

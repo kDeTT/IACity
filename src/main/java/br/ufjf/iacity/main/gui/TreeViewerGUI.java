@@ -1,6 +1,6 @@
 package br.ufjf.iacity.main.gui;
 
-import br.ufjf.iacity.algorithm.helper.SearchNode;
+import br.ufjf.iacity.algorithm.search.SearchNode;
 import com.mxgraph.swing.mxGraphComponent;
 import com.mxgraph.view.mxGraph;
 import java.util.Iterator;

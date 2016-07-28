@@ -4,16 +4,20 @@ import br.ufjf.iacity.algorithm.AbstractAlgorithmSearch;
 import br.ufjf.iacity.graph.CityGraph;
 import br.ufjf.iacity.graph.CityNodeAdjacency;
 import br.ufjf.iacity.graph.CityNodeGraph;
-import br.ufjf.iacity.helper.GeoCoordinate;
+import br.ufjf.iacity.helper.coordinate.GeoCoordinate;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileReader;
-import java.io.FileWriter;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.stream.Stream;
 
 /**
  *
@@ -23,8 +27,9 @@ public class FileHelper
 {
     public static final String WORK_DIR = System.getProperty("user.dir") + File.separator + "workdir" + File.separator;
     public static final String IACITY_FILE_EXTENSION = "txt";
+    private static final String CHARSET = "ISO-8859-1";
     
-    private static String formatFilePath(String path)
+    public static String formatFilePath(String path)
     {
         if(!path.endsWith(IACITY_FILE_EXTENSION))
         {
@@ -34,14 +39,45 @@ public class FileHelper
         return path;
     }
     
-    public static CityGraph loadGraphFile(String filePath) throws Exception
+    public static Stream<String> loadTxtFile(String filePath) throws IOException
+    {
+        try
+        {
+            BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(filePath), Charset.forName(CHARSET)));
+            return reader.lines();
+        }
+        catch(IOException | IllegalArgumentException ex)
+        {
+            throw ex;
+        }
+    }
+    
+    public static void saveTxtFile(String filePath, List<String> txtToSave) throws IOException
+    {
+        try
+        {
+            try(BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(filePath), Charset.forName(CHARSET))))
+            {
+                for(String line : txtToSave)
+                {
+                    writer.append(line + "\n");
+                }
+            }
+        }
+        catch(IOException | IllegalArgumentException ex)
+        {
+            throw ex;
+        }
+    }
+    
+    public static CityGraph loadGraphFile(String filePath) throws IOException
     {
         try
         {
             List<String> verticesList = new ArrayList<>();
             List<String> adjacencyList = new ArrayList<>();
 
-            try(BufferedReader reader = new BufferedReader(new FileReader(filePath)))
+            try(BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(filePath), Charset.forName(CHARSET))))
             {
                 String line;
                 
@@ -79,7 +115,7 @@ public class FileHelper
     {
         try 
         {
-            try (BufferedWriter writer = new BufferedWriter(new FileWriter(formatFilePath(filePath)))) 
+            try (BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(formatFilePath(filePath)), Charset.forName(CHARSET))))
             {
                 writer.write("BEGIN_VERTICES");
                 writer.newLine();
@@ -139,7 +175,7 @@ public class FileHelper
     {
         try 
         {
-            try (BufferedWriter writer = new BufferedWriter(new FileWriter(formatFilePath(filePath)))) 
+            try (BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(formatFilePath(filePath)), Charset.forName(CHARSET))))
             {
                 writer.write("BEGIN_SEARCHINFO");
                 writer.newLine();

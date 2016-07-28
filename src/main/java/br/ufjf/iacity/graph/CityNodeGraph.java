@@ -9,11 +9,11 @@ import java.util.Objects;
 public class CityNodeGraph 
 {
     private String idNode;
-    private float cost;
+    private double cost;
     private final List<CityNodeAdjacency> adjacencyList;
     private final City city;
     
-    public CityNodeGraph(float cost, City city) throws IllegalArgumentException
+    public CityNodeGraph(double cost, City city) throws IllegalArgumentException
     {
         if(city == null)
         {
@@ -76,12 +76,12 @@ public class CityNodeGraph
         return this.idNode;
     }
 
-    public float getCost() 
+    public double getCost() 
     {
         return cost;
     }
     
-    public void setCost(float cost) 
+    public void setCost(double cost) 
     {
         this.cost = cost;
     }
@@ -90,19 +90,21 @@ public class CityNodeGraph
     {
         return city;
     }
-    
+
     @Override
-    public int hashCode() {
+    public int hashCode() 
+    {
         int hash = 7;
-        hash = 97 * hash + Objects.hashCode(this.idNode);
-        hash = 97 * hash + Float.floatToIntBits(this.cost);
-        hash = 97 * hash + Objects.hashCode(this.adjacencyList);
-        hash = 97 * hash + Objects.hashCode(this.city);
+        hash = 17 * hash + Objects.hashCode(this.idNode);
+        hash = 17 * hash + (int) (Double.doubleToLongBits(this.cost) ^ (Double.doubleToLongBits(this.cost) >>> 32));
+        hash = 17 * hash + Objects.hashCode(this.adjacencyList);
+        hash = 17 * hash + Objects.hashCode(this.city);
         return hash;
     }
 
     @Override
-    public boolean equals(Object obj) {
+    public boolean equals(Object obj) 
+    {
         if (obj == null) {
             return false;
         }
@@ -113,7 +115,7 @@ public class CityNodeGraph
         if (!Objects.equals(this.idNode, other.idNode)) {
             return false;
         }
-        if (Float.floatToIntBits(this.cost) != Float.floatToIntBits(other.cost)) {
+        if (Double.doubleToLongBits(this.cost) != Double.doubleToLongBits(other.cost)) {
             return false;
         }
         if (!Objects.equals(this.adjacencyList, other.adjacencyList)) {

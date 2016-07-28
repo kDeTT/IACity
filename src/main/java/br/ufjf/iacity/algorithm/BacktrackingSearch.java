@@ -1,8 +1,8 @@
 package br.ufjf.iacity.algorithm;
 
-import br.ufjf.iacity.algorithm.helper.SearchNode;
-import br.ufjf.iacity.algorithm.helper.SearchTree;
-import br.ufjf.iacity.algorithm.helper.AlgorithmParameter;
+import br.ufjf.iacity.algorithm.search.SearchNode;
+import br.ufjf.iacity.algorithm.search.SearchTree;
+import br.ufjf.iacity.algorithm.search.AlgorithmParameter;
 
 public class BacktrackingSearch extends AbstractAlgorithmSearch
 {   
@@ -47,6 +47,9 @@ public class BacktrackingSearch extends AbstractAlgorithmSearch
     {
         // Dispara evento que a busca foi iniciada
         this.getSearchStartedEventInitiator().fireEvent(getSearchState());
+
+        // Marca o tempo inicial
+        long startSearchTime = System.nanoTime();
         
         // Muda o estado para buscando
         this.setSearchState(SearchState.Searching);
@@ -116,6 +119,15 @@ public class BacktrackingSearch extends AbstractAlgorithmSearch
                 }
             }
         }
+        
+        // Marca o tempo final
+        long endSearchTime = System.nanoTime();
+        
+        // Tempo total de execução em milisegundos
+        double executionTime = ((endSearchTime - startSearchTime) / 1e6);
+        
+        // Define o tempo total de execução
+        this.setExecutionTime(executionTime);
         
         // Dispara evento que a busca foi terminada
         this.getSearchStoppedEvenInitiator().fireEvent(getSearchState());

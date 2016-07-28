@@ -1,9 +1,10 @@
 package br.ufjf.iacity.algorithm;
 
-import br.ufjf.iacity.algorithm.helper.SearchNode;
-import br.ufjf.iacity.algorithm.helper.SearchTree;
-import br.ufjf.iacity.algorithm.helper.AlgorithmParameter;
+import br.ufjf.iacity.algorithm.search.SearchNode;
+import br.ufjf.iacity.algorithm.search.SearchTree;
+import br.ufjf.iacity.algorithm.search.AlgorithmParameter;
 import br.ufjf.iacity.helper.sort.QuickSort;
+import br.ufjf.iacity.helper.sort.QuickSort.SortType;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -52,6 +53,9 @@ public class OrderedSearch extends AbstractAlgorithmSearch
         // Dispara evento que a busca foi iniciada
         this.getSearchStartedEventInitiator().fireEvent(getSearchState());
         
+        // Marca o tempo inicial
+        long startSearchTime = System.nanoTime();
+        
         // Muda o estado para buscando
         this.setSearchState(SearchState.Searching);
         
@@ -63,6 +67,9 @@ public class OrderedSearch extends AbstractAlgorithmSearch
         
         // Adiciona o nó inicial na lista de abertos
         this.addInOpenedNodeList(SearchMode.Ordered, openedNodeList, getSearchTree().getStartNode());
+        
+        // Adiciona o nó na árvore de busca
+        this.getSearchTree().addChildToCurrentNode(getSearchTree().getStartNode());
         
         // Enquanto não for obtido sucesso ou fracasso, continue a busca
         while (!(getSearchState().equals(SearchState.Success) || getSearchState().equals(SearchState.Failed)))
@@ -83,11 +90,8 @@ public class OrderedSearch extends AbstractAlgorithmSearch
                  */
                 SearchNode openedSearchNode = this.getElementFromOpenedNodeList(SearchMode.Ordered, openedNodeList);
                 
-                // Define primeiramente o nó atual como o pai do novo nó
-//                this.getSearchTree().setCurrentNode(openedSearchNode.getRootNode());
-                
-                // Adiciona o nó na árvore de busca
-                this.getSearchTree().addChildToCurrentNode(openedSearchNode);
+//                // Adiciona o nó na árvore de busca
+//                this.getSearchTree().addChildToCurrentNode(openedSearchNode);
                 
                 // Altera o nó atual para o novo nó
                 this.getSearchTree().setCurrentNode(openedSearchNode);
@@ -168,7 +172,15 @@ public class OrderedSearch extends AbstractAlgorithmSearch
                                                      * e adicionar o novo
                                                      */
                                                     openedNodeList.remove(openedNode);
+                                                    
+                                                    // Adiciona na lista de abertos
                                                     this.addInOpenedNodeList(SearchMode.Ordered, openedNodeList, nextSearchNode);
+                                                    
+                                                    // Remove o nó antigo da árvore de busca
+                                                    this.getSearchTree().removeChildNode(openedNode);
+                                                    
+                                                    // Adiciona o novo nó na árvore de busca
+                                                    this.getSearchTree().addChildToCurrentNode(nextSearchNode);
                                                     
                                                     // Termina o loop
                                                     break;
@@ -180,6 +192,9 @@ public class OrderedSearch extends AbstractAlgorithmSearch
                                     {
                                         // Caso não esteja, adicionar o novo estado imediatamente
                                         this.addInOpenedNodeList(SearchMode.Ordered, openedNodeList, nextSearchNode);
+                                        
+                                        // Adiciona o nó na árvore de busca
+                                        this.getSearchTree().addChildToCurrentNode(nextSearchNode);
                                     }
                                 }
                             }
@@ -190,6 +205,9 @@ public class OrderedSearch extends AbstractAlgorithmSearch
                                  * o novo estado imediatamente
                                  */
                                 this.addInOpenedNodeList(SearchMode.Ordered, openedNodeList, nextSearchNode);
+                                
+                                // Adiciona o nó na árvore de busca
+                                this.getSearchTree().addChildToCurrentNode(nextSearchNode);
                             }
                         }
                         
@@ -198,13 +216,22 @@ public class OrderedSearch extends AbstractAlgorithmSearch
                     }
                     
                     // Ordena a lista de abertos usando o custo dos nós
-                    openedNodeList = QuickSort.sort(openedNodeList);
+                    openedNodeList = QuickSort.sort(openedNodeList, SortType.Cost);
 
                     // Define que o nó atual da árvore foi expandido
                     this.getSearchTree().getCurrentNode().setExpanded(true);
                 }
             }
         }
+        
+        // Marca o tempo final
+        long endSearchTime = System.nanoTime();
+        
+        // Tempo total de execução em milisegundos
+        double executionTime = ((endSearchTime - startSearchTime) / 1e6);
+        
+        // Define o tempo total de execução
+        this.setExecutionTime(executionTime);
         
         // Dispara evento que a busca foi terminada
         this.getSearchStoppedEvenInitiator().fireEvent(getSearchState());

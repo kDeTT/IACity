@@ -353,8 +353,8 @@ public class ManualCreateGraphGUI extends javax.swing.JDialog
         String cost = txtAdjCost.getText();
         String directional = (radioYesDirectional.isSelected() ? "true" : "false");
         
-        String newVertice = String.format("<%s, %s, %s, %s>", cityA, cityB, cost, directional);
-        this.listAdjacencyModel.addElement(newVertice);
+        String newAdj = String.format("<%s, %s, %s, %s>", cityA, cityB, cost, directional);
+        this.listAdjacencyModel.addElement(newAdj);
         
         txtAdjCityA.setText("");
         txtAdjCityB.setText("");

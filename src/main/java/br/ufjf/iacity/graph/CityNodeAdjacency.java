@@ -5,13 +5,13 @@ import java.util.Objects;
 public class CityNodeAdjacency 
 {
     private String idAdj;
-    private float cost;
+    private double cost;
     private final CityNodeGraph adjNode;
     
     private boolean directed;
     private boolean visited;
     
-    public CityNodeAdjacency(float cost, CityNodeGraph adjNode, boolean directed) throws IllegalArgumentException
+    public CityNodeAdjacency(double cost, CityNodeGraph adjNode, boolean directed) throws IllegalArgumentException
     {
         if(adjNode == null)
         {
@@ -33,12 +33,12 @@ public class CityNodeAdjacency
         return this.idAdj;
     }
 
-    public float getCost() 
+    public double getCost() 
     {
         return cost;
     }
 
-    public void setCost(float cost) 
+    public void setCost(double cost) 
     {
         this.cost = cost;
     }
@@ -49,16 +49,20 @@ public class CityNodeAdjacency
     }
 
     @Override
-    public int hashCode() {
+    public int hashCode()
+    {
         int hash = 7;
-        hash = 71 * hash + Objects.hashCode(this.idAdj);
-        hash = 71 * hash + Float.floatToIntBits(this.cost);
-        hash = 71 * hash + Objects.hashCode(this.adjNode);
+        hash = 97 * hash + Objects.hashCode(this.idAdj);
+        hash = 97 * hash + (int) (Double.doubleToLongBits(this.cost) ^ (Double.doubleToLongBits(this.cost) >>> 32));
+        hash = 97 * hash + Objects.hashCode(this.adjNode);
+        hash = 97 * hash + (this.directed ? 1 : 0);
+        hash = 97 * hash + (this.visited ? 1 : 0);
         return hash;
     }
 
     @Override
-    public boolean equals(Object obj) {
+    public boolean equals(Object obj) 
+    {
         if (obj == null) {
             return false;
         }
@@ -69,10 +73,16 @@ public class CityNodeAdjacency
         if (!Objects.equals(this.idAdj, other.idAdj)) {
             return false;
         }
-        if (Float.floatToIntBits(this.cost) != Float.floatToIntBits(other.cost)) {
+        if (Double.doubleToLongBits(this.cost) != Double.doubleToLongBits(other.cost)) {
             return false;
         }
         if (!Objects.equals(this.adjNode, other.adjNode)) {
+            return false;
+        }
+        if (this.directed != other.directed) {
+            return false;
+        }
+        if (this.visited != other.visited) {
             return false;
         }
         return true;

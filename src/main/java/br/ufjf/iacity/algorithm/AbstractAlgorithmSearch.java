@@ -1,13 +1,13 @@
 package br.ufjf.iacity.algorithm;
 
-import br.ufjf.iacity.algorithm.helper.SearchNode;
-import br.ufjf.iacity.algorithm.helper.SearchTree;
+import br.ufjf.iacity.algorithm.search.SearchNode;
+import br.ufjf.iacity.algorithm.search.SearchTree;
 import br.ufjf.iacity.algorithm.events.ISearchStartedEventListener;
 import br.ufjf.iacity.algorithm.events.ISearchStatusChangedEventListener;
 import br.ufjf.iacity.algorithm.events.ISearchStoppedEventListener;
-import br.ufjf.iacity.algorithm.events.initiator.SearchStartedEventInitiator;
-import br.ufjf.iacity.algorithm.events.initiator.SearchStatusChangedEventInitiator;
-import br.ufjf.iacity.algorithm.events.initiator.SearchStoppedEvenInitiator;
+import br.ufjf.iacity.algorithm.events.SearchStartedEventInitiator;
+import br.ufjf.iacity.algorithm.events.SearchStatusChangedEventInitiator;
+import br.ufjf.iacity.algorithm.events.SearchStoppedEvenInitiator;
 import br.ufjf.iacity.algorithm.transition.ITransition;
 import br.ufjf.iacity.graph.CityGraph;
 import br.ufjf.iacity.graph.CityNodeAdjacency;
@@ -19,13 +19,6 @@ import java.util.Stack;
 
 public abstract class AbstractAlgorithmSearch 
 {
-
-    /**
-     * @return the cityGraph
-     */
-    public CityGraph getCityGraph() {
-        return cityGraph;
-    }
     public enum SearchState { Success, Failed, Searching, Started, Stopped }
     
     public enum SearchMode { Backtracking, Breadth, Depth, Ordered, BestFirst, A, IDA }
@@ -112,15 +105,6 @@ public abstract class AbstractAlgorithmSearch
     {
         this.searchState = searchState;
         this.statusChangedEventInitiator.fireEvent(searchState);
-        
-        if(searchState.equals(SearchState.Searching))
-        {
-            this.searchStartedEventInitiator.fireEvent(searchState);
-        }
-        else if(searchState.equals(SearchState.Stopped) || searchState.equals(SearchState.Success) || searchState.equals(SearchState.Failed))
-        {
-            this.searchStoppedEvenInitiator.fireEvent(searchState);
-        }
     }
     
     private void makeSolutionPath()
@@ -345,6 +329,13 @@ public abstract class AbstractAlgorithmSearch
         }
         
         return (tmpObj != null) ? (SearchNode)tmpObj : null;
+    }
+    
+    /**
+     * @return the cityGraph
+     */
+    public CityGraph getCityGraph() {
+        return cityGraph;
     }
     
     /**

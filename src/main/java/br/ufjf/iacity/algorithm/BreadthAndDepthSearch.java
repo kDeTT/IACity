@@ -1,8 +1,8 @@
 package br.ufjf.iacity.algorithm;
 
-import br.ufjf.iacity.algorithm.helper.SearchNode;
-import br.ufjf.iacity.algorithm.helper.SearchTree;
-import br.ufjf.iacity.algorithm.helper.AlgorithmParameter;
+import br.ufjf.iacity.algorithm.search.SearchNode;
+import br.ufjf.iacity.algorithm.search.SearchTree;
+import br.ufjf.iacity.algorithm.search.AlgorithmParameter;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Stack;
@@ -57,6 +57,9 @@ public class BreadthAndDepthSearch extends AbstractAlgorithmSearch
         // Dispara evento que a busca foi iniciada
         this.getSearchStartedEventInitiator().fireEvent(getSearchState());
         
+        // Marca o tempo inicial
+        long startSearchTime = System.nanoTime();
+        
         // Muda o estado para buscando
         this.setSearchState(SearchState.Searching);
         
@@ -86,6 +89,9 @@ public class BreadthAndDepthSearch extends AbstractAlgorithmSearch
         // Adiciona o nó inicial na lista de abertos
         this.addInOpenedNodeList(searchMode, openedNodeList, getSearchTree().getStartNode());
         
+        // Adiciona o nó na árvore de busca
+        this.getSearchTree().addChildToCurrentNode(getSearchTree().getStartNode());
+        
         // Enquanto não for obtido sucesso ou fracasso, continue a busca
         while (!(getSearchState().equals(SearchState.Success) || getSearchState().equals(SearchState.Failed)))
         {
@@ -104,15 +110,6 @@ public class BreadthAndDepthSearch extends AbstractAlgorithmSearch
                  * 
                  */
                 SearchNode openedSearchNode = this.getElementFromOpenedNodeList(searchMode, openedNodeList);
-                
-//                if(searchMode.equals(SearchMode.Breadth))
-//                {
-//                    // Define primeiramente o nó atual como o pai do novo nó
-//                    this.getSearchTree().setCurrentNode(openedSearchNode.getRootNode());
-//                }
-                
-                // Adiciona o nó na árvore de busca
-                this.getSearchTree().addChildToCurrentNode(openedSearchNode);
                 
                 // Altera o nó atual para o novo nó
                 this.getSearchTree().setCurrentNode(openedSearchNode);
@@ -190,15 +187,27 @@ public class BreadthAndDepthSearch extends AbstractAlgorithmSearch
                         // Se busca em largura, adicionar na mesma ordem (Fila)
                         for (int i = 0; i < tmpList.size(); i++) 
                         {
-                            this.addInOpenedNodeList(searchMode, openedNodeList, tmpList.get(i));
+                            nextSearchNode =  tmpList.get(i);
+                                    
+                            // Adiciona na lista de abertos
+                            this.addInOpenedNodeList(searchMode, openedNodeList, nextSearchNode);
+                            
+                            // Adiciona o nó na árvore de busca
+                            this.getSearchTree().addChildToCurrentNode(nextSearchNode);
                         }
                     } 
                     else 
                     {
-                        // Se busca em profundidade, adicionar na ordem inversa (Pilha
+                        // Se busca em profundidade, adicionar na ordem inversa (Pilha)
                         for (int i = (tmpList.size() - 1); i >= 0; i--) 
                         {
-                            this.addInOpenedNodeList(searchMode, openedNodeList, tmpList.get(i));
+                            nextSearchNode = tmpList.get(i);
+                            
+                            // Adiciona na lista de abertos
+                            this.addInOpenedNodeList(searchMode, openedNodeList, nextSearchNode);
+                            
+                            // Adiciona o nó na árvore de busca
+                            this.getSearchTree().addChildToCurrentNode(nextSearchNode);
                         }
                     }
                     
@@ -207,6 +216,15 @@ public class BreadthAndDepthSearch extends AbstractAlgorithmSearch
                 }
             }
         }
+        
+        // Marca o tempo final
+        long endSearchTime = System.nanoTime();
+        
+        // Tempo total de execução em milisegundos
+        double executionTime = ((endSearchTime - startSearchTime) / 1e6);
+        
+        // Define o tempo total de execução
+        this.setExecutionTime(executionTime);
         
         // Dispara evento que a busca foi terminada
         this.getSearchStoppedEvenInitiator().fireEvent(getSearchState());

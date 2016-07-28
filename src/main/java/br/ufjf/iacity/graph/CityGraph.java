@@ -1,6 +1,6 @@
 package br.ufjf.iacity.graph;
 
-import br.ufjf.iacity.helper.GeoCoordinate;
+import br.ufjf.iacity.helper.coordinate.GeoCoordinate;
 import br.ufjf.iacity.model.City;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -16,24 +16,56 @@ public class CityGraph
         this.nodeList = new ArrayList<>();
     }
     
-    public void resetState()
+    private static String[] formatStringPattern(String pattern)
     {
-        CityNodeGraph tmpNode;
-        Iterator<CityNodeGraph> nodeIt = this.getNodeIterator();
-        
-        while(nodeIt.hasNext())
+        if(pattern == null)
         {
-            tmpNode = nodeIt.next();
-            Iterator<CityNodeAdjacency> nodeAdjIt = tmpNode.getAdjacencyIterator();
-            
-            CityNodeAdjacency tmpAdj;
-            
-            while(nodeAdjIt.hasNext())
+            return null;
+        }
+        
+        // Remove caracteres inicial e final da linha
+        pattern = pattern.replaceAll("<", "");
+        pattern = pattern.replaceAll(">", "");
+
+        // Capitaliza o texto
+        pattern = WordUtils.capitalizeFully(pattern);
+
+        // Remove todos os espaÃ§os
+        pattern = pattern.replaceAll(" ", "");
+
+        // Quebra os campos da linha
+        return pattern.split(",");
+    }
+    
+    public static String formatVerticePattern(String cityName, double latitude, double longitude, double cost)
+    {
+        return String.format("<%s, %s, %s, %s>", cityName, latitude, longitude, cost);
+    }
+    
+    public static String formatAdjacencyPattern(String cityA, String cityB, double cost, boolean directional)
+    {
+        return String.format("<%s, %s, %s, %s>", cityA, cityB, cost, directional);
+    }
+    
+    public static CityNodeGraph createCityNodeGraphFromStringPattern(String vertice)
+    {
+        if(vertice != null)
+        {
+            String[] lineSplit = formatStringPattern(vertice);
+
+            // Verifica se possui todos os campos necessÃ¡rios
+            if (lineSplit.length == 4) 
             {
-                tmpAdj = nodeAdjIt.next();
-                tmpAdj.setVisited(false);
+                String cityName = lineSplit[0];
+                double latitude = Double.parseDouble(lineSplit[1]);
+                double longitude = Double.parseDouble(lineSplit[2]);
+                double cost = Float.parseFloat(lineSplit[3]);
+                
+                return new CityNodeGraph(cost, new City(cityName, new GeoCoordinate(latitude, longitude)));
             }
         }
+        
+        return null;
     }
     
     public static CityGraph createGraphFromStringsList(List<String> verticesList, List<String> adjacencyList)
@@ -42,18 +74,7 @@ public class CityGraph
         
         for(String vertice : verticesList)
         {
-            // Remove caracteres inicial e final da linha
-            vertice = vertice.replaceAll("<", "");
-            vertice = vertice.replaceAll(">", "");
-
-            // Capitaliza o texto
-            vertice = WordUtils.capitalizeFully(vertice);
-
-            // Remove todos os espaÃ§os
-            vertice = vertice.replaceAll(" ", "");
-
-            // Quebra os campos da linha
-            String[] lineSplit = vertice.split(",");
+            String[] lineSplit = formatStringPattern(vertice);
 
             // Verifica se possui todos os campos necessÃ¡rios
             if (lineSplit.length == 4) 
@@ -61,7 +82,7 @@ public class CityGraph
                 String cityName = lineSplit[0];
                 double latitude = Double.parseDouble(lineSplit[1]);
                 double longitude = Double.parseDouble(lineSplit[2]);
-                float cost = Float.parseFloat(lineSplit[3]);
+                double cost = Float.parseFloat(lineSplit[3]);
 
                 City newCity = new City(cityName, new GeoCoordinate(latitude, longitude));
 
@@ -72,18 +93,7 @@ public class CityGraph
         
         for(String adjacency : adjacencyList)
         {
-            // Remove caracteres inicial e final da linha
-            adjacency = adjacency.replaceAll("<", "");
-            adjacency = adjacency.replaceAll(">", "");
-
-            // Capitaliza o texto
-            adjacency = WordUtils.capitalizeFully(adjacency);
-
-            // Remove todos os espaÃ§os
-            adjacency = adjacency.replaceAll(" ", "");
-
-            // Quebra os campos da linha
-            String[] lineSplit = adjacency.split(",");
+            String[] lineSplit = formatStringPattern(adjacency);
 
             // Verifica se possui todos os campos necessÃ¡rios
             if (lineSplit.length == 4)
@@ -142,12 +152,43 @@ public class CityGraph
         return cpyGraph;
     }
     
+    public void resetState()
+    {
+        CityNodeGraph tmpNode;
+        Iterator<CityNodeGraph> nodeIt = this.getNodeIterator();
+        
+        while(nodeIt.hasNext())
+        {
+            tmpNode = nodeIt.next();
+            Iterator<CityNodeAdjacency> nodeAdjIt = tmpNode.getAdjacencyIterator();
+            
+            CityNodeAdjacency tmpAdj;
+            
+            while(nodeAdjIt.hasNext())
+            {
+                tmpAdj = nodeAdjIt.next();
+                tmpAdj.setVisited(false);
+            }
+        }
+    }
+    
     public boolean addNode(CityNodeGraph nodeGraph)
     {
         return this.nodeList.add(nodeGraph);
     }
     
-    public boolean addNode(float cost, City city)
+    public void addAllNodes(List<CityNodeGraph> nodeGraphList)
+    {
+        if(nodeGraphList != null)
+        {
+            for(CityNodeGraph node : nodeGraphList)
+            {
+                this.nodeList.add(node);
+            }
+        }
+    }
+    
+    public boolean addNode(double cost, City city)
     {
         return (this.nodeList.add(new CityNodeGraph(cost, city)));
     }
@@ -204,7 +245,7 @@ public class CityGraph
         return this.nodeList.size();
     }
     
-    public boolean addAdjacency(CityNodeGraph city1, CityNodeGraph city2, float cost, boolean directed)
+    public boolean addAdjacency(CityNodeGraph city1, CityNodeGraph city2, double cost, boolean directed)
     {
         if(nodeList.contains(city1) && nodeList.contains(city2))
         {

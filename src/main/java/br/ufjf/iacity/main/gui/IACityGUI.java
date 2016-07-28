@@ -1,8 +1,10 @@
 package br.ufjf.iacity.main.gui;
 
+import br.ufjf.iacity.algorithm.ASearch;
 import br.ufjf.iacity.algorithm.AbstractAlgorithmSearch;
 import br.ufjf.iacity.algorithm.AbstractAlgorithmSearch.SearchMode;
 import br.ufjf.iacity.algorithm.BacktrackingSearch;
+import br.ufjf.iacity.algorithm.BestFirstSearch;
 import br.ufjf.iacity.algorithm.BreadthAndDepthSearch;
 import br.ufjf.iacity.algorithm.OrderedSearch;
 import br.ufjf.iacity.algorithm.events.ISearchStartedEventListener;
@@ -11,8 +13,8 @@ import br.ufjf.iacity.algorithm.events.ISearchStoppedEventListener;
 import br.ufjf.iacity.algorithm.transition.AlphabeticalTransition;
 import br.ufjf.iacity.graph.CityGraph;
 import br.ufjf.iacity.graph.CityNodeGraph;
-import br.ufjf.iacity.helper.GeoCoordinate;
-import br.ufjf.iacity.algorithm.helper.AlgorithmParameter;
+import br.ufjf.iacity.helper.coordinate.GeoCoordinate;
+import br.ufjf.iacity.algorithm.search.AlgorithmParameter;
 import br.ufjf.iacity.helper.file.FileHelper;
 import br.ufjf.iacity.model.City;
 import java.awt.event.ActionEvent;
@@ -44,8 +46,6 @@ public class IACityGUI extends JFrame implements
     
     private AlgorithmParameter searchParameter;
     private AbstractAlgorithmSearch algorithmSearch;
-    private long startSearchTime;
-    private long endSearchTime;
     
     /**
      * Creates new form IACityGUI
@@ -274,11 +274,11 @@ public class IACityGUI extends JFrame implements
 
         radioGroupSearchAlgorithm.add(radioASearch);
         radioASearch.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
-        radioASearch.setText("A*");
+        radioASearch.setText("A");
 
         radioGroupSearchAlgorithm.add(radioIDASearch);
         radioIDASearch.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
-        radioIDASearch.setText("IDA*");
+        radioIDASearch.setText("IDA");
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
@@ -559,7 +559,6 @@ public class IACityGUI extends JFrame implements
 
         btnShowInGoogleMaps.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         btnShowInGoogleMaps.setText("Ver no Google Maps");
-        btnShowInGoogleMaps.setActionCommand("Ver no Google Maps");
         btnShowInGoogleMaps.setEnabled(false);
         btnShowInGoogleMaps.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -827,10 +826,10 @@ public class IACityGUI extends JFrame implements
                     algorithmSearch = new OrderedSearch(searchParameter);
                     break;
                 case "BESTFIRST":
-                    
+                    algorithmSearch = new BestFirstSearch(searchParameter);
                     break;
-                case "A*":
-                    
+                case "A":
+                    algorithmSearch = new ASearch(searchParameter);
                     break;
                 case "IDA":
                     
@@ -871,6 +870,9 @@ public class IACityGUI extends JFrame implements
     }//GEN-LAST:event_btnShowSearchTreeActionPerformed
 
     private void btnSetStartAndEndNodeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSetStartAndEndNodeActionPerformed
+        searchParameter.setStartCityNode(null);
+        searchParameter.setEndCityNode(null);
+        
         if (searchParameter.getGraph() == null) 
         {
             JOptionPane.showMessageDialog(this, "O grafo não foi criado!");
@@ -969,7 +971,7 @@ public class IACityGUI extends JFrame implements
                 String loadPage = String.format("file:///%s%s?resultfile=%s",
                                 FileHelper.WORK_DIR,
                                 "iacity_viewer.html",
-                                savedFilePath);
+                                FileHelper.formatFilePath(savedFilePath));
                 
                 ProcessBuilder browser = new ProcessBuilder(BROWSER_PATH, "--allow-file-access-from-files", loadPage);
                 browser.start();
@@ -1000,10 +1002,10 @@ public class IACityGUI extends JFrame implements
             case "BESTFIRST":
                 searchParameter.setSearchMode(SearchMode.BestFirst);
                 break;
-            case "A*":
+            case "A":
                 searchParameter.setSearchMode(SearchMode.A);
                 break;
-            case "IDA*":
+            case "IDA":
                 searchParameter.setSearchMode(SearchMode.IDA);
                 break;
         }
@@ -1032,18 +1034,11 @@ public class IACityGUI extends JFrame implements
         this.btnShowSearchTree.setEnabled(false);
         this.btnSaveResult.setEnabled(false);
         this.btnShowInGoogleMaps.setEnabled(false);
-        
-        startSearchTime = System.nanoTime();
     }
     
     @Override
     public void searchStoppedEvent(Object event) 
     {
-        endSearchTime = System.nanoTime();
-        
-        double executionTime = ((endSearchTime - startSearchTime) / 1e6);
-        algorithmSearch.setExecutionTime(executionTime);
-        
         this.labelSearchExecutionTimeInfo.setText(String.format("Tempo de Execução: %s ms", algorithmSearch.getExecutionTime()));
         this.labelSearchCostInfo.setText(String.format("Custo da Solução: %s", algorithmSearch.getSolutionCost()));
         this.labelSearchDepthInfo.setText(String.format("Profundidade da Solução: %s", algorithmSearch.getSolutionDepth()));
@@ -1056,6 +1051,8 @@ public class IACityGUI extends JFrame implements
         this.btnShowSearchTree.setEnabled(true);
         this.btnSaveResult.setEnabled(true);
         this.btnShowInGoogleMaps.setEnabled(true);
+        
+        JOptionPane.showMessageDialog(this, "Busca concluída!");
     }
     
     @Override

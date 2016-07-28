@@ -1,0 +1,19 @@
+BEGIN_VERTICES
+<A, -1.0, -1.0, 0.0>
+<B, -1.0, -1.0, 0.0>
+<C, -1.0, -1.0, 0.0>
+<D, -1.0, -1.0, 0.0>
+<E, -1.0, -1.0, 0.0>
+<F, -1.0, -1.0, 0.0>
+END_VERTICES
+BEGIN_EDGES
+<A, B, 20.0, false>
+<A, C, 10.0, false>
+<A, D, 5.0, false>
+<B, C, 25.0, false>
+<B, D, 15.0, false>
+<C, D, 30.0, false>
+<C, E, 15.0, false>
+<D, E, 10.0, false>
+<E, F, 5.0, false>
+END_EDGES

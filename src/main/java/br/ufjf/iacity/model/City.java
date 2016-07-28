@@ -1,6 +1,6 @@
 package br.ufjf.iacity.model;
 
-import br.ufjf.iacity.helper.GeoCoordinate;
+import br.ufjf.iacity.helper.coordinate.GeoCoordinate;
 import java.util.Objects;
 
 public class City 

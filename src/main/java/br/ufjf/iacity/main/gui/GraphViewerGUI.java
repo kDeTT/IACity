@@ -120,7 +120,7 @@ public class GraphViewerGUI extends JFrame
         this.jGraph.insertVertex(jGraphParent, nodeGraph.getIdNode(), nodeGraph.getIdNode(), xCoord, yCoord, NODE_SIZE, NODE_SIZE);
     }
     
-    private void drawEdges(CityNodeGraph nodeA, CityNodeGraph nodeB, float costAdj)
+    private void drawEdges(CityNodeGraph nodeA, CityNodeGraph nodeB, double costAdj)
     {
         mxGraphModel graphModel = (mxGraphModel)jGraph.getModel();
         

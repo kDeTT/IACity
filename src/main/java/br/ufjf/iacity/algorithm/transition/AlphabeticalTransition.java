@@ -1,6 +1,6 @@
 package br.ufjf.iacity.algorithm.transition;
 
-import br.ufjf.iacity.algorithm.helper.SearchNode;
+import br.ufjf.iacity.algorithm.search.SearchNode;
 import br.ufjf.iacity.graph.CityNodeAdjacency;
 import br.ufjf.iacity.graph.CityNodeGraph;
 import java.util.Iterator;
