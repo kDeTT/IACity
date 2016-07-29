@@ -21,7 +21,7 @@ public class ASearch extends AbstractAlgorithmSearch
         if ((parameter.getGraph() == null) || (parameter.getTransition() == null) || 
                 (parameter.getStartCityNode() == null) || (parameter.getEndCityNode() == null))
         {
-            throw new IllegalArgumentException("Não é permitido nenhum parâmetro nulo para o construtor da classe OrderedSearch");
+            throw new IllegalArgumentException("Não é permitido nenhum parâmetro nulo para o construtor da classe ASearch");
         }
         
         // Define o grafo do problema e a regra de transição
@@ -121,6 +121,7 @@ public class ASearch extends AbstractAlgorithmSearch
                      * da árvore de busca, adicionando na lista de abertos
                      * 
                      */
+                    boolean isExpanded = false;
                     SearchNode currentNode = getSearchTree().getCurrentNode();
                     SearchNode nextSearchNode = this.transition.applyTransition(currentNode);
                     
@@ -135,13 +136,14 @@ public class ASearch extends AbstractAlgorithmSearch
                          */
                         City nextCity = nextSearchNode.getCityNodeGraph().getCity();
                         City endCity = this.searchTree.getEndNode().getCityNodeGraph().getCity();
-                        double cost = currentNode.getCost() + nextSearchNode.getCost();
                         
-                        // Define o valor da função de avaliação
-                        nextSearchNode.setEvalFunctionValue(cost + nextCity.getCoordinate().distanceTo(endCity.getCoordinate()));
+                        double cost = currentNode.getCost() + nextSearchNode.getCost();
                         
                         // Define o custo do estado
                         nextSearchNode.setCost(cost);
+                        
+                        // Define o valor da função de avaliação
+                        nextSearchNode.setEvalFunctionValue(cost + nextCity.getCoordinate().distanceTo(endCity.getCoordinate()));
                         
                         /**
                          *
@@ -192,7 +194,7 @@ public class ASearch extends AbstractAlgorithmSearch
                                                     // Adiciona o nó na árvore de busca
                                                     this.getSearchTree().addChildToCurrentNode(nextSearchNode);
                                                     
-                                                    // Termina o loop
+                                                    isExpanded = true;
                                                     break;
                                                 }
                                             }
@@ -205,6 +207,7 @@ public class ASearch extends AbstractAlgorithmSearch
                                         
                                         // Adiciona o nó na árvore de busca
                                         this.getSearchTree().addChildToCurrentNode(nextSearchNode);
+                                        isExpanded = true;
                                     }
                                 }
                             }
@@ -218,6 +221,7 @@ public class ASearch extends AbstractAlgorithmSearch
                                 
                                 // Adiciona o nó na árvore de busca
                                 this.getSearchTree().addChildToCurrentNode(nextSearchNode);
+                                isExpanded = true;
                             }
                         }
                         
@@ -225,11 +229,15 @@ public class ASearch extends AbstractAlgorithmSearch
                         nextSearchNode = this.transition.applyTransition(currentNode);
                     }
                     
-                    // Ordena a lista de abertos usando o custo dos nós
-                    openedNodeList = QuickSort.sort(openedNodeList, QuickSort.SortType.EvalFunction);
+                    // Verifica se o estado atual foi expandido
+                    if(isExpanded)
+                    {
+                        // Ordena a lista de abertos usando o custo dos nós
+                        openedNodeList = QuickSort.sort(openedNodeList, QuickSort.SortType.EvalFunction);
 
-                    // Define que o nó atual da árvore foi expandido
-                    this.getSearchTree().getCurrentNode().setExpanded(true);
+                        // Define que o nó atual da árvore foi expandido
+                        this.getSearchTree().getCurrentNode().setExpanded(true);
+                    }
                 }
             }
         }

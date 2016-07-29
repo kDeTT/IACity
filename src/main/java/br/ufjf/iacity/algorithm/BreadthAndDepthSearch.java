@@ -176,44 +176,48 @@ public class BreadthAndDepthSearch extends AbstractAlgorithmSearch
                         nextSearchNode = this.transition.applyTransition(currentNode);
                     }
                     
-                    /**
-                     * 
-                     * Adiciona os novos nós de busca na lista de abertos,
-                     * criados a partir das transições aplicadas, na ordem 
-                     * correta para manter a prioridade
-                     * 
-                     */
-                    if (searchMode.equals(SearchMode.Breadth))
+                    // Verifica se houve expansão do estado
+                    if(!tmpList.isEmpty())
                     {
-                        // Se busca em largura, adicionar na mesma ordem (Fila)
-                        for (int i = 0; i < tmpList.size(); i++) 
+                        /**
+                         *
+                         * Adiciona os novos nós de busca na lista de abertos,
+                         * criados a partir das transições aplicadas, na ordem
+                         * correta para manter a prioridade
+                         *
+                         */
+                        if (searchMode.equals(SearchMode.Breadth)) 
                         {
-                            nextSearchNode =  tmpList.get(i);
-                                    
-                            // Adiciona na lista de abertos
-                            this.addInOpenedNodeList(searchMode, openedNodeList, nextSearchNode);
-                            
-                            // Adiciona o nó na árvore de busca
-                            this.getSearchTree().addChildToCurrentNode(nextSearchNode);
-                        }
-                    } 
-                    else 
-                    {
-                        // Se busca em profundidade, adicionar na ordem inversa (Pilha)
-                        for (int i = (tmpList.size() - 1); i >= 0; i--) 
+                            // Se busca em largura, adicionar na mesma ordem (Fila)
+                            for (int i = 0; i < tmpList.size(); i++) 
+                            {
+                                nextSearchNode = tmpList.get(i);
+
+                                // Adiciona na lista de abertos
+                                this.addInOpenedNodeList(searchMode, openedNodeList, nextSearchNode);
+
+                                // Adiciona o nó na árvore de busca
+                                this.getSearchTree().addChildToCurrentNode(nextSearchNode);
+                            }
+                        } 
+                        else 
                         {
-                            nextSearchNode = tmpList.get(i);
-                            
-                            // Adiciona na lista de abertos
-                            this.addInOpenedNodeList(searchMode, openedNodeList, nextSearchNode);
-                            
-                            // Adiciona o nó na árvore de busca
-                            this.getSearchTree().addChildToCurrentNode(nextSearchNode);
+                            // Se busca em profundidade, adicionar na ordem inversa (Pilha)
+                            for (int i = (tmpList.size() - 1); i >= 0; i--) 
+                            {
+                                nextSearchNode = tmpList.get(i);
+
+                                // Adiciona na lista de abertos
+                                this.addInOpenedNodeList(searchMode, openedNodeList, nextSearchNode);
+
+                                // Adiciona o nó na árvore de busca
+                                this.getSearchTree().addChildToCurrentNode(nextSearchNode);
+                            }
                         }
+
+                        // Define que o nó atual da árvore foi expandido
+                        this.getSearchTree().getCurrentNode().setExpanded(true);
                     }
-                    
-                    // Define que o nó atual da árvore foi expandido
-                    this.getSearchTree().getCurrentNode().setExpanded(true);
                 }
             }
         }

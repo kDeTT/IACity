@@ -6,6 +6,7 @@ import br.ufjf.iacity.algorithm.AbstractAlgorithmSearch.SearchMode;
 import br.ufjf.iacity.algorithm.BacktrackingSearch;
 import br.ufjf.iacity.algorithm.BestFirstSearch;
 import br.ufjf.iacity.algorithm.BreadthAndDepthSearch;
+import br.ufjf.iacity.algorithm.IDASearch;
 import br.ufjf.iacity.algorithm.OrderedSearch;
 import br.ufjf.iacity.algorithm.events.ISearchStartedEventListener;
 import br.ufjf.iacity.algorithm.events.ISearchStatusChangedEventListener;
@@ -13,15 +14,12 @@ import br.ufjf.iacity.algorithm.events.ISearchStoppedEventListener;
 import br.ufjf.iacity.algorithm.transition.AlphabeticalTransition;
 import br.ufjf.iacity.graph.CityGraph;
 import br.ufjf.iacity.graph.CityNodeGraph;
-import br.ufjf.iacity.helper.coordinate.GeoCoordinate;
 import br.ufjf.iacity.algorithm.search.AlgorithmParameter;
 import br.ufjf.iacity.helper.file.FileHelper;
-import br.ufjf.iacity.model.City;
 import java.awt.event.ActionEvent;
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
-import java.util.Random;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JFileChooser;
@@ -901,7 +899,7 @@ public class IACityGUI extends JFrame implements
                     algorithmSearch = new ASearch(searchParameter);
                     break;
                 case "IDA":
-                    
+                    algorithmSearch = new IDASearch(searchParameter);
                     break;
             }
             
@@ -1172,35 +1170,6 @@ public class IACityGUI extends JFrame implements
         }
         
         return diagResult;
-    }
-    
-    private static CityGraph randomGraph(int maxCities, int maxAdjacency)
-    {
-        CityGraph graph = new CityGraph();
-        
-        for(int i = 0; i < maxCities; i++)
-        {
-            graph.addNode(-1, new City(String.valueOf(i), new GeoCoordinate(-1, -1)));
-        }
-        
-        float costAdj;
-        int rndIndex1;
-        int rndIndex2;
-        Random rand = new Random();
-        
-        for(int i = 0; i < maxCities; i++)
-        {
-            for(int j = 0; j < maxAdjacency; j++)
-            {
-                costAdj = rand.nextInt(500);
-                rndIndex1 = rand.nextInt(maxCities);
-                rndIndex2 = rand.nextInt(maxCities);
-            
-                graph.addAdjacency(graph.getNode(rndIndex1), graph.getNode(rndIndex2), costAdj, false);
-            }
-        }
-        
-        return graph;
     }
     
     /**

@@ -45,6 +45,7 @@ public abstract class AbstractAlgorithmSearch
     private String solutionPath;
     private double solutionCost;
     private int solutionDepth;
+    private int internalNodeCount;
     private int solutionExpandedNodeCount;
     private int solutionVisitedNodeCount;
     
@@ -162,6 +163,27 @@ public abstract class AbstractAlgorithmSearch
         else
         {
             this.solutionCost = Double.POSITIVE_INFINITY;
+        }
+    }
+    
+    private void calculateInternalTreeNodes(SearchNode rootNode)
+    {
+        if(rootNode != null)
+        {
+            // Verifica se não é um nó folha
+            if(rootNode.getChildNodeCount() > 0)
+            {
+                internalNodeCount++;
+            }
+            
+            SearchNode tmpNode;
+            Iterator<SearchNode> childIt = rootNode.getChildNodeIterator();
+            
+            while(childIt.hasNext())
+            {
+                tmpNode = childIt.next();
+                calculateInternalTreeNodes(tmpNode);
+            }
         }
     }
     
@@ -420,6 +442,7 @@ public abstract class AbstractAlgorithmSearch
     {
         this.solutionExpandedNodeCount = 0;
         this.calculateExpandedNodeCount(searchTree.getRootNode());
+        
         return solutionExpandedNodeCount;
     }
 
@@ -429,12 +452,13 @@ public abstract class AbstractAlgorithmSearch
     public int getSolutionVisitedNodeCount()
     {
         this.solutionVisitedNodeCount = 0;
+        
         this.calculateVisitedNodeCount(searchTree.getRootNode());
         return solutionVisitedNodeCount;
     }
     
-    public float getSolutionAverageFactorBranching()
+    public double getSolutionAverageFactorBranching()
     {
-        return ((float)getSolutionVisitedNodeCount() / getSolutionExpandedNodeCount());
+        return ((double)getSolutionTreeNodeCount() / getSolutionExpandedNodeCount());
     }
 }

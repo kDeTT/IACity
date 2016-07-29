@@ -1,5 +1,6 @@
 package br.ufjf.iacity.algorithm.search;
 
+import br.ufjf.iacity.model.City;
 import java.util.Iterator;
 
 public class SearchTree 
@@ -33,6 +34,20 @@ public class SearchTree
         this.depth = 0;
     }
     
+    public void resetTree()
+    {
+        this.rootNode.removeAllChildNode();
+        this.rootNode.setExpanded(false);
+        this.rootNode.setVisited(false);
+        this.rootNode.setCost(0);
+        
+        City startCity = startNode.getCityNodeGraph().getCity();
+        City endCity = endNode.getCityNodeGraph().getCity();
+        this.rootNode.setEvalFunctionValue(startCity.getCoordinate().distanceTo(endCity.getCoordinate()));
+        
+        this.currentNode = rootNode;
+    }
+    
     private void calculateDepth(SearchNode rootNode, int currentDepth)
     {
         if(rootNode != null)
@@ -59,7 +74,9 @@ public class SearchTree
     
     public int depth()
     {
-        calculateDepth(rootNode, 0);
+        depth = 0;
+        calculateDepth(rootNode, depth);
+        
         return (depth - 1);
     }
     
@@ -95,6 +112,11 @@ public class SearchTree
         }
     }
     
+    public void removeAllChildOfCurrentNode()
+    {
+        this.currentNode.removeAllChildNode();
+    }
+    
     public void removeChildNode(SearchNode childNode)
     {
         if(childNode != null)
@@ -102,8 +124,17 @@ public class SearchTree
             // Se o nó possui um pai
             if(childNode.getRootNode() != null)
             {
+                SearchNode rootChild = childNode.getRootNode();
+                
                 // Remove o filho do pai
-                childNode.getRootNode().removeChildNode(childNode);
+                rootChild.removeChildNode(childNode);
+                
+                // Verifica se após a remoção o pai não tem mais filhos
+                if(rootChild.getChildNodeCount() == 0)
+                {
+                    // Volta atrás e marca que o nó não foi expandido
+                    rootChild.setExpanded(false);
+                }
             }
             
             childNode = null;

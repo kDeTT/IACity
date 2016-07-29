@@ -113,6 +113,11 @@ public class SearchNode implements Comparable
         return (this.childNodeList.add(childNode));
     }
     
+    public void removeAllChildNode()
+    {
+        this.childNodeList.removeAll(childNodeList);
+    }
+    
     public boolean removeChildNode(SearchNode childNode)
     {
         return (this.childNodeList.remove(childNode));

@@ -90,9 +90,6 @@ public class OrderedSearch extends AbstractAlgorithmSearch
                  */
                 SearchNode openedSearchNode = this.getElementFromOpenedNodeList(SearchMode.Ordered, openedNodeList);
                 
-//                // Adiciona o nó na árvore de busca
-//                this.getSearchTree().addChildToCurrentNode(openedSearchNode);
-                
                 // Altera o nó atual para o novo nó
                 this.getSearchTree().setCurrentNode(openedSearchNode);
                 
@@ -124,6 +121,7 @@ public class OrderedSearch extends AbstractAlgorithmSearch
                      * da árvore de busca, adicionando na lista de abertos
                      * 
                      */
+                    boolean isExpanded = false;
                     SearchNode currentNode = getSearchTree().getCurrentNode();
                     SearchNode nextSearchNode = this.transition.applyTransition(currentNode);
                     
@@ -182,7 +180,7 @@ public class OrderedSearch extends AbstractAlgorithmSearch
                                                     // Adiciona o novo nó na árvore de busca
                                                     this.getSearchTree().addChildToCurrentNode(nextSearchNode);
                                                     
-                                                    // Termina o loop
+                                                    isExpanded = true;
                                                     break;
                                                 }
                                             }
@@ -195,6 +193,8 @@ public class OrderedSearch extends AbstractAlgorithmSearch
                                         
                                         // Adiciona o nó na árvore de busca
                                         this.getSearchTree().addChildToCurrentNode(nextSearchNode);
+                                        
+                                        isExpanded = true;
                                     }
                                 }
                             }
@@ -208,6 +208,8 @@ public class OrderedSearch extends AbstractAlgorithmSearch
                                 
                                 // Adiciona o nó na árvore de busca
                                 this.getSearchTree().addChildToCurrentNode(nextSearchNode);
+                                
+                                isExpanded = true;
                             }
                         }
                         
@@ -215,11 +217,15 @@ public class OrderedSearch extends AbstractAlgorithmSearch
                         nextSearchNode = this.transition.applyTransition(currentNode);
                     }
                     
-                    // Ordena a lista de abertos usando o custo dos nós
-                    openedNodeList = QuickSort.sort(openedNodeList, SortType.Cost);
+                    // Verfica se houve expansão do estado
+                    if(isExpanded)
+                    {
+                        // Ordena a lista de abertos usando o custo dos nós
+                        openedNodeList = QuickSort.sort(openedNodeList, SortType.Cost);
 
-                    // Define que o nó atual da árvore foi expandido
-                    this.getSearchTree().getCurrentNode().setExpanded(true);
+                        // Define que o nó atual da árvore foi expandido
+                        this.getSearchTree().getCurrentNode().setExpanded(true);
+                    }
                 }
             }
         }
