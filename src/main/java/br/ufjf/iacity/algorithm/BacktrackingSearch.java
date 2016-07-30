@@ -25,7 +25,8 @@ public class BacktrackingSearch extends AbstractAlgorithmSearch
         this.transition = parameter.getTransition();
         
         // Inicializa a árvore de busca com o primeiro nó e define o nó final
-        this.searchTree = new SearchTree(new SearchNode(null, 0, parameter.getStartCityNode()));
+        this.searchTree = new SearchTree();
+        this.searchTree.setStartNode(new SearchNode(null, 0, parameter.getStartCityNode()));
         this.searchTree.setEndNode(new SearchNode(null, 0, parameter.getEndCityNode()));
         
         // Habilita/Desabilita opções a serem usadas durante a busca
@@ -53,6 +54,9 @@ public class BacktrackingSearch extends AbstractAlgorithmSearch
         
         // Muda o estado para buscando
         this.setSearchState(SearchState.Searching);
+        
+        //Adiciona o nó inicial na árvore de busca
+        this.getSearchTree().addChildToCurrentNode(getSearchTree().getStartNode());
         
         // Define que o nó inicial foi visitado
         this.getSearchTree().getCurrentNode().setVisited(true);

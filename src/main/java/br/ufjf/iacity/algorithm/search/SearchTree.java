@@ -1,6 +1,5 @@
 package br.ufjf.iacity.algorithm.search;
 
-import br.ufjf.iacity.model.City;
 import java.util.Iterator;
 
 public class SearchTree 
@@ -17,18 +16,11 @@ public class SearchTree
     public SearchTree()
     {
         this.rootNode = null;
-        this.currentNode = null;
+        
+        this.startNode = null;
         this.endNode = null;
         
-        this.nodeCount = 0;
-        this.depth = 0;
-    }
-    
-    public SearchTree(SearchNode rootNode)
-    {
-        this.rootNode = rootNode;
-        this.currentNode = rootNode;
-        this.endNode = null;
+        this.currentNode = null;
         
         this.nodeCount = 0;
         this.depth = 0;
@@ -40,12 +32,12 @@ public class SearchTree
         this.rootNode.setExpanded(false);
         this.rootNode.setVisited(false);
         this.rootNode.setCost(0);
-        
-        City startCity = startNode.getCityNodeGraph().getCity();
-        City endCity = endNode.getCityNodeGraph().getCity();
-        this.rootNode.setEvalFunctionValue(startCity.getCoordinate().distanceTo(endCity.getCoordinate()));
+        this.rootNode.setEvalFunctionValue(0);
         
         this.currentNode = rootNode;
+        
+        this.nodeCount = 1;
+        this.depth = 0;
     }
     
     private void calculateDepth(SearchNode rootNode, int currentDepth)

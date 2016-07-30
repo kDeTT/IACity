@@ -103,7 +103,7 @@ public class IDASearch extends AbstractAlgorithmSearch
                         && (currentNode.getEvalFunctionValue() <= patamar))
                 {
                     // A busca teve sucesso
-                    setSearchState(AbstractAlgorithmSearch.SearchState.Success);
+                    setSearchState(SearchState.Success);
 
                     // O novo nó é o nó final
                     getSearchTree().setEndNode(currentNode);
@@ -125,6 +125,7 @@ public class IDASearch extends AbstractAlgorithmSearch
                         
                         // Retorna para o pai do nó atual
                         this.getSearchTree().setCurrentNode(currentNode.getRootNode());
+                        currentNode = getSearchTree().getCurrentNode();
                     }
                     
                     // Aplica a transição sobre o nó atual da árvore de busca
@@ -142,11 +143,12 @@ public class IDASearch extends AbstractAlgorithmSearch
                             // Define o custo do estado (Da raíz até o estado atual)
                             double cost = currentNode.getCost() + nextSearchNode.getCost();
                             nextSearchNode.setCost(cost);
+                            
+                            startCity = nextSearchNode.getCityNodeGraph().getCity();
 
                             // Define o valor da função de avaliação
-                            nextSearchNode.setEvalFunctionValue(cost
-                                    + nextSearchNode.getCityNodeGraph().getCity().
-                                    getCoordinate().distanceTo(endCity.getCoordinate()));
+                            nextSearchNode.setEvalFunctionValue(cost + 
+                                    startCity.getCoordinate().distanceTo(endCity.getCoordinate()));
                             
                              // Adiciona o novo nó na árvore de busca
                             this.getSearchTree().addChildToCurrentNode(nextSearchNode);
@@ -182,6 +184,9 @@ public class IDASearch extends AbstractAlgorithmSearch
                                 
                                 // Reseta o estado do grafo
                                 this.getCityGraph().resetState();
+                                
+                                // Reinicia a árvore
+                                this.getSearchTree().resetTree();
                             }
                         }
                         else

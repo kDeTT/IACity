@@ -452,8 +452,8 @@ public abstract class AbstractAlgorithmSearch
     public int getSolutionVisitedNodeCount()
     {
         this.solutionVisitedNodeCount = 0;
-        
         this.calculateVisitedNodeCount(searchTree.getRootNode());
+        
         return solutionVisitedNodeCount;
     }
     
