@@ -4,6 +4,9 @@ import br.ufjf.iacity.algorithm.search.SearchNode;
 import br.ufjf.iacity.algorithm.search.SearchTree;
 import br.ufjf.iacity.algorithm.search.AlgorithmParameter;
 
+/**
+ * Backtracking. Algoritmo de busca não informada
+ */
 public class BacktrackingSearch extends AbstractAlgorithmSearch
 {   
     /**
@@ -24,36 +27,34 @@ public class BacktrackingSearch extends AbstractAlgorithmSearch
         this.cityGraph = parameter.getGraph();
         this.transition = parameter.getTransition();
         
-        // Inicializa a árvore de busca com o primeiro nó e define o nó final
+        // Inicializa a árvore de busca e define o nó inicial e final
         this.searchTree = new SearchTree();
         this.searchTree.setStartNode(new SearchNode(null, 0, parameter.getStartCityNode()));
         this.searchTree.setEndNode(new SearchNode(null, 0, parameter.getEndCityNode()));
         
-        // Habilita/Desabilita opções a serem usadas durante a busca
+        // Configura opções a serem usadas durante a busca
         SearchNode.setEnableDuplicate(parameter.isEnableDuplicated());
         SearchNode.setEnableCost(false);
         
-        // Inicializa o estado da busca
+        // Define o estado atual da busca
         this.setSearchState(SearchState.Stopped);
     }
     
     /**
-     * 
-     * Executa a busca BacktrackingSearch sobre o grafo, usando as regras de transição
-     * definidas na inicialização da classe
-     * 
+     * Executa a busca sobre o grafo, usando as regras 
+     * de transição definidas na inicialização da classe
      */
     @Override
     public void search()
     {
-        // Dispara evento que a busca foi iniciada
+        // Dispara evento de que a busca foi iniciada
         this.getSearchStartedEventInitiator().fireEvent(getSearchState());
-
-        // Marca o tempo inicial
-        long startSearchTime = System.nanoTime();
         
         // Muda o estado para buscando
         this.setSearchState(SearchState.Searching);
+
+        // Marca o tempo inicial
+        long startSearchTime = System.nanoTime();
         
         //Adiciona o nó inicial na árvore de busca
         this.getSearchTree().addChildToCurrentNode(getSearchTree().getStartNode());
@@ -61,19 +62,17 @@ public class BacktrackingSearch extends AbstractAlgorithmSearch
         // Define que o nó inicial foi visitado
         this.getSearchTree().getCurrentNode().setVisited(true);
         
-        // Enquanto não for obtido sucesso ou fracasso, continua a busca
+        // Enquanto não for obtido sucesso ou fracasso
         while (!(getSearchState().equals(SearchState.Success) || getSearchState().equals(SearchState.Failed)))
         {
             // Aplica a transição sobre o nó atual da árvore de busca
             SearchNode nextSearchNode = transition.applyTransition(getSearchTree().getCurrentNode());
             
             /**
-             * 
              * Verifica se a transição foi aplicada.
              * 
              * Se sim, existe operador aplicável sobre o nó atual,
              * caso contrário, não existe mais operadores aplicáveis.
-             * 
              */
             if(nextSearchNode != null)
             {

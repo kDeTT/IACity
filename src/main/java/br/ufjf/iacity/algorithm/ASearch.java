@@ -28,57 +28,55 @@ public class ASearch extends AbstractAlgorithmSearch
         this.cityGraph = parameter.getGraph();
         this.transition = parameter.getTransition();
         
-        // Inicializa a árvore de busca vazia e define o nó final
+        // Inicializa a árvore de busca e define o nó inicial e final
         this.searchTree = new SearchTree();
         this.searchTree.setStartNode(new SearchNode(null, 0, parameter.getStartCityNode()));
         this.searchTree.setEndNode(new SearchNode(null, 0, parameter.getEndCityNode()));
         
-        // Habilita/Desabilita opções a serem usadas durante a busca
+        // Configura opções a serem usadas durante a busca
         SearchNode.setEnableDuplicate(parameter.isEnableDuplicated());
         SearchNode.setEnableCost(true);
         
-        // Inicializa o estado da busca
-        this.setSearchState(AbstractAlgorithmSearch.SearchState.Stopped);
+        // Define o estado atual da busca
+        this.setSearchState(SearchState.Stopped);
     }
     
     /**
-     *
-     * Executa a busca BreadthAndDepthSearch sobre o grafo, usando as regras 
+     * Executa a busca sobre o grafo, usando as regras 
      * de transição definidas na inicialização da classe
-     * 
      */
     @Override
     public void search()
     {
-        // Dispara evento que a busca foi iniciada
+        // Dispara evento de que a busca foi iniciada
         this.getSearchStartedEventInitiator().fireEvent(getSearchState());
+        
+        // Muda o estado para buscando
+        this.setSearchState(SearchState.Searching);
         
         // Marca o tempo inicial
         long startSearchTime = System.nanoTime();
         
-        // Muda o estado para buscando
-        this.setSearchState(AbstractAlgorithmSearch.SearchState.Searching);
-        
-        // Lista de nós abertos
+        // Cria lista de nós abertos
         List<SearchNode> openedNodeList = new LinkedList<>();
 
         // Cria a lista de nós fechados
         List<SearchNode> closedNodeList = new LinkedList<>();
         
         // Adiciona o nó inicial na lista de abertos
-        this.addInOpenedNodeList(AbstractAlgorithmSearch.SearchMode.Ordered, openedNodeList, getSearchTree().getStartNode());
+        this.addInOpenedNodeList(SearchMode.Ordered, openedNodeList, getSearchTree().getStartNode());
         
         //Adiciona o nó na árvore de busca
         this.getSearchTree().addChildToCurrentNode(getSearchTree().getStartNode());
         
-        // Enquanto não for obtido sucesso ou fracasso, continue a busca
-        while (!(getSearchState().equals(AbstractAlgorithmSearch.SearchState.Success) || getSearchState().equals(AbstractAlgorithmSearch.SearchState.Failed)))
+        // Enquanto não for obtido sucesso ou fracasso
+        while (!(getSearchState().equals(SearchState.Success) || getSearchState().equals(SearchState.Failed)))
         {
             // Verifica se a lista de abertos está vazia
             if(openedNodeList.isEmpty())
             {
                 // Se sim, a busca terminou com fracasso
-                this.setSearchState(AbstractAlgorithmSearch.SearchState.Failed);
+                this.setSearchState(SearchState.Failed);
             }
             else
             {
@@ -137,9 +135,8 @@ public class ASearch extends AbstractAlgorithmSearch
                         City nextCity = nextSearchNode.getCityNodeGraph().getCity();
                         City endCity = this.searchTree.getEndNode().getCityNodeGraph().getCity();
                         
-                        double cost = currentNode.getCost() + nextSearchNode.getCost();
-                        
                         // Define o custo do estado
+                        double cost = currentNode.getCost() + nextSearchNode.getCost();
                         nextSearchNode.setCost(cost);
                         
                         // Define o valor da função de avaliação
