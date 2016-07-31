@@ -5,6 +5,10 @@ import br.ufjf.iacity.graph.CityNodeAdjacency;
 import br.ufjf.iacity.graph.CityNodeGraph;
 import java.util.Iterator;
 
+/**
+ * Estratégia de controle para os algoritmos de busca usando a ordem alfabética
+ * do nome das cidades
+ */
 public class AlphabeticalTransition implements ITransition
 {
     @Override
@@ -15,11 +19,13 @@ public class AlphabeticalTransition implements ITransition
             CityNodeGraph currentCityNode = currentSearchNode.getCityNodeGraph();
             Iterator<CityNodeAdjacency> childCityNodeIterator = currentCityNode.getAdjacencyIterator();
             
-            CityNodeAdjacency tmpAdj = null;
+            CityNodeAdjacency tmpAdj;
             CityNodeAdjacency nextCityNodeAdj = null;
             
-            // Escolhe o primeiro nó ainda não aberto para ser comparado 
-            // alfabeticamente com o restante
+            /**
+             * Escolhe o primeiro nó ainda não aberto para ser comparado 
+             * alfabeticamente com o restante
+             */
             while(childCityNodeIterator.hasNext())
             {
                 tmpAdj = childCityNodeIterator.next();
@@ -49,17 +55,18 @@ public class AlphabeticalTransition implements ITransition
                 // Marca que a adjacência foi visitada
                 nextCityNodeAdj.setVisited(true);
                 
+                // Novo nó de busca
                 SearchNode newSearchNode = new SearchNode(
                                 currentSearchNode, // Nó atual é o pai do novo nó
                                 (currentSearchNode.getTreeLevel() + 1), // Define o nível da árvore com base no nível do pai
                                 nextCityNodeAdj.getAdjNode());
                 
+                // Se o custo está habilitado, define o custo do nó de busca
                 if(SearchNode.isEnableCost())
                 {
                     newSearchNode.setCost(nextCityNodeAdj.getCost());
                 }
                 
-                // Retorna o próximo nó
                 return newSearchNode;
             }
         }

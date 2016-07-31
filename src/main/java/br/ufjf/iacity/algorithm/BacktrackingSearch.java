@@ -5,12 +5,11 @@ import br.ufjf.iacity.algorithm.search.SearchTree;
 import br.ufjf.iacity.algorithm.search.AlgorithmParameter;
 
 /**
- * Backtracking. Algoritmo de busca não informada
+ * Algoritmo de busca Backtracking. Método não informado de busca
  */
 public class BacktrackingSearch extends AbstractAlgorithmSearch
 {   
     /**
-     * 
      * @param parameter Parâmetros de inicialização para o algoritmo de busca
      * 
      * @throws IllegalArgumentException 
@@ -88,7 +87,7 @@ public class BacktrackingSearch extends AbstractAlgorithmSearch
                     // Altera o nó atual para o novo nó criado
                     this.getSearchTree().setCurrentNode(nextSearchNode);
                     
-                    // Define que o nó atual da árvore foi visitado
+                    // Define que o novo nó atual da árvore foi visitado
                     this.getSearchTree().getCurrentNode().setVisited(true);
 
                     // Verifica se o nó é o nó buscado
@@ -105,11 +104,9 @@ public class BacktrackingSearch extends AbstractAlgorithmSearch
             else
             {
                 /**
-                 * 
                  * Verifica se o nó atual é o nó inicial, caso seja, significa
                  * que retornei ao ponto inicial e não há mais operadores aplicáveis
                  * e, neste caso, a solução não foi encontrada
-                 * 
                  */
                 if(getSearchTree().getCurrentNode().getIdNode().equalsIgnoreCase(getSearchTree().getRootNode().getIdNode()))
                 {

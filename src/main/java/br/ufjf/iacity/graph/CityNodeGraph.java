@@ -6,6 +6,9 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Objects;
 
+/**
+ * Nó do grafo de cidades
+ */
 public class CityNodeGraph 
 {
     private String idNode;

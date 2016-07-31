@@ -2,6 +2,9 @@ package br.ufjf.iacity.graph;
 
 import java.util.Objects;
 
+/**
+ * Adjacência do grafo de cidades
+ */
 public class CityNodeAdjacency 
 {
     private String idAdj;

@@ -2,6 +2,9 @@ package br.ufjf.iacity.algorithm.search;
 
 import java.util.Iterator;
 
+/**
+ * Árvore de busca
+ */
 public class SearchTree 
 {
     private SearchNode rootNode;

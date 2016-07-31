@@ -1,8 +1,7 @@
 package br.ufjf.iacity.helper.coordinate;
 
 /**
- *
- * @author Luis Augusto
+ * Coordenada cartesiana
  */
 public class CartesianCoordinate 
 {

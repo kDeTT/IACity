@@ -1,11 +1,5 @@
 package br.ufjf.iacity.algorithm.events;
 
-import br.ufjf.iacity.algorithm.events.ISearchStatusChangedEventListener;
-
-/**
- *
- * @author Luis Augusto
- */
 public class SearchStatusChangedEventInitiator extends AbstractEventInitiator<ISearchStatusChangedEventListener>
 {
     @Override

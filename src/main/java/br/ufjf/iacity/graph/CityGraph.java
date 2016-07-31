@@ -7,6 +7,9 @@ import java.util.Iterator;
 import java.util.List;
 import org.apache.commons.lang3.text.WordUtils;
 
+/**
+ * Grafo de cidades
+ */
 public class CityGraph 
 {
     private final List<CityNodeGraph> nodeList;

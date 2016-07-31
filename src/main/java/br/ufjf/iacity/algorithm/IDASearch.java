@@ -8,10 +8,12 @@ import br.ufjf.iacity.model.City;
 import java.util.LinkedList;
 import java.util.List;
 
+/**
+ * Algoritmo IDA*. Método informado de busca
+ */
 public class IDASearch extends AbstractAlgorithmSearch
 {
     /**
-     * 
      * @param parameter Parâmetros de inicialização para o algoritmo de busca
      * 
      * @throws IllegalArgumentException 
@@ -28,42 +30,40 @@ public class IDASearch extends AbstractAlgorithmSearch
         this.cityGraph = parameter.getGraph();
         this.transition = parameter.getTransition();
         
-        // Inicializa a árvore de busca com o primeiro nó e define o nó final
+        // Inicializa a árvore de busca e define o nó inicial e final
         this.searchTree = new SearchTree();
         this.searchTree.setStartNode(new SearchNode(null, 0, parameter.getStartCityNode()));
         this.searchTree.setEndNode(new SearchNode(null, 0, parameter.getEndCityNode()));
         
-        // Habilita/Desabilita opções a serem usadas durante a busca
+        // Configura opções a serem usadas durante a busca
         SearchNode.setEnableDuplicate(parameter.isEnableDuplicated());
         SearchNode.setEnableCost(true);
         
-        // Inicializa o estado da busca
-        this.setSearchState(AbstractAlgorithmSearch.SearchState.Stopped);
+        // Define o estado atual da busca
+        this.setSearchState(SearchState.Stopped);
     }
     
     /**
-     * 
-     * Executa a busca BacktrackingSearch sobre o grafo, usando as regras de transição
-     * definidas na inicialização da classe
-     * 
+     * Executa a busca sobre o grafo, usando as regras 
+     * de transição definidas na inicialização da classe
      */
     @Override
     public void search()
     {
-        // Dispara evento que a busca foi iniciada
+        // Dispara evento de que a busca foi iniciada
         this.getSearchStartedEventInitiator().fireEvent(getSearchState());
+        
+        // Muda o estado para buscando
+        this.setSearchState(SearchState.Searching);
         
         // Marca o tempo inicial
         long startSearchTime = System.nanoTime();
-        
-        // Muda o estado para buscando
-        this.setSearchState(AbstractAlgorithmSearch.SearchState.Searching);
         
         //Adiciona o nó inicial na árvore de busca
         this.getSearchTree().addChildToCurrentNode(getSearchTree().getStartNode());
         
         // Define o valor da função de avaliação para a raíz
-        SearchNode startNode = this.getSearchTree().getStartNode();
+        SearchNode startNode = this.getSearchTree().getCurrentNode();
         SearchNode endNode = this.getSearchTree().getEndNode();
         
         City startCity = startNode.getCityNodeGraph().getCity();
@@ -78,10 +78,10 @@ public class IDASearch extends AbstractAlgorithmSearch
         // Define que o nó inicial foi visitado
         startNode.setVisited(true);
         
-        // Lista de descartados
+        // Cria a lista de descartados
         List<SearchNode> discardedNodeList = new LinkedList<>();
         
-        // Enquanto não for obtido sucesso ou fracasso, continua a busca
+        // Enquanto não for obtido sucesso ou fracasso
         while (!(getSearchState().equals(SearchState.Success) || getSearchState().equals(SearchState.Failed)))
         {
             if(old_patamar == patamar)
@@ -144,9 +144,9 @@ public class IDASearch extends AbstractAlgorithmSearch
                             double cost = currentNode.getCost() + nextSearchNode.getCost();
                             nextSearchNode.setCost(cost);
                             
-                            startCity = nextSearchNode.getCityNodeGraph().getCity();
-
                             // Define o valor da função de avaliação
+                            startCity = nextSearchNode.getCityNodeGraph().getCity();
+                            
                             nextSearchNode.setEvalFunctionValue(cost + 
                                     startCity.getCoordinate().distanceTo(endCity.getCoordinate()));
                             

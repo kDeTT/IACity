@@ -2,6 +2,9 @@ package br.ufjf.iacity.helper.coordinate;
 
 import java.text.DecimalFormat;
 
+/**
+ * Coordenada em latitude e longitude
+ */
 public class GeoCoordinate 
 {
     private static final double MAX_LATITUDE = 90.0000000;

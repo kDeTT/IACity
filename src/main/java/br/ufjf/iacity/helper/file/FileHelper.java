@@ -20,8 +20,7 @@ import java.util.List;
 import java.util.stream.Stream;
 
 /**
- *
- * @author Luis Augusto
+ * Auxilia no tratamento de arquivos
  */
 public class FileHelper 
 {

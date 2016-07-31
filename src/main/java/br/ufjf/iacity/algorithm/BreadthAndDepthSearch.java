@@ -7,12 +7,15 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Stack;
 
+/**
+ * Algoritmo de busca em Largura e em Profundidade. Métodos não informados de busca
+ */
 public class BreadthAndDepthSearch extends AbstractAlgorithmSearch
 {
+    // Modo de busca que será utilizado
     private SearchMode searchMode;
 
     /**
-     * 
      * @param parameter Parâmetros de inicialização para o algoritmo de busca
      * 
      * @throws IllegalArgumentException 
@@ -29,57 +32,53 @@ public class BreadthAndDepthSearch extends AbstractAlgorithmSearch
         this.cityGraph = parameter.getGraph();
         this.transition = parameter.getTransition();
         
-        // Inicializa a árvore de busca vazia e define o nó final
+        // Inicializa a árvore de busca e define o nó inicial e final
         this.searchTree = new SearchTree();
         this.searchTree.setStartNode(new SearchNode(null, 0, parameter.getStartCityNode()));
         this.searchTree.setEndNode(new SearchNode(null, 0, parameter.getEndCityNode()));
         
-        // Habilita/Desabilita opções a serem usadas durante a busca
+        // Configura opções a serem usadas durante a busca
         SearchNode.setEnableDuplicate(parameter.isEnableDuplicated());
         SearchNode.setEnableCost(false);
         
         // Define o modo de busca que será utilizado (Largura ou Profundidade)
         this.searchMode = parameter.getSearchMode();
         
-        // Inicializa o estado da busca
+        // Define o estado atual da busca
         this.setSearchState(SearchState.Stopped);
     }
     
     /**
-     *
-     * Executa a busca BreadthAndDepthSearch sobre o grafo, usando as regras 
+     * Executa a busca sobre o grafo, usando as regras 
      * de transição definidas na inicialização da classe
-     * 
      */
     @Override
     public void search()
     {
-        // Dispara evento que a busca foi iniciada
+        // Dispara evento de que a busca foi iniciada
         this.getSearchStartedEventInitiator().fireEvent(getSearchState());
-        
-        // Marca o tempo inicial
-        long startSearchTime = System.nanoTime();
         
         // Muda o estado para buscando
         this.setSearchState(SearchState.Searching);
         
+        // Marca o tempo inicial
+        long startSearchTime = System.nanoTime();
+        
         // Lista de nós abertos
-        List<SearchNode> openedNodeList = null;
+        List<SearchNode> openedNodeList;
         
         /**
-         * 
          * Verifica o modo de busca que será utilizado e define qual será
          * a estrutura auxiliar que irá ser utilizada
-         * 
          */
         if(searchMode.equals(SearchMode.Breadth))
         {
-            // Busca em largura, define uma fila
+            // Busca em largura, cria uma fila
             openedNodeList = new LinkedList<>();
         }
         else
         {
-            // Senão busca em profundidade, define uma pilha
+            // Busca em profundidade, cria uma pilha
             openedNodeList = new Stack<>();
         }
         
@@ -92,7 +91,7 @@ public class BreadthAndDepthSearch extends AbstractAlgorithmSearch
         // Adiciona o nó na árvore de busca
         this.getSearchTree().addChildToCurrentNode(getSearchTree().getStartNode());
         
-        // Enquanto não for obtido sucesso ou fracasso, continue a busca
+        // Enquanto não for obtido sucesso ou fracasso
         while (!(getSearchState().equals(SearchState.Success) || getSearchState().equals(SearchState.Failed)))
         {
             // Verifica se a lista de abertos está vazia
@@ -104,24 +103,20 @@ public class BreadthAndDepthSearch extends AbstractAlgorithmSearch
             else
             {
                 /**
-                 * 
                  * Senão, seleciona o próximo nó da lista de abertos de acordo 
                  * com o modo de busca usado
-                 * 
                  */
                 SearchNode openedSearchNode = this.getElementFromOpenedNodeList(searchMode, openedNodeList);
                 
                 // Altera o nó atual para o novo nó
                 this.getSearchTree().setCurrentNode(openedSearchNode);
                 
-                // Define que o nó atual da árvore foi visitado
+                // Define que o novo nó atual da árvore foi visitado
                 this.getSearchTree().getCurrentNode().setVisited(true);
                 
                 /**
-                 *
                  * Remove o elemento atual da lista de abertos e adiciona na
                  * lista de fechados
-                 *
                  */
                 closedNodeList.add(removeFromOpenedNodeList(searchMode, openedNodeList));
                 
@@ -140,32 +135,34 @@ public class BreadthAndDepthSearch extends AbstractAlgorithmSearch
                     List<SearchNode> tmpList = new LinkedList<>();
                     
                     /**
-                     * 
                      * Aplica cada transição possível sobre o nó atual 
                      * da árvore de busca, adicionando na lista de abertos
-                     * 
                      */
                     SearchNode currentNode = getSearchTree().getCurrentNode();
                     SearchNode nextSearchNode = this.transition.applyTransition(currentNode);
                     
-                    // Enquanto há transição aplicável, continue
+                    // Enquanto há transição aplicável
                     while(nextSearchNode != null)
                     {
                         /**
-                         *
                          * Verifica se não há ancestral e se também já não está
                          * nas listas de abertos e fechados
-                         *
                          */
                         if (!checkAncestral(nextSearchNode))
                         {
+                            // Verifica se podas serão permitidas (enableDuplicated)
                             if(SearchNode.isEnableDuplicate())
                             {
                                 tmpList.add(nextSearchNode);
                             }
                             else
                             {
-                                if (!checkContains(closedNodeList, nextSearchNode) && !checkContains(openedNodeList, nextSearchNode)) 
+                                /**
+                                 * Caso podas sejam permitidas, verifica se o nó
+                                 * já não está nas listas
+                                 */
+                                if (!checkContains(closedNodeList, nextSearchNode) && 
+                                        !checkContains(openedNodeList, nextSearchNode)) 
                                 {
                                     tmpList.add(nextSearchNode);
                                 }
@@ -180,11 +177,8 @@ public class BreadthAndDepthSearch extends AbstractAlgorithmSearch
                     if(!tmpList.isEmpty())
                     {
                         /**
-                         *
-                         * Adiciona os novos nós de busca na lista de abertos,
-                         * criados a partir das transições aplicadas, na ordem
+                         * Adiciona os novos nós na lista de abertos na ordem
                          * correta para manter a prioridade
-                         *
                          */
                         if (searchMode.equals(SearchMode.Breadth)) 
                         {

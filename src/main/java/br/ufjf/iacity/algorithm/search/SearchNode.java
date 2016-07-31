@@ -6,6 +6,9 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Objects;
 
+/**
+ * Nó da árvore de busca
+ */
 public class SearchNode implements Comparable
 {
     private String idNode;
@@ -38,45 +41,6 @@ public class SearchNode implements Comparable
         this.visited = false;
         
         this.cityNodeGraph = cityNodeGraph;
-    }
-
-    @Override
-    public int hashCode() {
-        int hash = 3;
-        hash = 37 * hash + Objects.hashCode(this.idNode);
-        hash = 37 * hash + Objects.hashCode(this.rootNode);
-        hash = 37 * hash + Objects.hashCode(this.childNodeList);
-        hash = 37 * hash + this.treeLevel;
-        hash = 37 * hash + (this.expanded ? 1 : 0);
-        hash = 37 * hash + (this.visited ? 1 : 0);
-        hash = 37 * hash + (int) (Double.doubleToLongBits(this.cost) ^ (Double.doubleToLongBits(this.cost) >>> 32));
-        hash = 37 * hash + Objects.hashCode(this.cityNodeGraph);
-        return hash;
-    }
-
-    @Override
-    public boolean equals(Object obj) 
-    {
-        if (obj == null) 
-        {
-            return false;
-        }
-        
-        if (getClass() != obj.getClass()) 
-        {
-            return false;
-        }
-        
-        SearchNode other = (SearchNode) obj;
-        return Objects.equals(this.idNode, other.idNode);
-    }
-    
-    @Override
-    public int compareTo(Object obj)
-    {
-        // Caso contrário, compara os custos dos estados
-        SearchNode other = (SearchNode) obj;
-        return Double.compare(this.cost, other.cost);
     }
     
     /**
@@ -216,4 +180,44 @@ public class SearchNode implements Comparable
     public void setEvalFunctionValue(double evalFunctionValue) {
         this.evalFunctionValue = evalFunctionValue;
     }
+    
+    @Override
+    public int hashCode() {
+        int hash = 3;
+        hash = 37 * hash + Objects.hashCode(this.idNode);
+        hash = 37 * hash + Objects.hashCode(this.rootNode);
+        hash = 37 * hash + Objects.hashCode(this.childNodeList);
+        hash = 37 * hash + this.treeLevel;
+        hash = 37 * hash + (this.expanded ? 1 : 0);
+        hash = 37 * hash + (this.visited ? 1 : 0);
+        hash = 37 * hash + (int) (Double.doubleToLongBits(this.cost) ^ (Double.doubleToLongBits(this.cost) >>> 32));
+        hash = 37 * hash + Objects.hashCode(this.cityNodeGraph);
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) 
+    {
+        if (obj == null) 
+        {
+            return false;
+        }
+        
+        if (getClass() != obj.getClass()) 
+        {
+            return false;
+        }
+        
+        SearchNode other = (SearchNode) obj;
+        return Objects.equals(this.idNode, other.idNode);
+    }
+    
+    @Override
+    public int compareTo(Object obj)
+    {
+        // Caso contrário, compara os custos dos estados
+        SearchNode other = (SearchNode) obj;
+        return Double.compare(this.cost, other.cost);
+    }
+    
 }

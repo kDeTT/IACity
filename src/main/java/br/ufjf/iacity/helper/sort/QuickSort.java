@@ -5,6 +5,8 @@ import java.util.LinkedList;
 import java.util.List;
 
 /**
+ * Implementa o algoritmo QuickSort em listas
+ * 
  * @see https://gist.github.com/djitz/2152957
  */
 public class QuickSort

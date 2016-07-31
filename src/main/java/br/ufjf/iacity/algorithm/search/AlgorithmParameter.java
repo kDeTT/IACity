@@ -6,8 +6,7 @@ import br.ufjf.iacity.graph.CityGraph;
 import br.ufjf.iacity.graph.CityNodeGraph;
 
 /**
- *
- * @author Luis Augusto
+ * Parâmetros de entrada para os algoritmos de busca
  */
 public class AlgorithmParameter 
 {

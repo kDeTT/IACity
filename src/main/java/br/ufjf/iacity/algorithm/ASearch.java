@@ -8,10 +8,12 @@ import br.ufjf.iacity.model.City;
 import java.util.LinkedList;
 import java.util.List;
 
+/**
+ * Algoritmo A*. Método informado de busca
+ */
 public class ASearch extends AbstractAlgorithmSearch
 {
     /**
-     * 
      * @param parameter Parâmetros de inicialização para o algoritmo de busca
      * 
      * @throws IllegalArgumentException 
@@ -64,7 +66,7 @@ public class ASearch extends AbstractAlgorithmSearch
         List<SearchNode> closedNodeList = new LinkedList<>();
         
         // Adiciona o nó inicial na lista de abertos
-        this.addInOpenedNodeList(SearchMode.Ordered, openedNodeList, getSearchTree().getStartNode());
+        this.addInOpenedNodeList(SearchMode.A, openedNodeList, getSearchTree().getStartNode());
         
         //Adiciona o nó na árvore de busca
         this.getSearchTree().addChildToCurrentNode(getSearchTree().getStartNode());
@@ -86,7 +88,7 @@ public class ASearch extends AbstractAlgorithmSearch
                  * com o modo de busca usado
                  * 
                  */
-                SearchNode openedSearchNode = this.getElementFromOpenedNodeList(AbstractAlgorithmSearch.SearchMode.Ordered, openedNodeList);
+                SearchNode openedSearchNode = this.getElementFromOpenedNodeList(SearchMode.A, openedNodeList);
  
                 // Altera o nó atual para o novo nó
                 this.getSearchTree().setCurrentNode(openedSearchNode);
@@ -100,13 +102,13 @@ public class ASearch extends AbstractAlgorithmSearch
                  * lista de fechados
                  *
                  */
-                closedNodeList.add(removeFromOpenedNodeList(AbstractAlgorithmSearch.SearchMode.Ordered, openedNodeList));
+                closedNodeList.add(removeFromOpenedNodeList(SearchMode.A, openedNodeList));
                 
                 // Verifica se o nó buscado foi encontrado
                 if(openedSearchNode.getIdNode().equalsIgnoreCase(getSearchTree().getEndNode().getIdNode()))
                 {
                     // A busca teve sucesso
-                    this.setSearchState(AbstractAlgorithmSearch.SearchState.Success);
+                    this.setSearchState(SearchState.Success);
                         
                     // O nó final foi encontrado
                     this.getSearchTree().setEndNode(openedSearchNode);
@@ -133,7 +135,7 @@ public class ASearch extends AbstractAlgorithmSearch
                          * estado atual até o estado final
                          */
                         City nextCity = nextSearchNode.getCityNodeGraph().getCity();
-                        City endCity = this.searchTree.getEndNode().getCityNodeGraph().getCity();
+                        City endCity = this.getSearchTree().getEndNode().getCityNodeGraph().getCity();
                         
                         // Define o custo do estado
                         double cost = currentNode.getCost() + nextSearchNode.getCost();
@@ -186,7 +188,7 @@ public class ASearch extends AbstractAlgorithmSearch
                                                     this.getSearchTree().removeChildNode(openedNode);
                                                     
                                                     // Adiciona o novo nó na lista de abertos
-                                                    this.addInOpenedNodeList(AbstractAlgorithmSearch.SearchMode.Ordered, openedNodeList, nextSearchNode);
+                                                    this.addInOpenedNodeList(SearchMode.A, openedNodeList, nextSearchNode);
                                                     
                                                     // Adiciona o nó na árvore de busca
                                                     this.getSearchTree().addChildToCurrentNode(nextSearchNode);
@@ -200,7 +202,7 @@ public class ASearch extends AbstractAlgorithmSearch
                                     else
                                     {
                                         // Caso não esteja, adicionar o novo estado imediatamente
-                                        this.addInOpenedNodeList(AbstractAlgorithmSearch.SearchMode.Ordered, openedNodeList, nextSearchNode);
+                                        this.addInOpenedNodeList(SearchMode.A, openedNodeList, nextSearchNode);
                                         
                                         // Adiciona o nó na árvore de busca
                                         this.getSearchTree().addChildToCurrentNode(nextSearchNode);
@@ -214,7 +216,7 @@ public class ASearch extends AbstractAlgorithmSearch
                                  * Caso podas não sejam permitidas, adicionar
                                  * o novo estado imediatamente
                                  */
-                                this.addInOpenedNodeList(AbstractAlgorithmSearch.SearchMode.Ordered, openedNodeList, nextSearchNode);
+                                this.addInOpenedNodeList(SearchMode.A, openedNodeList, nextSearchNode);
                                 
                                 // Adiciona o nó na árvore de busca
                                 this.getSearchTree().addChildToCurrentNode(nextSearchNode);

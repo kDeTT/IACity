@@ -45,6 +45,8 @@ public class IACityGUI extends JFrame implements
     private AlgorithmParameter searchParameter;
     private AbstractAlgorithmSearch algorithmSearch;
     
+    private Thread searchThread;
+    
     /**
      * Creates new form IACityGUI
      */
@@ -124,6 +126,7 @@ public class IACityGUI extends JFrame implements
         labelTotalNodeCount = new javax.swing.JLabel();
         labelTreeDepthInfo = new javax.swing.JLabel();
         jLabel11 = new javax.swing.JLabel();
+        btnStopSearch = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("IACity");
@@ -341,7 +344,7 @@ public class IACityGUI extends JFrame implements
                 .addComponent(jLabel4)
                 .addGap(18, 18, 18)
                 .addComponent(checkBoxEnableDuplicated)
-                .addContainerGap(85, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         jPanel5.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(153, 153, 153), 1, true));
@@ -376,7 +379,7 @@ public class IACityGUI extends JFrame implements
                 .addComponent(jLabel5)
                 .addGap(18, 18, 18)
                 .addComponent(radioAlphabeticalTransition)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(85, Short.MAX_VALUE))
         );
 
         jPanel7.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(153, 153, 153)));
@@ -441,7 +444,7 @@ public class IACityGUI extends JFrame implements
                 .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(txtEndNodeID, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel9))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 7, Short.MAX_VALUE)
                 .addComponent(btnSetStartAndEndNode)
                 .addContainerGap())
         );
@@ -466,15 +469,15 @@ public class IACityGUI extends JFrame implements
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
-                .addGap(13, 13, 13)
+                .addGap(29, 29, 29)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jPanel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(jPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jPanel7, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addContainerGap(47, Short.MAX_VALUE))
+                    .addComponent(jPanel7, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(31, Short.MAX_VALUE))
         );
 
         jTabbedPane2.addTab("Algoritmos de IA", jPanel2);
@@ -644,19 +647,32 @@ public class IACityGUI extends JFrame implements
         jLabel11.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jLabel11.setText("Status da Busca");
 
+        btnStopSearch.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        btnStopSearch.setText("Parar");
+        btnStopSearch.setEnabled(false);
+        btnStopSearch.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnStopSearchActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel6Layout = new javax.swing.GroupLayout(jPanel6);
         jPanel6.setLayout(jPanel6Layout);
         jPanel6Layout.setHorizontalGroup(
             jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel6Layout.createSequentialGroup()
+            .addGroup(jPanel6Layout.createSequentialGroup()
                 .addContainerGap(136, Short.MAX_VALUE)
                 .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel11)
-                    .addComponent(jPanel8, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(jPanel6Layout.createSequentialGroup()
-                        .addGap(206, 206, 206)
-                        .addComponent(btnStartSearch, javax.swing.GroupLayout.PREFERRED_SIZE, 122, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGap(131, 131, 131))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel6Layout.createSequentialGroup()
+                        .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel11)
+                            .addComponent(jPanel8, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(131, 131, 131))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel6Layout.createSequentialGroup()
+                        .addComponent(btnStartSearch, javax.swing.GroupLayout.PREFERRED_SIZE, 122, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(btnStopSearch, javax.swing.GroupLayout.PREFERRED_SIZE, 122, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(247, 247, 247))))
         );
         jPanel6Layout.setVerticalGroup(
             jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -666,7 +682,9 @@ public class IACityGUI extends JFrame implements
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jPanel8, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(btnStartSearch, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btnStartSearch, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnStopSearch, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap())
         );
 
@@ -896,7 +914,7 @@ public class IACityGUI extends JFrame implements
                 algorithmSearch.addSearchStatusChangedEventListener(this);
                 
                 // Thread que fará a busca
-                Thread searchThread = new Thread()
+                searchThread = new Thread()
                 {
                     @Override
                     public void run() 
@@ -979,29 +997,38 @@ public class IACityGUI extends JFrame implements
     }//GEN-LAST:event_radioAlphabeticalTransitionActionPerformed
 
     private void btnShowGraphActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnShowGraphActionPerformed
-        java.awt.EventQueue.invokeLater(new Runnable()
+        if(searchParameter.getGraph() == null)
         {
-            @Override
-            public void run() 
-            {
-                GraphViewerGUI frame = new GraphViewerGUI(searchParameter.getGraph());
-		frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-		frame.setVisible(true);
-            }
-        });
+            JOptionPane.showMessageDialog(this, "O grafo não foi criado!");
+        }
+        else
+        {
+            java.awt.EventQueue.invokeLater(new Runnable() {
+                @Override
+                public void run() {
+                    GraphViewerGUI frame = new GraphViewerGUI(searchParameter.getGraph());
+                    frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+                    frame.setVisible(true);
+                }
+            });
+        }
     }//GEN-LAST:event_btnShowGraphActionPerformed
 
     private void btnSaveGraphActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSaveGraphActionPerformed
-        if (showFileDialog(JFileChooser.SAVE_DIALOG, "Escolha uma pasta e um nome para o arquivo", GRAPH_INSTANCE_PATH, fileFilter) == JFileChooser.APPROVE_OPTION) 
+        if (searchParameter.getGraph() == null)
         {
-            try 
-            {
-                FileHelper.saveGraphFile(selectedFilePath, searchParameter.getGraph());
-                JOptionPane.showMessageDialog(this, "O grafo foi salvo!");
-            } 
-            catch (IOException ex) 
-            {
-                JOptionPane.showMessageDialog(this, ex.getMessage());
+            JOptionPane.showMessageDialog(this, "O grafo não foi criado!");
+        }
+        else
+        {
+
+            if (showFileDialog(JFileChooser.SAVE_DIALOG, "Escolha uma pasta e um nome para o arquivo", GRAPH_INSTANCE_PATH, fileFilter) == JFileChooser.APPROVE_OPTION) {
+                try {
+                    FileHelper.saveGraphFile(selectedFilePath, searchParameter.getGraph());
+                    JOptionPane.showMessageDialog(this, "O grafo foi salvo!");
+                } catch (IOException ex) {
+                    JOptionPane.showMessageDialog(this, ex.getMessage());
+                }
             }
         }
     }//GEN-LAST:event_btnSaveGraphActionPerformed
@@ -1046,6 +1073,25 @@ public class IACityGUI extends JFrame implements
             Logger.getLogger(IACityGUI.class.getName()).log(Level.SEVERE, null, ex);
         }
     }//GEN-LAST:event_btnShowInGoogleMapsActionPerformed
+
+    private void btnStopSearchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnStopSearchActionPerformed
+        if(searchThread != null)
+        {
+            searchThread.stop();
+            
+            clearStatus();
+            
+            btnCreateGraph.setEnabled(true);
+            btnShowGraph.setEnabled(true);
+            btnSaveGraph.setEnabled(true);
+            btnSetStartAndEndNode.setEnabled(true);
+            btnStartSearch.setEnabled(true);
+            btnStopSearch.setEnabled(false);
+            btnShowSearchTree.setEnabled(false);
+            btnSaveResult.setEnabled(false);
+            btnShowInGoogleMaps.setEnabled(false);
+        }
+    }//GEN-LAST:event_btnStopSearchActionPerformed
     
     private void radioGroupSearchAlgorithmActionPerformed(ActionEvent evt)
     {
@@ -1102,6 +1148,7 @@ public class IACityGUI extends JFrame implements
         btnSaveGraph.setEnabled(false);
         btnSetStartAndEndNode.setEnabled(false);
         btnStartSearch.setEnabled(false);
+        btnStopSearch.setEnabled(true);
         btnShowSearchTree.setEnabled(false);
         btnSaveResult.setEnabled(false);
         btnShowInGoogleMaps.setEnabled(false);
@@ -1126,6 +1173,7 @@ public class IACityGUI extends JFrame implements
         btnSaveGraph.setEnabled(true);
         btnSetStartAndEndNode.setEnabled(true);
         btnStartSearch.setEnabled(true);
+        btnStopSearch.setEnabled(false);
         btnShowSearchTree.setEnabled(true);
         btnSaveResult.setEnabled(true);
         btnShowInGoogleMaps.setEnabled(true);
@@ -1193,6 +1241,7 @@ public class IACityGUI extends JFrame implements
     private javax.swing.JButton btnShowInGoogleMaps;
     private javax.swing.JButton btnShowSearchTree;
     private javax.swing.JButton btnStartSearch;
+    private javax.swing.JButton btnStopSearch;
     private javax.swing.JCheckBox checkBoxEnableDuplicated;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel11;
